@@ -1,0 +1,40 @@
+.nav-bar {
+  max-width: 1440px;
+  min-width: 1024px;
+  margin: 0 auto;
+}
+
+.nav-menu-item {
+  height: 64px;
+}
+
+.nav-menu-item {
+  line-height: 64px;
+}
+
+
+.nav-search-icon{
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+}
+
+.nav-search-input {
+  margin-right: 16px;
+}
+
+.nav-search-input input {
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  border-radius: 16px;
+  border: 0;
+}
+
+.nav-wx {
+  cursor: pointer;
+  margin-right: 16px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.nav-action{
+  color: rgba(255, 255, 255, 0.65);
+}
