@@ -1,0 +1,32 @@
+import React, { Component } from 'react';
+import _ from 'lodash';
+
+import VideoCard from '../VideoCard/VideoCard';
+
+import './VideoCardList.css';
+import { Empty } from 'antd';
+
+export default class VideoCardList extends Component {
+  render() {
+    const { videoList, type } = this.props;
+    return !_.isEmpty(videoList) ? (
+      <div>
+        <ul className="video-card-list">
+          {videoList.map((value, index) => (
+            <li className="video-card-list-item" key={type + index}>
+              <VideoCard
+                imgSrc={value.imgSrc}
+                title={value.title}
+                videoId={value.videoId}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : (
+      <div>
+        <Empty />
+      </div>
+    );
+  }
+}

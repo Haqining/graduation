@@ -1,0 +1,71 @@
+.video-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-card img {
+  transition: transform 0.3s;
+  width: 100%;
+}
+
+.video-card:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+.video-card:hover img {
+  transform: scale(1.1, 1.1);
+}
+
+.video-card:hover .play-icon {
+  opacity: 1;
+}
+
+.video-card-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #000000;
+}
+
+.video-card-title::before {
+  content: '';
+  width: 10px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  left: 0;
+}
+
+.video-card-title::after {
+  content: '';
+  width: 10px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  right: 0;
+}
+
+.play-icon {
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
