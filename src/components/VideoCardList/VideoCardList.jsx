@@ -8,16 +8,17 @@ import { Empty } from 'antd';
 
 export default class VideoCardList extends Component {
   render() {
-    const { videoList, type } = this.props;
+    const { videoList } = this.props;
     return !_.isEmpty(videoList) ? (
       <div>
         <ul className="video-card-list">
           {videoList.map((value, index) => (
-            <li className="video-card-list-item" key={type + index}>
+            <li className="video-card-list-item" key={value.videoType + index}>
               <VideoCard
-                imgSrc={value.imgSrc}
-                title={value.title}
                 videoId={value.videoId}
+                videoType={value.videoType}
+                videoCover={value.videoCover}
+                videoTitle={value.videoTitle}
               />
             </li>
           ))}

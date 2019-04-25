@@ -1,9 +1,10 @@
-.section {
-  padding: 40px 0;
-}
-
-.section-content {
-  max-width: 1440px;
-  min-width: 1024px;
-  margin: 0 auto;
+.ant-back-top-inner {
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  border-radius: 4px;
+  background-color: #1890ff;
+  color: #ffffff;
+  text-align: center;
+  font-size: 20px;
 }

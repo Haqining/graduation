@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Divider, Button } from 'antd';
+import { Row, Col, Divider, Button, BackTop } from 'antd';
 
 import VideoCardList from '../../../components/VideoCardList/VideoCardList';
 
 import './Home.css';
 import bannersData from './bannersData';
-import officialData from './officialData';
-import talentData from './TalentData';
+import OfficialData from '../OfficialData';
+import TalentData from '../TalentData';
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       banners: bannersData,
-      officialVideos: officialData,
-      talentVideos: talentData
+      officialVideos: OfficialData,
+      talentVideos: TalentData
     };
   }
 
@@ -29,34 +29,34 @@ export default class Home extends Component {
       <div>
         <Row className="section home-banner">
           <Row className="section-content" type="flex">
-            <div className="home-banner-left" title={left.title}>
-              <Link to={`/play/${left.videoId}`}>
-                <img src={left.imgSrc} alt="" />
+            <div className="home-banner-left" title={left.videoTitle}>
+              <Link to={`/index/play/${left.videoId}&&${left.videoType}`}>
+                <img src={left.videoCover} alt="" />
                 <span className="shadow-inside" />
               </Link>
             </div>
             <div className="home-banner-right">
-              <Col className="home-banner-tl" span={12} title={tl.title}>
-                <Link to={`/play/${tl.videoId}`}>
-                  <img src={tl.imgSrc} alt="" />
+              <Col className="home-banner-tl" span={12} title={tl.videoTitle}>
+                <Link to={`/index/play/${tl.videoId}&&${tl.videoType}`}>
+                  <img src={tl.videoCover} alt="" />
                   <span className="shadow-inside" />
                 </Link>
               </Col>
-              <Col className="home-banner-tr" span={12} title={tr.title}>
-                <Link to={`/play/${tr.videoId}`}>
-                  <img src={tr.imgSrc} alt="" />
+              <Col className="home-banner-tr" span={12} title={tr.videoTitle}>
+                <Link to={`/index/play/${tr.videoId}&&${tr.videoType}`}>
+                  <img src={tr.videoCover} alt="" />
                   <span className="shadow-inside" />
                 </Link>
               </Col>
-              <Col className="home-banner-bl" span={12} title={bl.title}>
-                <Link to={`/play/${bl.videoId}`}>
-                  <img src={bl.imgSrc} alt="" />
+              <Col className="home-banner-bl" span={12} title={bl.videoTitle}>
+                <Link to={`/index/play/${bl.videoId}&&${bl.videoType}`}>
+                  <img src={bl.videoCover} alt="" />
                   <span className="shadow-inside" />
                 </Link>
               </Col>
-              <Col className="home-banner-br" span={12} title={br.title}>
-                <Link to={`/play/${br.videoId}`}>
-                  <img src={br.imgSrc} alt="" />
+              <Col className="home-banner-br" span={12} title={br.videoTitle}>
+                <Link to={`/index/play/${br.videoId}&&${br.videoType}`}>
+                  <img src={br.videoCover} alt="" />
                   <span className="shadow-inside" />
                 </Link>
               </Col>
@@ -69,13 +69,20 @@ export default class Home extends Component {
               className="home-channel-title"
               style={{ margin: '0 0 40px 0' }}
             >
-              官方视频
+              官方频道
             </Divider>
             <Row>
-              <VideoCardList videoList={officialVideos} type="official" />
+              <VideoCardList videoList={officialVideos} />
             </Row>
             <Row type="flex" justify="center">
-              <Button>更多视频</Button>
+              <Button
+                href="/index/official"
+                type="primary"
+                size="large"
+                style={{ padding: '0 40px' }}
+              >
+                更多视频
+              </Button>
             </Row>
           </Row>
         </Row>
@@ -85,16 +92,26 @@ export default class Home extends Component {
               className="home-channel-title"
               style={{ margin: '0 0 40px 0' }}
             >
-              达人视频
+              达人频道
             </Divider>
             <Row>
-              <VideoCardList videoList={talentVideos} type="talent" />
+              <VideoCardList videoList={talentVideos} />
             </Row>
             <Row type="flex" justify="center">
-              <Button>更多视频</Button>
+              <Button
+                href="/index/talent"
+                type="primary"
+                size="large"
+                style={{ padding: '0 40px' }}
+              >
+                更多视频
+              </Button>
             </Row>
           </Row>
         </Row>
+        <BackTop visibilityHeight={0}>
+          <div className="ant-back-top-inner">UP</div>
+        </BackTop>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Menu,
   Row,
@@ -17,10 +18,10 @@ const { Item: MenuItem } = Menu;
 
 const dropMenu = (
   <Menu>
-    <Menu.Item>testUserName</Menu.Item>
-    <Menu.Item>
+    <MenuItem>testUserName</MenuItem>
+    <MenuItem>
       <span>退出</span>
-    </Menu.Item>
+    </MenuItem>
   </Menu>
 );
 
@@ -34,16 +35,16 @@ export default class NavBar extends Component {
           <div className="nav-logo" />
           <Menu mode="horizontal" theme="dark" selectedKeys={[selectedKey]}>
             <MenuItem key="home" className="nav-menu-item">
-              首页
+              <Link to="/index/home">首页</Link>
             </MenuItem>
             <MenuItem key="official" className="nav-menu-item">
-              官方视频
+              <Link to="/index/official">官方频道</Link>
             </MenuItem>
             <MenuItem key="talent" className="nav-menu-item">
-              用户视频
+              <Link to="/index/talent">达人频道</Link>
             </MenuItem>
             <MenuItem key="article" className="nav-menu-item">
-              评测文章
+              <Link to="/index/article">文章频道</Link>
             </MenuItem>
           </Menu>
         </div>
@@ -68,23 +69,23 @@ export default class NavBar extends Component {
           <span>
             {isLogin ? (
               <span>
-                <a className="nav-action" href="#1">
+                <Link className="nav-action" to="#">
                   注册
-                </a>
+                </Link>
                 <Divider type="vertical" />
-                <a className="nav-action" href="#1">
+                <Link className="nav-action" to="#">
                   登录
-                </a>
+                </Link>
               </span>
             ) : (
               <Row type="flex" align="middle">
-                <a className="nav-action" href="#1">
+                <Link className="nav-action" to="#">
                   通知
-                </a>
+                </Link>
                 <Divider type="vertical" />
-                <a className="nav-action" href="#1">
+                <Link className="nav-action" to="#">
                   私信
-                </a>
+                </Link>
                 <Divider type="vertical" />
                 <Dropdown overlay={dropMenu} placement="bottomRight">
                   <Avatar icon="user" />

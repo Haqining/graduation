@@ -4,6 +4,9 @@ import { Layout } from 'antd';
 
 import NavBar from '../../components/NavBar/NavBar';
 import Home from './Home/Home';
+import Official from './Official/OfficialContainer';
+import Talent from './Talent/TalentContainer';
+import Play from './Play/Play';
 
 import './Index.css';
 
@@ -17,12 +20,15 @@ export default class Index extends Component {
     } = this.props;
     return (
       <Layout>
-        <Header>
+        <Header className="header">
           <NavBar selectedKey={pathname.split('/')[2]} />
         </Header>
-        <Content>
+        <Content className="content">
           <Switch>
             <Route path={`${url}/home`} component={Home} />
+            <Route path={`${url}/official`} component={Official} />
+            <Route path={`${url}/talent`} component={Talent} />
+            <Route path={`${url}/play/:videoId&&:videoType`} component={Play} />
             <Redirect from={`${url}/`} to={`${url}/home`} />
           </Switch>
         </Content>

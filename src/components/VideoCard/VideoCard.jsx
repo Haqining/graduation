@@ -6,13 +6,13 @@ import './VideoCard.css';
 
 export default class VideoCard extends Component {
   render() {
-    const { imgSrc, title, videoId } = this.props;
+    const { videoId, videoType, videoCover, videoTitle } = this.props;
     return (
       <div className="video-card">
-        <Link to={`/play/${videoId}`}>
-          <img src={imgSrc} alt={title} />
-          <span className="video-card-title" title={title}>
-            {title}
+        <Link to={`/index/play/${videoId}&&${videoType}`}>
+          <img src={videoCover} alt={videoTitle} />
+          <span className="video-card-title" title={videoTitle}>
+            {videoTitle}
           </span>
           <span className="play-icon">
             <Icon type="caret-right" />

@@ -1,4 +1,4 @@
-import {} from './actionType';
+import {} from './actionTypes';
 
 const initialState = {};
 
