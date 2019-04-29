@@ -1,0 +1,33 @@
+.comment-editor-content {
+  margin-bottom: 32px;
+}
+
+.comment-editor {
+  border-radius: 8px;
+  border: 1px solid #d1d1d1;
+  margin-bottom: 32px;
+}
+
+.comment-editor-content .bf-content {
+  height: 184px;
+}
+
+.comment-item {
+  padding: 16px 0;
+  border-bottom: 1px solid #ebedf0;
+}
+
+.comment-item-right {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.comment-item-info {
+  color: #b4b4b4;
+  margin-bottom: 8px;
+}
+
+.comment-item-action > span {
+  cursor: pointer;
+  user-select: none;
+}

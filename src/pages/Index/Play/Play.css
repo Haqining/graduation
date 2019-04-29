@@ -59,21 +59,6 @@
   margin-bottom: 8px;
 }
 
-.play-editor-content {
-  margin-bottom: 32px;
-}
-
-.play-editor{
-  border-radius: 8px;
-  border: 1px solid #d1d1d1;
-  margin-bottom: 32px;
-}
-
-
-.play-editor-content .bf-content {
-  height: 184px;
-}
-
 .play-comment-content {
   background: #ffffff;
 }

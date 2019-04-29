@@ -2,6 +2,7 @@ import wrapper from '../../../assets/player-wrapper.jpg';
 
 export default {
   videoTitle: '王自如上手体验三星 Galaxy Fold 折叠屏：9 年后又一次重磅开箱！',
+  contentType: '1',
   videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
   videoWrapper: wrapper,
   videoIntroduction:

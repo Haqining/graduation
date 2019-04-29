@@ -28,7 +28,7 @@ export default class Index extends Component {
             <Route path={`${url}/home`} component={Home} />
             <Route path={`${url}/official`} component={Official} />
             <Route path={`${url}/talent`} component={Talent} />
-            <Route path={`${url}/play/:videoId&&:videoType`} component={Play} />
+            <Route path={`${url}/play/:contentId&&:videoType`} component={Play} />
             <Redirect from={`${url}/`} to={`${url}/home`} />
           </Switch>
         </Content>

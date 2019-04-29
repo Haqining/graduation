@@ -8,7 +8,8 @@ import {
   Popover,
   Divider,
   Avatar,
-  Dropdown
+  Dropdown,
+  message
 } from 'antd';
 
 import './NavBar.css';
@@ -26,9 +27,30 @@ const dropMenu = (
 );
 
 export default class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      keyword: ''
+    };
+  }
+
+  changeKeyword = e => {
+    const {
+      target: { value }
+    } = e;
+    this.setState({
+      keyword: value
+    });
+  };
+
+  confirmSearch = () => {
+    message.info('按了回车');
+  };
+
   render() {
     const { selectedKey } = this.props;
-    const isLogin = localStorage.getItem('token') !== '';
+    const { keyword } = this.state;
+    const isLogin = localStorage.getItem('userId') !== '';
     return (
       <Row className="nav-bar" type="flex" justify="space-between">
         <div>
@@ -51,8 +73,11 @@ export default class NavBar extends Component {
         <Row className="nav-right" type="flex">
           <span className="nav-search-input">
             <Input
-              placeholder="Search"
+              value={keyword}
+              placeholder="这是搜索"
               prefix={<Icon className="nav-search-icon" type="search" />}
+              onChange={this.changeKeyword}
+              onPressEnter={this.confirmSearch}
             />
           </span>
           <span>

@@ -25,9 +25,10 @@ export default class VideoCardList extends Component {
         </ul>
       </div>
     ) : (
-      <div>
-        <Empty />
-      </div>
+      <Empty
+        description="没得视频看 (°ー°〃)"
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
+      />
     );
   }
 }

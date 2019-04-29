@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Breadcrumb, Icon, Button, message } from 'antd';
+import { Row, Breadcrumb, Icon, BackTop } from 'antd';
 import ReactPlayer from 'react-player';
-import BraftEditor from 'braft-editor';
+
+import CommentList from '../../../components/CommentList/CommentList';
 
 import './Play.css';
+import ContentTypeDictionary from './ContentTypeDictionary';
 import VideoInfo from './VideoInfo';
 
 const { Item: BreadcrumbItem } = Breadcrumb;
-
-const controls = ['bold', 'italic', 'blockquote', 'emoji'];
 
 export default class Play extends Component {
   constructor(props) {
@@ -17,13 +17,11 @@ export default class Play extends Component {
     this.state = {
       videoInfo: VideoInfo,
       isPlay: false,
-      isFirstClick: true,
-      editorState: BraftEditor.createEditorState(),
-      comments: []
+      isFirstClick: true
     };
   }
 
-  chooseType = videoType => {
+  chooseVideoType = videoType => {
     const isOfficial = videoType === 'official';
     return (
       <Link to={isOfficial ? '/index/official' : '/index/talent'}>
@@ -45,37 +43,32 @@ export default class Play extends Component {
     });
   };
 
-  editorChangeHandler = editorState => {
-    this.setState({
-      editorState
-    });
-  };
-
-  submitComment = () => {
-    const { editorState } = this.state;
-    if (editorState.isEmpty()) {
-      message.error('请输入评论的内容 (￣▽￣)');
-    }
-  };
-
   render() {
     const {
       match: {
-        params: { videoType }
+        params: { contentId, videoType }
       }
     } = this.props;
     const {
-      videoInfo: { videoTitle, videoUrl, videoWrapper, videoIntroduction },
+      videoInfo: {
+        videoTitle,
+        contentType,
+        videoUrl,
+        videoWrapper,
+        videoIntroduction
+      },
       isPlay,
-      isFirstClick,
-      editorState
+      isFirstClick
     } = this.state;
     return (
       <div>
         <Row className="section play-content">
           <Row className="section-content">
             <Breadcrumb className="play-breadcrumb">
-              <BreadcrumbItem>{this.chooseType(videoType)}</BreadcrumbItem>
+              <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem>
+              <BreadcrumbItem>
+                {ContentTypeDictionary[contentType]}
+              </BreadcrumbItem>
               <BreadcrumbItem>{videoTitle}</BreadcrumbItem>
             </Breadcrumb>
             <Row className="play-title">{videoTitle}</Row>
@@ -117,27 +110,13 @@ export default class Play extends Component {
         <Row className="section play-comment-content">
           <Row className="section-content ">
             <Row className="play-editor-content">
-              <BraftEditor
-                className="play-editor"
-                value={editorState}
-                controls={controls}
-                placeholder="可以在这里编辑评论内容 ε=ε=ε=(~￣▽￣)~"
-                onChange={this.editorChangeHandler}
-              />
-              <Row type="flex" justify="end">
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={this.submitComment}
-                  style={{ padding: '0 40px' }}
-                >
-                  评论
-                </Button>
-              </Row>
+              <CommentList contentId={contentId} />
             </Row>
-            <Row>ddi</Row>
           </Row>
         </Row>
+        <BackTop visibilityHeight={0}>
+          <div className="ant-back-top-inner">UP</div>
+        </BackTop>
       </div>
     );
   }
