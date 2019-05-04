@@ -1,7 +1,3 @@
-.home-banner {
-  background: #f7f7f7;
-}
-
 .home-banner a {
   display: block;
   position: relative;
@@ -38,14 +34,6 @@
   padding-left: 4px;
 }
 
-.home-official {
-  background: #e9e9e9;
-}
-
 .home-channel-title > span {
   font-size: 1.75rem;
-}
-
-.home-talent {
-  background: #f7f7f7;
 }

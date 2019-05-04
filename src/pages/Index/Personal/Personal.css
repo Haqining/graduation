@@ -1,0 +1,19 @@
+.personal-header {
+  padding: 24px;
+  margin-bottom: 32px;
+  border: 1px solid #e8e8e8;
+}
+
+.personal-username {
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.personal-other-info {
+  margin-top: 16px;
+}
+
+.personal-other-info > span {
+  margin-right: 32px;
+}

@@ -27,7 +27,12 @@
   margin-bottom: 8px;
 }
 
+.comment-item-action {
+  margin-top: 8px;
+}
+
 .comment-item-action > span {
   cursor: pointer;
   user-select: none;
+  transition: color 0.3s;
 }

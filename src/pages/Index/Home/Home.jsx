@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Divider, Button, BackTop } from 'antd';
 
-import VideoCardList from '../../../components/VideoCardList/VideoCardList';
+import VideoList from '../../../components/VideoList/VideoList';
+import ArticleList from '../../../components/ArticleList/ArticleList';
 
 import './Home.css';
 import bannersData from './bannersData';
 import OfficialData from '../OfficialData';
 import TalentData from '../TalentData';
+import ArticleData from '../ArticleData';
 
 export default class Home extends Component {
   constructor(props) {
@@ -15,15 +17,35 @@ export default class Home extends Component {
     this.state = {
       banners: bannersData,
       officialVideos: OfficialData,
-      talentVideos: TalentData
+      talentVideos: TalentData,
+      articleList: ArticleData
     };
   }
 
+  changeArticleLike = e => {
+    const { articleList } = this.state;
+    const selectArticle = articleList[e];
+    if (selectArticle.liked) {
+      selectArticle.like -= 1;
+    } else {
+      selectArticle.like += 1;
+    }
+    selectArticle.liked = !selectArticle.liked;
+    articleList[e] = { ...selectArticle };
+    this.setState({
+      articleList
+    });
+  };
+
   render() {
+    const {
+      history: { push }
+    } = this.props;
     const {
       banners: { left, tl, tr, bl, br },
       officialVideos,
-      talentVideos
+      talentVideos,
+      articleList
     } = this.state;
     return (
       <div>
@@ -63,8 +85,8 @@ export default class Home extends Component {
             </div>
           </Row>
         </Row>
-        <Row className="section home-official">
-          <Row className="section-content">
+        <Row className="section">
+          <div className="section-content">
             <Divider
               className="home-channel-title"
               style={{ margin: '0 0 40px 0' }}
@@ -72,7 +94,7 @@ export default class Home extends Component {
               官方频道
             </Divider>
             <Row>
-              <VideoCardList videoList={officialVideos} />
+              <VideoList videoList={officialVideos} />
             </Row>
             <Row type="flex" justify="center">
               <Button
@@ -84,10 +106,10 @@ export default class Home extends Component {
                 更多视频
               </Button>
             </Row>
-          </Row>
+          </div>
         </Row>
-        <Row className="section home-talent">
-          <Row className="section-content">
+        <Row className="section">
+          <div className="section-content">
             <Divider
               className="home-channel-title"
               style={{ margin: '0 0 40px 0' }}
@@ -95,7 +117,7 @@ export default class Home extends Component {
               达人频道
             </Divider>
             <Row>
-              <VideoCardList videoList={talentVideos} />
+              <VideoList videoList={talentVideos} />
             </Row>
             <Row type="flex" justify="center">
               <Button
@@ -107,7 +129,34 @@ export default class Home extends Component {
                 更多视频
               </Button>
             </Row>
-          </Row>
+          </div>
+        </Row>
+        <Row className="section">
+          <div className="section-content">
+            <Divider
+              className="home-channel-title"
+              style={{ margin: '0 0 40px 0' }}
+            >
+              测评文章
+            </Divider>
+            <Row>
+              <ArticleList
+                articleList={articleList}
+                push={push}
+                onArticleLikeChange={this.changeArticleLike}
+              />
+            </Row>
+            <Row type="flex" justify="center">
+              <Button
+                href="/index/article"
+                type="primary"
+                size="large"
+                style={{ padding: '0 40px' }}
+              >
+                更多文章
+              </Button>
+            </Row>
+          </div>
         </Row>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>

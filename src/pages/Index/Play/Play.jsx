@@ -6,7 +6,7 @@ import ReactPlayer from 'react-player';
 import CommentList from '../../../components/CommentList/CommentList';
 
 import './Play.css';
-import ContentTypeDictionary from './ContentTypeDictionary';
+import { ContentTypeDictionary } from '../../../config.js';
 import VideoInfo from './VideoInfo';
 
 const { Item: BreadcrumbItem } = Breadcrumb;
@@ -46,7 +46,7 @@ export default class Play extends Component {
   render() {
     const {
       match: {
-        params: { contentId, videoType }
+        params: { videoId, videoType }
       }
     } = this.props;
     const {
@@ -61,9 +61,9 @@ export default class Play extends Component {
       isFirstClick
     } = this.state;
     return (
-      <div>
+      <Row>
         <Row className="section play-content">
-          <Row className="section-content">
+          <div className="section-content">
             <Breadcrumb className="play-breadcrumb">
               <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem>
               <BreadcrumbItem>
@@ -105,19 +105,19 @@ export default class Play extends Component {
               <Row className="play-introduction-title">视频介绍</Row>
               <Row>{videoIntroduction}</Row>
             </Row>
-          </Row>
+          </div>
         </Row>
         <Row className="section play-comment-content">
-          <Row className="section-content ">
+          <div className="section-content ">
             <Row className="play-editor-content">
-              <CommentList contentId={contentId} />
+              <CommentList contentId={videoId} />
             </Row>
-          </Row>
+          </div>
         </Row>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>
-      </div>
+      </Row>
     );
   }
 }

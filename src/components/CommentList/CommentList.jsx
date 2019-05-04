@@ -3,6 +3,7 @@ import { Row, Button, message, Empty, Pagination, Avatar, Divider } from 'antd';
 import BraftEditor from 'braft-editor';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import moment from 'moment';
 
 import './CommentList.css';
 import CommentListData from './CommentListData';
@@ -38,13 +39,25 @@ export default class CommentList extends Component {
   };
 
   submitComment = () => {
-    const { editorState } = this.state;
+    const { editorState, commentList } = this.state;
     if (editorState.isEmpty()) {
       message.error('请输入评论的内容 (～￣(OO)￣)ブ');
     } else {
       message.success('评论成功 d=====(￣▽￣*)b');
       this.setState({
-        editorState: BraftEditor.createEditorState()
+        editorState: BraftEditor.createEditorState(),
+        commentList: [
+          {
+            userId: 'testUserId12',
+            avatar: '',
+            username: 'testName',
+            time: moment().format('YYYY-MM-DD HH:mm'),
+            commentContent: editorState.toHTML(),
+            like: 0,
+            liked: false
+          },
+          ...commentList
+        ]
       });
     }
   };
@@ -64,6 +77,19 @@ export default class CommentList extends Component {
     });
   };
 
+  replyComment = index => () => {
+    const { commentList, currentPage } = this.state;
+    const selectComment = commentList[(currentPage - 1) * 10 + index];
+    this.refs.commentEditor.requestFocus();
+    this.setState({
+      editorState: BraftEditor.createEditorState(
+        `<blockquote><p>引用@${selectComment.username}:</p><p>${
+          selectComment.commentContent
+        }</p></blockquote><p></p>`
+      )
+    });
+  };
+
   changePage = page => {
     this.setState({
       currentPage: page
@@ -80,6 +106,7 @@ export default class CommentList extends Component {
         <Row className="comment-editor-content">
           <BraftEditor
             className="comment-editor"
+            ref="commentEditor"
             value={editorState}
             controls={controls}
             placeholder="可以在这里编辑评论内容 Ψ(￣∀￣)Ψ"
@@ -136,19 +163,19 @@ export default class CommentList extends Component {
                     >
                       <span
                         onClick={this.changeCommentLike(index)}
-                        style={value.liked ? { color: '#ed1c24' } : {}}
+                        style={{ color: value.liked ? '#ed1c24' : '' }}
                       >
                         {value.liked ? '已赞' : '点赞'}({value.like})
                       </span>
                       <Divider type="vertical" />
-                      <span style={{ cursor: 'pointer' }}>回复</span>
+                      <span onClick={this.replyComment(index)}>回复</span>
                     </Row>
                   </div>
                 </Row>
               ))
           ) : (
             <Empty
-              description="快来抢沙发 ┑(￣Д ￣)┍"
+              description="还没有评论，快来抢沙发吧 ┑(￣Д ￣)┍"
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             />
           )}

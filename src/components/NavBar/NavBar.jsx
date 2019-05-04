@@ -17,15 +17,6 @@ import wxCode from '../../assets/小程序码.jpg';
 
 const { Item: MenuItem } = Menu;
 
-const dropMenu = (
-  <Menu>
-    <MenuItem>testUserName</MenuItem>
-    <MenuItem>
-      <span>退出</span>
-    </MenuItem>
-  </Menu>
-);
-
 export default class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +24,10 @@ export default class NavBar extends Component {
       keyword: ''
     };
   }
+
+  logout = () => {
+    console.log('logout');
+  };
 
   changeKeyword = e => {
     const {
@@ -66,7 +61,7 @@ export default class NavBar extends Component {
               <Link to="/index/talent">达人频道</Link>
             </MenuItem>
             <MenuItem key="article" className="nav-menu-item">
-              <Link to="/index/article">文章频道</Link>
+              <Link to="/index/article">测评文章</Link>
             </MenuItem>
           </Menu>
         </div>
@@ -93,29 +88,43 @@ export default class NavBar extends Component {
           </span>
           <span>
             {isLogin ? (
-              <span>
-                <Link className="nav-action" to="#">
-                  注册
-                </Link>
-                <Divider type="vertical" />
-                <Link className="nav-action" to="#">
-                  登录
-                </Link>
-              </span>
-            ) : (
               <Row type="flex" align="middle">
                 <Link className="nav-action" to="#">
                   通知
                 </Link>
                 <Divider type="vertical" />
-                <Link className="nav-action" to="#">
+                {/* <Link className="nav-action" to="#">
                   私信
                 </Link>
-                <Divider type="vertical" />
-                <Dropdown overlay={dropMenu} placement="bottomRight">
-                  <Avatar icon="user" />
+                <Divider type="vertical" /> */}
+                <Dropdown
+                  overlay={
+                    <Menu>
+                      <MenuItem>
+                        <Link to="/index/personal">testUserName</Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <div onClick={this.logout}>退出</div>
+                      </MenuItem>
+                    </Menu>
+                  }
+                  placement="bottomRight"
+                >
+                  <Link to="/index/personal">
+                    <Avatar icon="user" style={{ cursor: 'pointer' }} />
+                  </Link>
                 </Dropdown>
               </Row>
+            ) : (
+              <span>
+                <Link className="nav-action" to="/register">
+                  注册
+                </Link>
+                <Divider type="vertical" />
+                <Link className="nav-action" to="/login">
+                  登录
+                </Link>
+              </span>
             )}
           </span>
         </Row>

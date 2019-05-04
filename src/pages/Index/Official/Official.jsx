@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Row, Button, BackTop } from 'antd';
+import _ from 'lodash';
 
 import './Official.css';
 import OfficialData from '../OfficialData';
-import VideoCardList from '../../../components/VideoCardList/VideoCardList';
+import VideoList from '../../../components/VideoList/VideoList';
 
 export default class Official extends Component {
   constructor(props) {
@@ -24,28 +25,31 @@ export default class Official extends Component {
 
   render() {
     const { videoList, hasMore } = this.state;
+    const hasData = !_.isEmpty(videoList);
     return (
       <div>
-        <Row className="section video-list-content">
-          <Row className="section-content">
+        <Row className="section">
+          <div className="section-content">
             <Row>
-              <VideoCardList videoList={videoList} />
+              <VideoList videoList={videoList} />
             </Row>
-            <Row type="flex" justify="center">
-              {hasMore ? (
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={this.showMore}
-                  style={{ padding: '0 40px' }}
-                >
-                  显示更多
-                </Button>
-              ) : (
-                <span>没有更多了ε=ε=ε=(~￣▽￣)~</span>
-              )}
-            </Row>
-          </Row>
+            {hasData ? (
+              <Row type="flex" justify="center">
+                {hasMore ? (
+                  <Button
+                    type="primary"
+                    size="large"
+                    onClick={this.showMore}
+                    style={{ padding: '0 40px' }}
+                  >
+                    显示更多
+                  </Button>
+                ) : (
+                  <span>没有更多了ε=ε=ε=(~￣▽￣)~</span>
+                )}
+              </Row>
+            ) : null}
+          </div>
         </Row>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
