@@ -1,0 +1,23 @@
+.uv-cover-uploader > .ant-upload {
+  width: 400px;
+  height: 225px;
+  margin: 0;
+}
+
+.uv-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uv-cropper {
+  width: 400px;
+  height: 225px;
+}
+
+.uv-avatar-preview {
+  width: 400px;
+  height: 225px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}

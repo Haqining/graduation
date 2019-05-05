@@ -91,10 +91,18 @@ export default class Personal extends Component {
             </Row>
             <Row type="flex" justify="center" style={{ marginBottom: 32 }}>
               <ButtonGroup size="large">
-                <Button type="primary" style={{ padding: '0 40px' }}>
+                <Button
+                  type="primary"
+                  href="/index/upload/video"
+                  style={{ padding: '0 40px' }}
+                >
                   投稿视频
                 </Button>
-                <Button type="primary" style={{ padding: '0 40px' }}>
+                <Button
+                  type="primary"
+                  href="/index/upload/article"
+                  style={{ padding: '0 40px' }}
+                >
                   投稿文章
                 </Button>
               </ButtonGroup>

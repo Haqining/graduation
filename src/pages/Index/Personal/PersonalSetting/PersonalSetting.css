@@ -21,7 +21,7 @@
   height: 200px;
 }
 
-.cropper-preview {
+.ps-avatar-preview {
   width: 200px;
   height: 200px;
   margin-bottom: 16px;
@@ -29,7 +29,7 @@
   overflow: hidden;
 }
 
-.avatar-uploader > .ant-upload {
+.ps-avatar-uploader > .ant-upload {
   width: 200px;
   height: 200px;
   margin: 0;

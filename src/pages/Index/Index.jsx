@@ -6,6 +6,7 @@ import './Index.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Home from './Home/Home';
 import PersonalRoute from './Personal/PersonalRoute';
+import Upload from './Upload/Upload';
 import Official from './Official/OfficialContainer';
 import Talent from './Talent/TalentContainer';
 import Play from './Play/Play';
@@ -29,6 +30,7 @@ export default class Index extends Component {
           <Switch>
             <Route path={`${url}/home`} component={Home} />
             <Route path={`${url}/personal`} component={PersonalRoute} />
+            <Route path={`${url}/upload`} component={Upload} />
             <Route path={`${url}/official`} component={Official} />
             <Route path={`${url}/talent`} component={Talent} />
             <Route path={`${url}/play/:videoId&&:videoType`} component={Play} />

@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import Cropper from 'react-cropper';
 import moment from 'moment';
+import _ from 'lodash';
 
 import './PersonalSetting.css';
 import options from './cascader-address-options';
@@ -30,6 +31,8 @@ const { Item: FormItem } = Form;
 const { TextArea } = Input;
 const { Group: RadioGroup } = Radio;
 const { confirm } = Modal;
+
+const fileTypes = ['image/jpeg', 'image/png', 'image/bmp'];
 
 export default Form.create()(
   class PersonalSetting extends Component {
@@ -84,6 +87,15 @@ export default Form.create()(
     };
 
     uploadAvatar = file => {
+      const { size, type } = file;
+      if (size > 2 * 1024 * 1024) {
+        message.error('选择的图片过大，请重新选择');
+        return false;
+      }
+      if (!_.includes(fileTypes, type)) {
+        message.error('选择了错误的文件类型，请重新选择');
+        return false;
+      }
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
@@ -94,7 +106,7 @@ export default Form.create()(
 
     updateAvatar = () => {
       const { userInfo } = this.state;
-      // 上传用
+      // 裁切后直接上传服务器用
       // this.refs.cropper.getCroppedCanvas().toBlob(blob => {
       // });
       this.setState({
@@ -166,12 +178,13 @@ export default Form.create()(
                       autoCropArea={1}
                       aspectRatio={1}
                       minCropBoxWidth={50}
-                      preview=".cropper-preview"
+                      preview=".ps-avatar-preview"
                     />
                     <Divider />
-                    <div className="cropper-preview" />
+                    <div className="ps-avatar-preview" />
                     <div style={{ marginBottom: 16 }}>效果预览</div>
                     <Upload
+                      accept={fileTypes.join()}
                       showUploadList={false}
                       beforeUpload={this.uploadAvatar}
                     >
@@ -181,23 +194,16 @@ export default Form.create()(
                 ) : (
                   <div className="ps-upload-content">
                     <Upload
-                      className="avatar-uploader"
-                      accept="image/*"
+                      className="ps-avatar-uploader"
+                      accept={fileTypes.join()}
                       listType="picture-card"
                       showUploadList={false}
                       beforeUpload={this.uploadAvatar}
                     >
-                      <Icon
-                        type="plus"
-                        style={{
-                          fontSize: '2rem'
-                        }}
-                      />
-                      <div style={{ marginTop: 16 }}>上传一张图片</div>
+                      <Icon type="plus" />
                     </Upload>
                     <div>
-                      请选择图片上传：大小180 *
-                      180像素支持JPG、PNG等格式，图片需小于2M
+                      请选择图片上传：支持JPG、PNG、BMP等格式，图片需小于2M
                     </div>
                   </div>
                 )}
@@ -314,36 +320,34 @@ export default Form.create()(
     render() {
       const { pageState } = this.state;
       return (
-        <div>
-          <Row className="section">
-            <div className="section-content">
-              <Row style={{ marginBottom: 24 }}>
-                <Link to="/index/personal">
-                  <Icon type="left" />
-                  返回个人中心
-                </Link>
-              </Row>
-              <Layout className="ps-content">
-                <Sider width={200} style={{ background: '#ffffff' }}>
-                  <Menu
-                    selectedKeys={[pageState]}
-                    onSelect={this.selectMenuItem}
-                    style={{ height: '100%' }}
-                  >
-                    <MenuItem key="changeAvatar">修改头像</MenuItem>
-                    <MenuItem key="changeInfo">修改资料</MenuItem>
-                    <MenuItem key="changePassword">修改密码</MenuItem>
-                  </Menu>
-                </Sider>
-                <Content style={{ minHeight: 480 }}>
-                  <Row type="flex" justify="center">
-                    {this.choosePage(pageState)}
-                  </Row>
-                </Content>
-              </Layout>
-            </div>
-          </Row>
-        </div>
+        <Row className="section">
+          <div className="section-content">
+            <Row style={{ marginBottom: 24 }}>
+              <Link to="/index/personal">
+                <Icon type="left" />
+                返回个人中心
+              </Link>
+            </Row>
+            <Layout className="ps-content">
+              <Sider width={200} style={{ background: '#ffffff' }}>
+                <Menu
+                  selectedKeys={[pageState]}
+                  onSelect={this.selectMenuItem}
+                  style={{ height: '100%' }}
+                >
+                  <MenuItem key="changeAvatar">修改头像</MenuItem>
+                  <MenuItem key="changeInfo">修改资料</MenuItem>
+                  <MenuItem key="changePassword">修改密码</MenuItem>
+                </Menu>
+              </Sider>
+              <Content style={{ minHeight: 480 }}>
+                <Row type="flex" justify="center">
+                  {this.choosePage(pageState)}
+                </Row>
+              </Content>
+            </Layout>
+          </div>
+        </Row>
       );
     }
   }

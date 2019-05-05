@@ -54,7 +54,7 @@ export default class Play extends Component {
         videoTitle,
         contentType,
         videoUrl,
-        videoWrapper,
+        videoCover,
         videoIntroduction
       },
       isPlay,
@@ -91,7 +91,7 @@ export default class Play extends Component {
                   <div
                     className="play-video-wrapper"
                     onClick={this.playVideo}
-                    style={{ backgroundImage: `url(${videoWrapper})` }}
+                    style={{ backgroundImage: `url(${videoCover})` }}
                   />
                 </div>
               ) : null}
