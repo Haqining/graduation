@@ -32,7 +32,7 @@ const { TextArea } = Input;
 const { Group: RadioGroup } = Radio;
 const { confirm } = Modal;
 
-const fileTypes = ['image/jpeg', 'image/png', 'image/bmp'];
+const fileTypes = ['image/jpeg', 'image/png'];
 
 export default Form.create()(
   class PersonalSetting extends Component {
@@ -70,7 +70,8 @@ export default Form.create()(
       if (tempImage) {
         const that = this;
         confirm({
-          title: '上传的头像还未进行更新，确定取消嘛？',
+          title: '上传的头像还未进行更新，确定取消吗？',
+          centered: true,
           onOk() {
             that.setState({
               tempImage: '',
@@ -119,11 +120,11 @@ export default Form.create()(
       });
     };
 
-    confirmPasswordHandler = (rule, value, callback) => {
+    comparePassword = (rule, value, callback) => {
       const {
         form: { getFieldValue }
       } = this.props;
-      if (value && value !== getFieldValue('password')) {
+      if (value && value !== getFieldValue('newPassword')) {
         callback('确认的密码与设置的密码不一致');
       }
       callback();
@@ -202,9 +203,7 @@ export default Form.create()(
                     >
                       <Icon type="plus" />
                     </Upload>
-                    <div>
-                      请选择图片上传：支持JPG、PNG、BMP等格式，图片需小于2M
-                    </div>
+                    <div>请选择图片上传：支持JPG、PNG格式，需小于5M</div>
                   </div>
                 )}
               </Row>
@@ -220,7 +219,7 @@ export default Form.create()(
           >
             <FormItem label="昵称">
               {getFieldDecorator('nickname', {
-                rules: [{ required: true, message: '请设置一个昵称' }],
+                rules: [{ required: true, message: '昵称是必需的' }],
                 initialValue: username
               })(<Input />)}
             </FormItem>
@@ -272,11 +271,10 @@ export default Form.create()(
             <FormItem label="当前密码">
               {getFieldDecorator('password', {
                 rules: [
-                  { required: true, message: '没输入当前密码如何修改呢？' },
-                  { max: 18, message: '最多18字符' },
+                  { required: true, message: '当前密码是必需的' },
                   {
-                    min: 6,
-                    message: '至少6个字符'
+                    pattern: /^[a-zA-Z0-9~!@#$%^&*-_=+]{6,18}$/,
+                    message: '密码为字母、数字及一些符号的组合,6到18个字符'
                   }
                 ]
               })(<Input type="password" />)}
@@ -284,11 +282,10 @@ export default Form.create()(
             <FormItem label="新密码">
               {getFieldDecorator('newPassword', {
                 rules: [
-                  { required: true, message: '请设置一个新密码' },
-                  { max: 18, message: '最多18字符' },
+                  { required: true, message: '新密码是必需的' },
                   {
-                    min: 6,
-                    message: '至少6个字符'
+                    pattern: /^[a-zA-Z0-9~!@#$%^&*-_=+]{6,18}$/,
+                    message: '密码为字母、数字及一些符号的组合,6到18个字符'
                   }
                 ]
               })(<Input type="password" />)}
@@ -296,13 +293,12 @@ export default Form.create()(
             <FormItem label="确认密码">
               {getFieldDecorator('confirmPassword', {
                 rules: [
-                  { required: true, message: '请设置一个新密码' },
-                  { max: 18, message: '最多18字符' },
+                  { required: true, message: '确认密码是必需的' },
                   {
-                    min: 6,
-                    message: '至少6个字符'
+                    pattern: /^[a-zA-Z0-9~!@#$%^&*-_=+]{6,18}$/,
+                    message: '密码为字母、数字及一些符号的组合,6到18个字符'
                   },
-                  { validator: this.confirmPasswordHandler }
+                  { validator: this.comparePassword }
                 ]
               })(<Input type="password" />)}
             </FormItem>

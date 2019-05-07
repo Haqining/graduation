@@ -71,6 +71,7 @@ export default class ArticleList extends Component {
                 {value.liked ? '已赞' : '点赞'}({value.like})
               </span>
               <span>评论({value.comments})</span>
+              {/* TODO:加一个可操作列表 */}
             </Row>
           </Row>
         ))}

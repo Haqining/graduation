@@ -34,11 +34,10 @@ export default Form.create()(
               <FormItem>
                 {getFieldDecorator('password', {
                   rules: [
-                    { required: true, message: '请输入密码好吗？' },
-                    { max: 18, message: '最多18字符' },
+                    { required: true, message: '密码是必需的' },
                     {
-                      min: 6,
-                      message: '至少6个字符'
+                      pattern: /^[a-zA-Z0-9~!@#$%^&*-_=+]{6,18}$/,
+                      message: '密码为字母、数字及一些符号的组合,6到18个字符'
                     }
                   ]
                 })(<Input type="password" placeholder="密码" />)}

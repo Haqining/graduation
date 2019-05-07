@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { Empty } from 'antd';
+import { Link } from 'react-router-dom';
+import { Empty, Icon } from 'antd';
 import _ from 'lodash';
 
 import './VideoList.css';
-import VideoCard from '../VideoCard/VideoCard';
 
 export default class VideoList extends Component {
+  testClick = (index) => e => {
+    // 防止冒泡
+    e.stopPropagation();
+    console.log(index);
+  };
+
   render() {
     const { videoList } = this.props;
     return !_.isEmpty(videoList) ? (
@@ -13,12 +19,18 @@ export default class VideoList extends Component {
         <ul className="video-card-list">
           {videoList.map((value, index) => (
             <li className="video-card-list-item" key={value.videoType + index}>
-              <VideoCard
-                videoId={value.videoId}
-                videoType={value.videoType}
-                videoCover={value.videoCover}
-                videoTitle={value.videoTitle}
-              />
+              <div className="video-card">
+                <Link to={`/index/play/${value.videoId}&&${value.videoType}`}>
+                  <img src={value.videoCover} alt={value.videoTitle} />
+                  <div className="video-card-title" title={value.videoTitle}>
+                    {value.videoTitle}
+                  </div>
+                  <span className="play-icon">
+                    <Icon type="caret-right" />
+                  </span>
+                </Link>
+                {/* TODO:添加一个可操作列表 */}
+              </div>
             </li>
           ))}
         </ul>

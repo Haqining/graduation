@@ -109,7 +109,7 @@ export default class CommentList extends Component {
             ref="commentEditor"
             value={editorState}
             controls={controls}
-            placeholder="可以在这里编辑评论内容 Ψ(￣∀￣)Ψ"
+            placeholder="编辑评论内容"
             onChange={this.changeEditor}
           />
           <Row type="flex" justify="end">

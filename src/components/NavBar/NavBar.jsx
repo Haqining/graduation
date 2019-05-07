@@ -5,7 +5,7 @@ import {
   Row,
   Input,
   Icon,
-  Popover,
+  // Popover,
   Divider,
   Avatar,
   Dropdown,
@@ -13,7 +13,7 @@ import {
 } from 'antd';
 
 import './NavBar.css';
-import wxCode from '../../assets/小程序码.jpg';
+// import wxCode from '../../assets/小程序码.jpg';
 
 const { Item: MenuItem } = Menu;
 
@@ -69,13 +69,13 @@ export default class NavBar extends Component {
           <span className="nav-search-input">
             <Input
               value={keyword}
-              placeholder="这是搜索"
+              placeholder="搜索"
               prefix={<Icon className="nav-search-icon" type="search" />}
               onChange={this.changeKeyword}
               onPressEnter={this.confirmSearch}
             />
           </span>
-          <span>
+          {/* <span>
             <Popover
               className="nav-wx"
               placement="bottomRight"
@@ -85,7 +85,7 @@ export default class NavBar extends Component {
               <Icon type="wechat" style={{ marginRight: 8 }} />
               小程序
             </Popover>
-          </span>
+          </span> */}
           <span>
             {isLogin ? (
               <Row type="flex" align="middle">

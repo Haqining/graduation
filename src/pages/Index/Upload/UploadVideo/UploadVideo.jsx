@@ -99,7 +99,8 @@ export default Form.create()(
     closeModal = () => {
       const that = this;
       confirm({
-        title: '封面还未进行上传，确定取消嘛？',
+        title: '图片还未进行上传，确定取消吗？',
+        centered: true,
         onOk() {
           that.setState({
             tempCover: '',
@@ -116,7 +117,7 @@ export default Form.create()(
       const { videoList, videoCover, tempCover, modalVisible } = this.state;
       return (
         <Row type="flex" justify="center">
-          <Form style={{ width: 400 }}>
+          <Form style={{ width: 800 }}>
             <FormItem>
               <Dragger
                 accept={videoTypes.join()}
@@ -134,23 +135,29 @@ export default Form.create()(
             </FormItem>
             <FormItem label="标题">
               {getFieldDecorator('videoTitle', {
-                rules: [{ required: true, message: '稿件标题是必须的' }]
-              })(<Input placeholder="请输入稿件标题" />)}
+                rules: [{ required: true, message: '标题是必须的' }]
+              })(<Input placeholder="建议30个字符以内" />)}
             </FormItem>
             <FormItem label="封面图片">
-              <Upload
-                className="uv-cover-uploader"
-                accept={imageTypes.join()}
-                listType="picture-card"
-                showUploadList={false}
-                beforeUpload={this.uploadCover}
-              >
-                {videoCover ? (
-                  <img src={videoCover} alt="videoCover" style={{ width: '100%' }} />
-                ) : (
-                  <Icon type="plus" />
-                )}
-              </Upload>
+              <Row type="flex" justify="center">
+                <Upload
+                  className="uv-cover-uploader"
+                  accept={imageTypes.join()}
+                  listType="picture-card"
+                  showUploadList={false}
+                  beforeUpload={this.uploadCover}
+                >
+                  {videoCover ? (
+                    <img
+                      src={videoCover}
+                      alt="videoCover"
+                      style={{ width: '100%' }}
+                    />
+                  ) : (
+                    <Icon type="plus" />
+                  )}
+                </Upload>
+              </Row>
               <div style={{ textAlign: 'center' }}>
                 （支持JPG、PNG格式，需小于5M）
               </div>
@@ -164,17 +171,17 @@ export default Form.create()(
                 </Select>
               )}
             </FormItem>
-            <FormItem label="简介">
+            <FormItem label="视频简介">
               {getFieldDecorator('videoIntroduction', {
                 rules: [
-                  { required: true, message: '请输入简介内容' },
+                  { required: true, message: '视频简介是必需的' },
                   {
                     max: 240,
                     message: '不能超过240个字符'
                   }
                 ]
               })(
-                <TextArea autosize placeholder="简历能让更多的人找到你的视频" />
+                <TextArea autosize placeholder="最多240个字符" />
               )}
             </FormItem>
             <FormItem>
@@ -213,12 +220,12 @@ export default Form.create()(
                   guides={false}
                   toggleDragModeOnDblclick={false}
                   autoCropArea={1}
-                  aspectRatio={16 / 9}
-                  minCropBoxWidth={200}
-                  preview=".uv-avatar-preview"
+                  aspectRatio={4 / 3}
+                  minCropBoxWidth={100}
+                  preview=".uv-cover-preview"
                 />
                 <Divider />
-                <div className="uv-avatar-preview" />
+                <div className="uv-cover-preview" />
                 <div style={{ marginBottom: 16 }}>效果预览</div>
                 <Upload
                   accept={imageTypes.join()}

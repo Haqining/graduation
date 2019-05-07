@@ -15,3 +15,75 @@
 .video-card-list-item:nth-child(3n) {
   margin-right: 0;
 }
+
+.video-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-card img {
+  transition: transform 0.3s;
+  width: 100%;
+}
+
+.video-card:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+}
+
+.video-card:hover img {
+  transform: scale(1.1);
+}
+
+.video-card:hover .play-icon {
+  opacity: 1;
+}
+
+.video-card-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.65);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.video-card-title::before {
+  content: '';
+  width: 10px;
+  height: 20px;
+  background: #1890ff;
+  position: absolute;
+  left: 0;
+}
+
+.video-card-title::after {
+  content: '';
+  width: 10px;
+  height: 20px;
+  background: #1890ff;
+  position: absolute;
+  right: 0;
+}
+
+.play-icon {
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}

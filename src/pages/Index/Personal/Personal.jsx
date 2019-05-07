@@ -31,15 +31,25 @@ export default class Personal extends Component {
         ...ArticleData,
         ...ArticleData,
         ...ArticleData
+      ],
+      pvCurrentPage: 1,
+      pendingVideo: [...VideoData, ...VideoData, ...VideoData],
+      paCurrentPage: 1,
+      pendingArticle: [
+        ...ArticleData,
+        ...ArticleData,
+        ...ArticleData,
+        ...ArticleData
       ]
     };
   }
 
   changeTabPane = () => {
-    console.log('a');
     this.setState({
       videoCurrentPage: 1,
-      articleCurrentPage: 1
+      articleCurrentPage: 1,
+      pvCurrentPage: 1,
+      paCurrentPage: 1
     });
   };
 
@@ -55,18 +65,38 @@ export default class Personal extends Component {
     });
   };
 
+  changePVPage = page => {
+    this.setState({
+      pvCurrentPage: page
+    });
+  };
+
+  changePAPage = page => {
+    this.setState({
+      paCurrentPage: page
+    });
+  };
+
   render() {
     const {
       userInfo: { avatar, username, introduction, sex, hometown, joinTime },
       videoCurrentPage,
       videoList,
       articleCurrentPage,
-      articleList
+      articleList,
+      pvCurrentPage,
+      pendingVideo,
+      paCurrentPage,
+      pendingArticle
     } = this.state;
     const videoNumber = videoList.length;
     const videoNeedPagination = videoNumber > 12;
     const articleNumber = articleList.length;
     const articleNeedPagination = articleNumber > 9;
+    const pvNumber = pendingVideo.length;
+    const pvNeedPagination = pvNumber > 12;
+    const paNumber = pendingArticle.length;
+    const paNeedPagination = paNumber > 9;
     return (
       <div>
         <Row className="section">
@@ -104,6 +134,13 @@ export default class Personal extends Component {
                   style={{ padding: '0 40px' }}
                 >
                   投稿文章
+                </Button>
+                <Button
+                  type="primary"
+                  href="/index/auction"
+                  style={{ padding: '0 40px' }}
+                >
+                  二手拍卖
                 </Button>
               </ButtonGroup>
             </Row>
@@ -148,6 +185,52 @@ export default class Personal extends Component {
                         pageSize={9}
                         total={articleNumber}
                         onChange={this.changeArticlePage}
+                      />
+                    </Row>
+                  ) : null}
+                </TabPane>
+                <TabPane
+                  key="pendingVideo"
+                  tab={'待审核视频（' + pvNumber + '）'}
+                >
+                  <Row>
+                    <VideoList
+                      videoList={pendingVideo.filter(
+                        (value, index) =>
+                          (pvCurrentPage - 1) * 12 <= index &&
+                          index <= pvCurrentPage * 12 - 1
+                      )}
+                    />
+                  </Row>
+                  {pvNeedPagination ? (
+                    <Row type="flex" justify="center">
+                      <Pagination
+                        current={pvCurrentPage}
+                        pageSize={12}
+                        total={pvNumber}
+                        onChange={this.changePVPage}
+                      />
+                    </Row>
+                  ) : null}
+                </TabPane>
+                <TabPane
+                  key="pendingArticle"
+                  tab={'待审核文章（' + paNumber + '）'}
+                >
+                  <ArticleList
+                    articleList={pendingArticle.filter(
+                      (value, index) =>
+                        (paCurrentPage - 1) * 9 <= index &&
+                        index <= paCurrentPage * 9 - 1
+                    )}
+                  />
+                  {paNeedPagination ? (
+                    <Row type="flex" justify="center">
+                      <Pagination
+                        current={paCurrentPage}
+                        pageSize={9}
+                        total={paNumber}
+                        onChange={this.changePAPage}
                       />
                     </Row>
                   ) : null}

@@ -1,0 +1,57 @@
+.auction-content {
+  padding: 24px 0;
+  border: 1px solid #e8e8e8;
+  background: #ffffff;
+}
+
+.auction-product-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+}
+
+.auction-delete-image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 120px;
+  font-size: 2rem;
+  text-align: center;
+  color: #f5222d;
+  background: rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.auction-product-image:hover > .auction-delete-image {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.auction-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auction-cropper {
+  width: 200px;
+  height: 200px;
+}
+
+.auction-image-preview {
+  width: 400px;
+  height: 400px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.auction-image-uploader > .ant-upload {
+  width: 120px;
+  height: 120px;
+  margin: 0;
+  margin-bottom: 16px;
+}

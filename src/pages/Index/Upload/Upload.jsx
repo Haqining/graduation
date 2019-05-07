@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Switch, Route } from 'react-router-dom';
-import { Row, Layout, Menu } from 'antd';
+import { Row, Layout, Menu, Icon } from 'antd';
 
 import './Upload.css';
 import UploadArticle from './UploadArticle/UploadArticle';
@@ -18,6 +18,12 @@ export default class Upload extends Component {
     return (
       <Row className="section">
         <div className="section-content">
+          <Row style={{ marginBottom: 24 }}>
+            <Link to="/index/personal">
+              <Icon type="left" />
+              返回个人中心
+            </Link>
+          </Row>
           <Layout className="upload-content">
             <Sider width={200} style={{ background: '#ffffff' }}>
               <Menu

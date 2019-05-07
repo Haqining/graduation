@@ -8,7 +8,7 @@ const { Item: FormItem } = Form;
 
 export default Form.create()(
   class Register extends Component {
-    confirmPasswordHandler = (rule, value, callback) => {
+    comparePassword = (rule, value, callback) => {
       const {
         form: { getFieldValue }
       } = this.props;
@@ -29,10 +29,10 @@ export default Form.create()(
               <FormItem>
                 {getFieldDecorator('nickname', {
                   rules: [
-                    { required: true, message: '需要一个昵称' },
+                    { required: true, message: '昵称是必需的' },
                     {
                       max: 20,
-                      message: '昵称最长只能20个字符'
+                      message: '最多20个字符'
                     }
                   ]
                 })(<Input placeholder="昵称" />)}
@@ -40,19 +40,18 @@ export default Form.create()(
               <FormItem>
                 {getFieldDecorator('email', {
                   rules: [
-                    { required: true, message: '邮箱是必要的' },
-                    { type: 'email', message: '需要正确格式' }
+                    { required: true, message: '邮箱是必需的' },
+                    { type: 'email', message: '邮箱格式不正确' }
                   ]
                 })(<Input placeholder="邮箱" />)}
               </FormItem>
               <FormItem>
                 {getFieldDecorator('password', {
                   rules: [
-                    { required: true, message: '请设置一个密码' },
-                    { max: 18, message: '最多18字符' },
+                    { required: true, message: '密码是必需的' },
                     {
-                      min: 6,
-                      message: '至少6个字符'
+                      pattern: /^[a-zA-Z0-9~!@#$%^&*-_=+]{6,18}$/,
+                      message: '密码为字母、数字及一些符号的组合,6到18个字符'
                     }
                   ]
                 })(<Input type="password" placeholder="密码" />)}
@@ -60,15 +59,15 @@ export default Form.create()(
               <FormItem>
                 {getFieldDecorator('confirmPassword', {
                   rules: [
-                    { required: true, message: '必须确认一次密码' },
-                    { max: 18, message: '最多18字符' },
+                    { required: true, message: '确认密码是必需的' },
+                    { max: 18, message: '最多18个字符' },
                     {
                       min: 6,
                       message: '至少6个字符'
                     },
-                    { validator: this.confirmPasswordHandler }
+                    { validator: this.comparePassword }
                   ]
-                })(<Input type="password" placeholder="确认一次密码" />)}
+                })(<Input type="password" placeholder="确认密码" />)}
               </FormItem>
               <FormItem>
                 <Button type="primary" size="large" style={{ width: '100%' }}>
