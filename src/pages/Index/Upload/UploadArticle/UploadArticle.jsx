@@ -123,7 +123,7 @@ export default Form.create()(
         <Row type="flex" justify="center">
           <div className="ua-content">
             <Form>
-              <FormItem label="封面图片">
+              <FormItem label="封面图片" required>
                 <Row type="flex" justify="center">
                   <Upload
                     className="ua-cover-uploader"

@@ -118,7 +118,7 @@ export default Form.create()(
       return (
         <Row type="flex" justify="center">
           <Form style={{ width: 800 }}>
-            <FormItem>
+            <FormItem label="上传视频" required>
               <Dragger
                 accept={videoTypes.join()}
                 fileList={videoList}
@@ -138,7 +138,7 @@ export default Form.create()(
                 rules: [{ required: true, message: '标题是必须的' }]
               })(<Input placeholder="建议30个字符以内" />)}
             </FormItem>
-            <FormItem label="封面图片">
+            <FormItem label="封面图片" required>
               <Row type="flex" justify="center">
                 <Upload
                   className="uv-cover-uploader"
@@ -180,9 +180,7 @@ export default Form.create()(
                     message: '不能超过240个字符'
                   }
                 ]
-              })(
-                <TextArea autosize placeholder="最多240个字符" />
-              )}
+              })(<TextArea autosize placeholder="最多240个字符" />)}
             </FormItem>
             <FormItem>
               <Row type="flex" justify="center">
