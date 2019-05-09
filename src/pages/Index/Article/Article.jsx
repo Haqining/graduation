@@ -6,13 +6,10 @@ import ArticleList from '../../../components/ArticleList/ArticleList';
 import ArticleData from '../ArticleData';
 
 export default class Article extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articleList: ArticleData,
-      hasMore: true
-    };
-  }
+  state = {
+    articleList: ArticleData,
+    hasMore: true
+  };
 
   showMore = () => {
     const { articleList } = this.state;
@@ -22,36 +19,14 @@ export default class Article extends Component {
     });
   };
 
-  changeArticleLike = e => {
-    const { articleList } = this.state;
-    const selectArticle = articleList[e];
-    if (selectArticle.liked) {
-      selectArticle.like -= 1;
-    } else {
-      selectArticle.like += 1;
-    }
-    selectArticle.liked = !selectArticle.liked;
-    articleList[e] = { ...selectArticle };
-    this.setState({
-      articleList
-    });
-  };
-
   render() {
-    const {
-      history: { push }
-    } = this.props;
     const { articleList, hasMore } = this.state;
     return (
       <div>
-        <Row className="section">
+        <div className="section">
           <div className="section-content">
             <Row>
-              <ArticleList
-                articleList={articleList}
-                push={push}
-                onArticleLikeChange={this.changeArticleLike}
-              />
+              <ArticleList articleList={articleList} />
             </Row>
             <Row type="flex" justify="center">
               {hasMore ? (
@@ -68,7 +43,7 @@ export default class Article extends Component {
               )}
             </Row>
           </div>
-        </Row>
+        </div>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>

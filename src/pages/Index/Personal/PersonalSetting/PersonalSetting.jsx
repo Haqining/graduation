@@ -36,22 +36,19 @@ const fileTypes = ['image/jpeg', 'image/png'];
 
 export default Form.create()(
   class PersonalSetting extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        userInfo: {
-          avatar: testAvatar,
-          username: 'testName',
-          introduction: '个人介绍',
-          sex: '1',
-          hometown: '11,1101,110101'
-        },
-        // changeAvatar changeInfo changePassword
-        pageState: 'changeAvatar',
-        modalVisible: false,
-        tempImage: ''
-      };
-    }
+    state = {
+      userInfo: {
+        avatar: testAvatar,
+        username: 'testName',
+        introduction: '个人介绍',
+        sex: '1',
+        hometown: '11,1101,110101'
+      },
+      // changeAvatar changeInfo changePassword
+      pageState: 'changeAvatar',
+      modalVisible: false,
+      tempImage: ''
+    };
 
     selectMenuItem = ({ selectedKeys }) => {
       this.setState({
@@ -217,9 +214,9 @@ export default Form.create()(
             wrapperCol={{ span: 18 }}
             style={{ width: 400 }}
           >
-            <FormItem label="昵称">
-              {getFieldDecorator('nickname', {
-                rules: [{ required: true, message: '昵称是必需的' }],
+            <FormItem label="用户名">
+              {getFieldDecorator('username', {
+                rules: [{ required: true, message: '用户名是必需的' }],
                 initialValue: username
               })(<Input />)}
             </FormItem>
@@ -236,7 +233,7 @@ export default Form.create()(
             <FormItem label="简介">
               {getFieldDecorator('introduction', {
                 initialValue: introduction
-              })(<TextArea />)}
+              })(<TextArea autosize />)}
             </FormItem>
             <FormItem label="家乡">
               {getFieldDecorator('hometown', {
@@ -316,7 +313,7 @@ export default Form.create()(
     render() {
       const { pageState } = this.state;
       return (
-        <Row className="section">
+        <div className="section">
           <div className="section-content">
             <Row style={{ marginBottom: 24 }}>
               <Link to="/index/personal">
@@ -343,7 +340,7 @@ export default Form.create()(
               </Content>
             </Layout>
           </div>
-        </Row>
+        </div>
       );
     }
   }

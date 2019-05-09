@@ -1,50 +1,24 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Menu,
-  Row,
-  Input,
-  Icon,
-  // Popover,
-  Divider,
-  Avatar,
-  Dropdown,
-  message
-} from 'antd';
+import { Menu, Row, Icon, Popover, Divider, Avatar, Dropdown } from 'antd';
 
 import './NavBar.css';
-// import wxCode from '../../assets/小程序码.jpg';
+import wxCode from '../../assets/小程序码.jpg';
 
 const { Item: MenuItem } = Menu;
 
 export default class NavBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      keyword: ''
-    };
-  }
-
   logout = () => {
     console.log('logout');
   };
 
-  changeKeyword = e => {
-    const {
-      target: { value }
-    } = e;
-    this.setState({
-      keyword: value
-    });
-  };
-
-  confirmSearch = () => {
-    message.info('按了回车');
+  routeToSearch = () => {
+    const { push } = this.props;
+    push('/index/search');
   };
 
   render() {
     const { selectedKey } = this.props;
-    const { keyword } = this.state;
     const isLogin = localStorage.getItem('userId') !== '';
     return (
       <Row className="nav-bar" type="flex" justify="space-between">
@@ -66,30 +40,23 @@ export default class NavBar extends Component {
           </Menu>
         </div>
         <Row className="nav-right" type="flex">
-          <span className="nav-search-input">
-            <Input
-              value={keyword}
-              placeholder="搜索"
-              prefix={<Icon className="nav-search-icon" type="search" />}
-              onChange={this.changeKeyword}
-              onPressEnter={this.confirmSearch}
-            />
+          <span onClick={this.routeToSearch}>
+            <Icon type="search" style={{ marginRight: 8 }} />
+            搜索
           </span>
-          {/* <span>
-            <Popover
-              className="nav-wx"
-              placement="bottomRight"
-              arrowPointAtCenter
-              content={<img src={wxCode} alt="小程序码" />}
-            >
-              <Icon type="wechat" style={{ marginRight: 8 }} />
-              小程序
-            </Popover>
-          </span> */}
+
+          <Popover
+            placement="bottomRight"
+            arrowPointAtCenter
+            content={<img src={wxCode} alt="小程序码" />}
+          >
+            <Icon type="wechat" style={{ marginRight: 8 }} />
+            小程序
+          </Popover>
           <span>
             {isLogin ? (
               <Row type="flex" align="middle">
-                <Link className="nav-action" to="#">
+                <Link to="#" style={{ color: 'rgba(255, 255, 255, 0.65)' }}>
                   通知
                 </Link>
                 <Divider type="vertical" />
@@ -101,7 +68,7 @@ export default class NavBar extends Component {
                   overlay={
                     <Menu>
                       <MenuItem>
-                        <Link to="/index/personal">testUserName</Link>
+                        <Link to={`/index/personal/${'id'}`}>testUserName</Link>
                       </MenuItem>
                       <MenuItem>
                         <div onClick={this.logout}>退出</div>
@@ -110,7 +77,7 @@ export default class NavBar extends Component {
                   }
                   placement="bottomRight"
                 >
-                  <Link to="/index/personal">
+                  <Link to={`/index/personal/${'id'}`}>
                     <Avatar icon="user" style={{ cursor: 'pointer' }} />
                   </Link>
                 </Dropdown>

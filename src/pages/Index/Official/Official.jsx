@@ -7,13 +7,10 @@ import OfficialData from '../OfficialData';
 import VideoList from '../../../components/VideoList/VideoList';
 
 export default class Official extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      videoList: OfficialData,
-      hasMore: true
-    };
-  }
+  state = {
+    videoList: OfficialData,
+    hasMore: true
+  };
 
   showMore = () => {
     const { videoList } = this.state;
@@ -28,7 +25,7 @@ export default class Official extends Component {
     const hasData = !_.isEmpty(videoList);
     return (
       <div>
-        <Row className="section">
+        <div className="section">
           <div className="section-content">
             <Row>
               <VideoList videoList={videoList} />
@@ -50,7 +47,7 @@ export default class Official extends Component {
               </Row>
             ) : null}
           </div>
-        </Row>
+        </div>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>

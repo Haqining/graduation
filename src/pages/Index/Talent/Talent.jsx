@@ -7,13 +7,10 @@ import TalentData from '../TalentData';
 import VideoList from '../../../components/VideoList/VideoList';
 
 export default class Talent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      videoList: TalentData,
-      hasMore: true
-    };
-  }
+  state = {
+    videoList: TalentData,
+    hasMore: true
+  };
 
   showMore = () => {
     const { videoList } = this.state;
@@ -28,7 +25,7 @@ export default class Talent extends Component {
     const hasData = !_.isEmpty(videoList);
     return (
       <div>
-        <Row className="section">
+        <div className="section">
           <div className="section-content">
             <Row>
               <VideoList videoList={videoList} />
@@ -50,7 +47,7 @@ export default class Talent extends Component {
               </Row>
             ) : null}
           </div>
-        </Row>
+        </div>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>

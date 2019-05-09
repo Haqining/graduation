@@ -45,14 +45,11 @@ const controls = [
 
 export default Form.create()(
   class UploadArticle extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        articleCover: '',
-        tempCover: '',
-        modalVisible: false
-      };
-    }
+    state = {
+      articleCover: '',
+      tempCover: '',
+      modalVisible: false
+    };
 
     uploadCover = file => {
       const { size, type } = file;
@@ -176,12 +173,7 @@ export default Form.create()(
                       message: '不能超过240个字符'
                     }
                   ]
-                })(
-                  <TextArea
-                    autosize
-                    placeholder="最多240个字符"
-                  />
-                )}
+                })(<TextArea autosize placeholder="最多240个字符" />)}
               </FormItem>
               <FormItem label="正文">
                 {getFieldDecorator('articleContent', {

@@ -27,15 +27,12 @@ const imageTypes = ['image/jpeg', 'image/png'];
 
 export default Form.create()(
   class UploadVideo extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        videoList: [],
-        videoCover: '',
-        tempCover: '',
-        modalVisible: false
-      };
-    }
+    state = {
+      videoList: [],
+      videoCover: '',
+      tempCover: '',
+      modalVisible: false
+    };
 
     uploadVideo = file => {
       const { videoList } = this.state;

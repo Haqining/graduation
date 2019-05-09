@@ -5,6 +5,7 @@ import { Layout } from 'antd';
 import './Index.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Home from './Home/Home';
+import Search from './Search/Search';
 import PersonalRoute from './Personal/PersonalRoute';
 import Upload from './Upload/Upload';
 import Auction from './Auction/Auction';
@@ -20,16 +21,18 @@ export default class Index extends Component {
   render() {
     const {
       location: { pathname },
-      match: { url }
+      match: { url },
+      history: { push }
     } = this.props;
     return (
       <Layout>
         <Header className="header">
-          <NavBar selectedKey={pathname.split('/')[2]} />
+          <NavBar selectedKey={pathname.split('/')[2]} push={push} />
         </Header>
         <Content className="content">
           <Switch>
             <Route path={`${url}/home`} component={Home} />
+            <Route path={`${url}/search`} component={Search} />
             <Route path={`${url}/personal`} component={PersonalRoute} />
             <Route path={`${url}/upload`} component={Upload} />
             <Route path={`${url}/auction`} component={Auction} />

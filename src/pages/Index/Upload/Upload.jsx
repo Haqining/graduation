@@ -16,7 +16,7 @@ export default class Upload extends Component {
       match: { url }
     } = this.props;
     return (
-      <Row className="section">
+      <div className="section">
         <div className="section-content">
           <Row style={{ marginBottom: 24 }}>
             <Link to="/index/personal">
@@ -46,7 +46,7 @@ export default class Upload extends Component {
             </Content>
           </Layout>
         </div>
-      </Row>
+      </div>
     );
   }
 }

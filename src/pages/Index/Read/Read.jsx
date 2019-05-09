@@ -10,12 +10,9 @@ import CommentList from '../../../components/CommentList/CommentList';
 const { Item: BreadcrumbItem } = Breadcrumb;
 
 export default class Read extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articleInfo: ArticleInfo
-    };
-  }
+  state = {
+    articleInfo: ArticleInfo
+  };
 
   changeArticleLike = () => {
     const { articleInfo } = this.state;
@@ -52,7 +49,7 @@ export default class Read extends Component {
     } = this.state;
     return (
       <div>
-        <Row className="section">
+        <div className="section">
           <div className="section-content read-article-content">
             <Breadcrumb className="read-breadcrumb">
               <BreadcrumbItem>
@@ -101,14 +98,14 @@ export default class Read extends Component {
               </Button>
             </Row>
           </div>
-        </Row>
-        <Row className="section play-comment-content">
+        </div>
+        <div className="section play-comment-content">
           <div className="section-content ">
             <Row className="play-editor-content">
               <CommentList contentId={articleId} />
             </Row>
           </div>
-        </Row>
+        </div>
       </div>
     );
   }

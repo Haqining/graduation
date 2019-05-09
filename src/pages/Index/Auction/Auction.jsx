@@ -37,36 +37,47 @@ const imageTypes = ['image/jpeg', 'image/png'];
 
 export default Form.create()(
   class Auction extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        // shelf stored
-        pageState: 'stored',
-        isCover: true,
-        modalVisible: false,
-        tempImage: '',
-        productCover: '',
-        productImages: [],
-        storedProducts: [...StoredProducts],
-        previewVisible: false,
-        previewImage: ''
-      };
-    }
+    state = {
+      // shelf stored
+      pageState: 'shelf',
+      isCover: true,
+      modalVisible: false,
+      tempImage: '',
+      productCover: '',
+      productImages: [],
+      storedProducts: [...StoredProducts],
+      previewVisible: false,
+      previewImage: ''
+    };
 
     selectMenuItem = ({ selectedKeys }) => {
       //在这里阻止一下界面跳转
+      const {
+        form: { getFieldsValue, resetFields }
+      } = this.props;
       const { pageState, productCover, productImages } = this.state;
+      let isEmptyForm = true;
+      if (!_.isEmpty(getFieldsValue())) {
+        _.forEach(getFieldsValue(), value => {
+          if (value) {
+            isEmptyForm = false;
+          }
+        });
+      }
       if (
         pageState === 'shelf' &&
-        (productCover || !_.isEmpty(productImages))
+        (productCover || !_.isEmpty(productImages) || !isEmptyForm)
       ) {
         const that = this;
         Modal.confirm({
           title: '将会清除填写的内容',
           centered: true,
           onOk() {
+            resetFields();
             that.setState({
-              pageState: selectedKeys[0]
+              pageState: selectedKeys[0],
+              productCover: '',
+              productImages: []
             });
           }
         });
@@ -187,8 +198,8 @@ export default Form.create()(
         status
       } = record;
       Modal.info({
-        centered: true,
         title: productName,
+        centered: true,
         icon: false,
         width: 500,
         content: (
@@ -427,10 +438,10 @@ export default Form.create()(
               </FormItem>
               <FormItem label="产品数量">
                 {getFieldDecorator('productQuantity', {
-                  initialValue: 1,
                   rules: [{ required: true, message: '产品数量是必需的' }]
                 })(
                   <InputNumber
+                    placeholder="至少为1"
                     precision={0}
                     min={1}
                     step={1}
@@ -451,8 +462,8 @@ export default Form.create()(
                   <InputNumber
                     placeholder="建议为产品原价百分之六十（单位：元）"
                     precision={2}
-                    min={0}
-                    step={20}
+                    min={20}
+                    step={100}
                     style={{ width: '100%' }}
                   />
                 )}
@@ -460,7 +471,7 @@ export default Form.create()(
               <FormItem label="加价幅度">
                 {getFieldDecorator('priceIncrease', {
                   rules: [
-                    { required: true, message: '加价幅度"是必需的' },
+                    { required: true, message: '加价幅度是必需的' },
                     {
                       pattern: /^\+?(?:[1-9]\d*(?:\.\d{1,2})?|0\.(?:\d[1-9]|[1-9]\d))$/,
                       message: '请输入正确格式的价格'
@@ -470,8 +481,8 @@ export default Form.create()(
                   <InputNumber
                     placeholder="单位：元"
                     precision={2}
-                    min={0}
-                    step={100}
+                    min={20}
+                    step={20}
                     style={{ width: '100%' }}
                   />
                 )}
@@ -616,7 +627,7 @@ export default Form.create()(
     render() {
       const { pageState } = this.state;
       return (
-        <Row className="section">
+        <div className="section">
           <div className="section-content">
             <Row style={{ marginBottom: 24 }}>
               <Link to="/index/personal">
@@ -642,7 +653,7 @@ export default Form.create()(
               </Content>
             </Layout>
           </div>
-        </Row>
+        </div>
       );
     }
   }

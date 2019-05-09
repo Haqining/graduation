@@ -1,10 +1,10 @@
-.video-card-list {
+.video-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.video-card-list-item {
+.video-list-item {
   list-style: none;
   float: left;
   width: 30%;
@@ -12,7 +12,7 @@
   margin-bottom: 40px;
 }
 
-.video-card-list-item:nth-child(3n) {
+.video-list-item:nth-child(3n) {
   margin-right: 0;
 }
 

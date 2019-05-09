@@ -12,35 +12,14 @@ import TalentData from '../TalentData';
 import ArticleData from '../ArticleData';
 
 export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      banners: bannersData,
-      officialVideos: OfficialData,
-      talentVideos: TalentData,
-      articleList: ArticleData
-    };
-  }
-
-  changeArticleLike = e => {
-    const { articleList } = this.state;
-    const selectArticle = articleList[e];
-    if (selectArticle.liked) {
-      selectArticle.like -= 1;
-    } else {
-      selectArticle.like += 1;
-    }
-    selectArticle.liked = !selectArticle.liked;
-    articleList[e] = { ...selectArticle };
-    this.setState({
-      articleList
-    });
+  state = {
+    banners: bannersData,
+    officialVideos: OfficialData,
+    talentVideos: TalentData,
+    articleList: ArticleData
   };
 
   render() {
-    const {
-      history: { push }
-    } = this.props;
     const {
       banners: { left, tl, tr, bl, br },
       officialVideos,
@@ -49,7 +28,7 @@ export default class Home extends Component {
     } = this.state;
     return (
       <div>
-        <Row className="section home-banner">
+        <div className="section home-banner">
           <Row className="section-content" type="flex">
             <div className="home-banner-left" title={left.videoTitle}>
               <Link to={`/index/play/${left.videoId}&&${left.videoType}`}>
@@ -84,8 +63,8 @@ export default class Home extends Component {
               </Col>
             </div>
           </Row>
-        </Row>
-        <Row className="section">
+        </div>
+        <div className="section">
           <div className="section-content">
             <Divider
               className="home-channel-title"
@@ -107,8 +86,8 @@ export default class Home extends Component {
               </Button>
             </Row>
           </div>
-        </Row>
-        <Row className="section">
+        </div>
+        <div className="section">
           <div className="section-content">
             <Divider
               className="home-channel-title"
@@ -130,8 +109,8 @@ export default class Home extends Component {
               </Button>
             </Row>
           </div>
-        </Row>
-        <Row className="section">
+        </div>
+        <div className="section">
           <div className="section-content">
             <Divider
               className="home-channel-title"
@@ -140,11 +119,7 @@ export default class Home extends Component {
               测评文章
             </Divider>
             <Row>
-              <ArticleList
-                articleList={articleList}
-                push={push}
-                onArticleLikeChange={this.changeArticleLike}
-              />
+              <ArticleList articleList={articleList} />
             </Row>
             <Row type="flex" justify="center">
               <Button
@@ -157,7 +132,7 @@ export default class Home extends Component {
               </Button>
             </Row>
           </div>
-        </Row>
+        </div>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>

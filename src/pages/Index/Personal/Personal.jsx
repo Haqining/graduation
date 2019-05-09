@@ -12,39 +12,37 @@ const { Group: ButtonGroup } = Button;
 const { TabPane } = Tabs;
 
 export default class Personal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userInfo: {
-        avatar: testAvatar,
-        username: 'testName',
-        introduction: '个人介绍',
-        sex: '男',
-        hometown: '未设置',
-        joinTime: '2019-03-03'
-      },
-      videoCurrentPage: 1,
-      videoList: [...VideoData, ...VideoData, ...VideoData],
-      articleCurrentPage: 1,
-      articleList: [
-        ...ArticleData,
-        ...ArticleData,
-        ...ArticleData,
-        ...ArticleData
-      ],
-      pvCurrentPage: 1,
-      pendingVideo: [...VideoData, ...VideoData, ...VideoData],
-      paCurrentPage: 1,
-      pendingArticle: [
-        ...ArticleData,
-        ...ArticleData,
-        ...ArticleData,
-        ...ArticleData
-      ]
-    };
-  }
+  state = {
+    userInfo: {
+      avatar: testAvatar,
+      username: 'testName',
+      introduction: '个人介绍',
+      sex: '男',
+      hometown: '未设置',
+      joinTime: '2019-03-03'
+    },
+    videoCurrentPage: 1,
+    videoList: [...VideoData, ...VideoData, ...VideoData],
+    articleCurrentPage: 1,
+    articleList: [
+      ...ArticleData,
+      ...ArticleData,
+      ...ArticleData,
+      ...ArticleData
+    ],
+    pvCurrentPage: 1,
+    pendingVideo: [...VideoData, ...VideoData, ...VideoData],
+    paCurrentPage: 1,
+    pendingArticle: [
+      ...ArticleData,
+      ...ArticleData,
+      ...ArticleData,
+      ...ArticleData
+    ]
+  };
 
-  changeTabPane = () => {
+  changeTabPane = activeKey => {
+    // TODO:在这里请求接口
     this.setState({
       videoCurrentPage: 1,
       articleCurrentPage: 1,
@@ -79,6 +77,11 @@ export default class Personal extends Component {
 
   render() {
     const {
+      match: {
+        params: { userId }
+      }
+    } = this.props;
+    const {
       userInfo: { avatar, username, introduction, sex, hometown, joinTime },
       videoCurrentPage,
       videoList,
@@ -89,6 +92,8 @@ export default class Personal extends Component {
       paCurrentPage,
       pendingArticle
     } = this.state;
+    const isSelf = userId === 'id';
+    const isAdmin = userId === 'admin';
     const videoNumber = videoList.length;
     const videoNeedPagination = videoNumber > 12;
     const articleNumber = articleList.length;
@@ -99,7 +104,7 @@ export default class Personal extends Component {
     const paNeedPagination = paNumber > 9;
     return (
       <div>
-        <Row className="section">
+        <div className="section">
           <div className="section-content">
             <Row className="personal-header" type="flex" align="middle">
               <Avatar
@@ -117,33 +122,39 @@ export default class Personal extends Component {
                   <span>加入时间：{joinTime}</span>
                 </Row>
               </div>
-              <Button href="/index/personal/setting">编辑资料</Button>
+              {isSelf ? (
+                <Button href="/index/personal/setting">编辑资料</Button>
+              ) : null}
             </Row>
-            <Row type="flex" justify="center" style={{ marginBottom: 32 }}>
-              <ButtonGroup size="large">
-                <Button
-                  type="primary"
-                  href="/index/upload/video"
-                  style={{ padding: '0 40px' }}
-                >
-                  投稿视频
-                </Button>
-                <Button
-                  type="primary"
-                  href="/index/upload/article"
-                  style={{ padding: '0 40px' }}
-                >
-                  投稿文章
-                </Button>
-                <Button
-                  type="primary"
-                  href="/index/auction"
-                  style={{ padding: '0 40px' }}
-                >
-                  二手拍卖
-                </Button>
-              </ButtonGroup>
-            </Row>
+            {isSelf ? (
+              <Row type="flex" justify="center" style={{ marginBottom: 32 }}>
+                <ButtonGroup size="large">
+                  <Button
+                    type="primary"
+                    href="/index/upload/video"
+                    style={{ padding: '0 40px' }}
+                  >
+                    投稿视频
+                  </Button>
+                  <Button
+                    type="primary"
+                    href="/index/upload/article"
+                    style={{ padding: '0 40px' }}
+                  >
+                    投稿文章
+                  </Button>
+                  {isAdmin ? (
+                    <Button
+                      type="primary"
+                      href="/index/auction"
+                      style={{ padding: '0 40px' }}
+                    >
+                      二手拍卖
+                    </Button>
+                  ) : null}
+                </ButtonGroup>
+              </Row>
+            ) : null}
             <Row>
               <Tabs onChange={this.changeTabPane}>
                 <TabPane key="video" tab={'投稿的视频（' + videoNumber + '）'}>
@@ -189,56 +200,60 @@ export default class Personal extends Component {
                     </Row>
                   ) : null}
                 </TabPane>
-                <TabPane
-                  key="pendingVideo"
-                  tab={'待审核视频（' + pvNumber + '）'}
-                >
-                  <Row>
-                    <VideoList
-                      videoList={pendingVideo.filter(
+                {isSelf ? (
+                  <TabPane
+                    key="pendingVideo"
+                    tab={'待审核视频（' + pvNumber + '）'}
+                  >
+                    <Row>
+                      <VideoList
+                        videoList={pendingVideo.filter(
+                          (value, index) =>
+                            (pvCurrentPage - 1) * 12 <= index &&
+                            index <= pvCurrentPage * 12 - 1
+                        )}
+                      />
+                    </Row>
+                    {pvNeedPagination ? (
+                      <Row type="flex" justify="center">
+                        <Pagination
+                          current={pvCurrentPage}
+                          pageSize={12}
+                          total={pvNumber}
+                          onChange={this.changePVPage}
+                        />
+                      </Row>
+                    ) : null}
+                  </TabPane>
+                ) : null}
+                {isSelf ? (
+                  <TabPane
+                    key="pendingArticle"
+                    tab={'待审核文章（' + paNumber + '）'}
+                  >
+                    <ArticleList
+                      articleList={pendingArticle.filter(
                         (value, index) =>
-                          (pvCurrentPage - 1) * 12 <= index &&
-                          index <= pvCurrentPage * 12 - 1
+                          (paCurrentPage - 1) * 9 <= index &&
+                          index <= paCurrentPage * 9 - 1
                       )}
                     />
-                  </Row>
-                  {pvNeedPagination ? (
-                    <Row type="flex" justify="center">
-                      <Pagination
-                        current={pvCurrentPage}
-                        pageSize={12}
-                        total={pvNumber}
-                        onChange={this.changePVPage}
-                      />
-                    </Row>
-                  ) : null}
-                </TabPane>
-                <TabPane
-                  key="pendingArticle"
-                  tab={'待审核文章（' + paNumber + '）'}
-                >
-                  <ArticleList
-                    articleList={pendingArticle.filter(
-                      (value, index) =>
-                        (paCurrentPage - 1) * 9 <= index &&
-                        index <= paCurrentPage * 9 - 1
-                    )}
-                  />
-                  {paNeedPagination ? (
-                    <Row type="flex" justify="center">
-                      <Pagination
-                        current={paCurrentPage}
-                        pageSize={9}
-                        total={paNumber}
-                        onChange={this.changePAPage}
-                      />
-                    </Row>
-                  ) : null}
-                </TabPane>
+                    {paNeedPagination ? (
+                      <Row type="flex" justify="center">
+                        <Pagination
+                          current={paCurrentPage}
+                          pageSize={9}
+                          total={paNumber}
+                          onChange={this.changePAPage}
+                        />
+                      </Row>
+                    ) : null}
+                  </TabPane>
+                ) : null}
               </Tabs>
             </Row>
           </div>
-        </Row>
+        </div>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>

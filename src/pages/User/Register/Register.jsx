@@ -27,15 +27,15 @@ export default Form.create()(
           <div className="user-form">
             <Form style={{ width: 300 }}>
               <FormItem>
-                {getFieldDecorator('nickname', {
+                {getFieldDecorator('username', {
                   rules: [
-                    { required: true, message: '昵称是必需的' },
+                    { required: true, message: '用户名是必需的' },
                     {
                       max: 20,
                       message: '最多20个字符'
                     }
                   ]
-                })(<Input placeholder="昵称" />)}
+                })(<Input placeholder="用户名" />)}
               </FormItem>
               <FormItem>
                 {getFieldDecorator('email', {

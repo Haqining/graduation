@@ -12,14 +12,11 @@ import VideoInfo from './VideoInfo';
 const { Item: BreadcrumbItem } = Breadcrumb;
 
 export default class Play extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      videoInfo: VideoInfo,
-      isPlay: false,
-      isFirstClick: true
-    };
-  }
+  state = {
+    videoInfo: VideoInfo,
+    isPlay: false,
+    isFirstClick: true
+  };
 
   chooseVideoType = videoType => {
     const isOfficial = videoType === 'official';
@@ -61,8 +58,8 @@ export default class Play extends Component {
       isFirstClick
     } = this.state;
     return (
-      <Row>
-        <Row className="section play-content">
+      <div>
+        <div className="section play-content">
           <div className="section-content">
             <Breadcrumb className="play-breadcrumb">
               <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem>
@@ -106,18 +103,18 @@ export default class Play extends Component {
               <Row>{videoIntroduction}</Row>
             </Row>
           </div>
-        </Row>
-        <Row className="section play-comment-content">
+        </div>
+        <div className="section play-comment-content">
           <div className="section-content ">
             <Row className="play-editor-content">
               <CommentList contentId={videoId} />
             </Row>
           </div>
-        </Row>
+        </div>
         <BackTop visibilityHeight={0}>
           <div className="ant-back-top-inner">UP</div>
         </BackTop>
-      </Row>
+      </div>
     );
   }
 }

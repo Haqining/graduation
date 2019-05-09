@@ -14,17 +14,14 @@ export default class CommentList extends Component {
   static propTypes = {
     contentId: PropTypes.string.isRequired
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorState: BraftEditor.createEditorState(),
-      commentList: [],
-      // 保存被引用者的id用于请求
-      cited: '',
-      currentPage: 1
-    };
-  }
+  
+  state = {
+    editorState: BraftEditor.createEditorState(),
+    commentList: [],
+    // 保存被引用者的id用于请求
+    cited: '',
+    currentPage: 1
+  };
 
   componentWillMount() {
     this.setState({

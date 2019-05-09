@@ -11,7 +11,7 @@ export default class Index extends Component {
     } = this.props;
     return (
       <Switch>
-        <Route exact path={`${url}/`} component={Personal} />
+        <Route exact path={`${url}/:userId`} component={Personal} />
         <Route exact path={`${url}/setting`} component={PersonalSetting} />
       </Switch>
     );
