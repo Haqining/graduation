@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Row,
   Layout,
@@ -56,21 +55,21 @@ export default Form.create()(
         form: { getFieldsValue, resetFields }
       } = this.props;
       const { pageState, productCover, productImages } = this.state;
-      let isEmptyForm = true;
+      let hasData = false;
       if (!_.isEmpty(getFieldsValue())) {
         _.forEach(getFieldsValue(), value => {
           if (value) {
-            isEmptyForm = false;
+            hasData = true;
           }
         });
       }
       if (
         pageState === 'shelf' &&
-        (productCover || !_.isEmpty(productImages) || !isEmptyForm)
+        (productCover || !_.isEmpty(productImages) || hasData)
       ) {
         const that = this;
         Modal.confirm({
-          title: '将会清除填写的内容',
+          title: '填写的内容还未提交，确定离开本页吗？',
           centered: true,
           onOk() {
             resetFields();
@@ -629,12 +628,6 @@ export default Form.create()(
       return (
         <div className="section">
           <div className="section-content">
-            <Row style={{ marginBottom: 24 }}>
-              <Link to="/index/personal">
-                <Icon type="left" />
-                返回个人中心
-              </Link>
-            </Row>
             <Layout className="auction-main-content">
               <Sider width={200} style={{ background: '#ffffff' }}>
                 <Menu

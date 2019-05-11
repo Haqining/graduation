@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Prompt } from 'react-router-dom';
+
 import {
   Row,
   Form,
@@ -48,7 +50,8 @@ export default Form.create()(
     state = {
       articleCover: '',
       tempCover: '',
-      modalVisible: false
+      modalVisible: false,
+      editorState: BraftEditor.createEditorState()
     };
 
     uploadCover = file => {
@@ -96,9 +99,9 @@ export default Form.create()(
 
     render() {
       const {
-        form: { getFieldDecorator }
+        form: { getFieldDecorator, getFieldsValue }
       } = this.props;
-      const { articleCover, tempCover, modalVisible } = this.state;
+      const { articleCover, tempCover, modalVisible, editorState } = this.state;
       const extendControls = [
         {
           key: 'ua-editor-uploader',
@@ -116,143 +119,144 @@ export default Form.create()(
           )
         }
       ];
+      let hasData = false;
+      if (!_.isEmpty(getFieldsValue())) {
+        _.forEach(getFieldsValue(), value => {
+          if (value) {
+            hasData = true;
+          }
+        });
+      }
+      if (!editorState.isEmpty()) {
+        hasData = true;
+      }
       return (
         <Row type="flex" justify="center">
-          <div className="ua-content">
-            <Form>
-              <FormItem label="封面图片" required>
-                <Row type="flex" justify="center">
-                  <Upload
-                    className="ua-cover-uploader"
-                    accept={imageTypes.join()}
-                    listType="picture-card"
-                    showUploadList={false}
-                    beforeUpload={this.uploadCover}
-                  >
-                    {articleCover ? (
-                      <img
-                        src={articleCover}
-                        alt="articleCover"
-                        style={{ width: '100%' }}
-                      />
-                    ) : (
-                      <Icon type="plus" />
-                    )}
-                  </Upload>
-                </Row>
-                <div style={{ textAlign: 'center' }}>
-                  （支持JPG、PNG格式，需小于5M）
-                </div>
-              </FormItem>
-              <FormItem label="标题">
-                {getFieldDecorator('articleTitle', {
-                  rules: [
-                    { required: true, message: '标题是必需的' },
-                    {
-                      max: 40,
-                      message: '最多40个字符'
-                    }
-                  ]
-                })(<Input placeholder="建议30个字符以内" />)}
-              </FormItem>
-              <FormItem label="分类">
-                {getFieldDecorator('contentType', {
-                  rules: [{ required: true, message: '分类是必需的' }]
-                })(
-                  <Select placeholder="点击选择">
-                    <Option value="1">手机</Option>
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem label="文章简介">
-                {getFieldDecorator('articleIntroduction', {
-                  rules: [
-                    { required: true, message: '简介是必需的' },
-                    {
-                      max: 240,
-                      message: '不能超过240个字符'
-                    }
-                  ]
-                })(<TextArea autosize placeholder="最多240个字符" />)}
-              </FormItem>
-              <FormItem label="正文">
-                {getFieldDecorator('articleContent', {
-                  validateTrigger: 'onBlur',
-                  rules: [
-                    {
-                      required: true,
-                      validator: (_, value, callback) => {
-                        if (value.isEmpty()) {
-                          callback('正文内容不得为空');
-                        } else {
-                          callback();
-                        }
-                      }
-                    }
-                  ]
-                })(
-                  <BraftEditor
-                    className="ua-editor"
-                    placeholder="输入正文内容"
-                    controls={controls}
-                    extendControls={extendControls}
-                  />
-                )}
-              </FormItem>
-              <FormItem>
-                <Row type="flex" justify="center">
-                  <Button
-                    type="primary"
-                    size="large"
-                    style={{ padding: '0 40px' }}
-                  >
-                    立即投稿
-                  </Button>
-                </Row>
-              </FormItem>
-            </Form>
-            <Modal
-              visible={modalVisible}
-              closable={false}
-              centered
-              destroyOnClose
-              keyboard={false}
-              maskClosable={false}
-              okText="上传封面"
-              onCancel={this.closeModal}
-              onOk={this.updateCover}
-            >
+          <Form>
+            <FormItem label="封面图片" required>
               <Row type="flex" justify="center">
-                <div className="ua-upload-content">
-                  <Cropper
-                    className="ua-cropper"
-                    src={tempCover}
-                    ref="cropper"
-                    viewMode={2}
-                    background={false}
-                    movable={false}
-                    zoomable={false}
-                    guides={false}
-                    toggleDragModeOnDblclick={false}
-                    autoCropArea={1}
-                    aspectRatio={16 / 9}
-                    minCropBoxWidth={100}
-                    preview=".ua-cover-preview"
-                  />
-                  <Divider />
-                  <div className="ua-cover-preview" />
-                  <div style={{ marginBottom: 16 }}>效果预览</div>
-                  <Upload
-                    accept={imageTypes.join()}
-                    showUploadList={false}
-                    beforeUpload={this.uploadCover}
-                  >
-                    <Button>重新选择一张图片</Button>
-                  </Upload>
-                </div>
+                <Upload
+                  className="ua-cover-uploader"
+                  accept={imageTypes.join()}
+                  listType="picture-card"
+                  showUploadList={false}
+                  beforeUpload={this.uploadCover}
+                >
+                  {articleCover ? (
+                    <img
+                      src={articleCover}
+                      alt="articleCover"
+                      style={{ width: '100%' }}
+                    />
+                  ) : (
+                    <Icon type="plus" />
+                  )}
+                </Upload>
               </Row>
-            </Modal>
-          </div>
+              <div style={{ textAlign: 'center' }}>
+                （支持JPG、PNG格式，需小于5M）
+              </div>
+            </FormItem>
+            <FormItem label="标题">
+              {getFieldDecorator('articleTitle', {
+                rules: [
+                  { required: true, message: '标题是必需的' },
+                  {
+                    max: 40,
+                    message: '最多40个字符'
+                  }
+                ]
+              })(<Input placeholder="建议30个字符以内" />)}
+            </FormItem>
+            <FormItem label="分类">
+              {getFieldDecorator('contentType', {
+                rules: [{ required: true, message: '分类是必需的' }]
+              })(
+                <Select placeholder="点击选择">
+                  <Option value="1">手机</Option>
+                </Select>
+              )}
+            </FormItem>
+            <FormItem label="文章简介">
+              {getFieldDecorator('articleIntroduction', {
+                rules: [
+                  { required: true, message: '简介是必需的' },
+                  {
+                    max: 240,
+                    message: '不能超过240个字符'
+                  }
+                ]
+              })(<TextArea autosize placeholder="最多240个字符" />)}
+            </FormItem>
+            <FormItem label="正文">
+              <BraftEditor
+                className="ua-editor"
+                value={editorState}
+                placeholder="输入正文内容"
+                controls={controls}
+                extendControls={extendControls}
+                onChange={editorState => {
+                  this.setState({ editorState });
+                }}
+              />
+            </FormItem>
+            <FormItem>
+              <Row type="flex" justify="center">
+                <Button
+                  type="primary"
+                  size="large"
+                  style={{ padding: '0 40px' }}
+                >
+                  立即投稿
+                </Button>
+              </Row>
+            </FormItem>
+          </Form>
+          <Modal
+            visible={modalVisible}
+            closable={false}
+            centered
+            destroyOnClose
+            keyboard={false}
+            maskClosable={false}
+            okText="上传封面"
+            onCancel={this.closeModal}
+            onOk={this.updateCover}
+          >
+            <Row type="flex" justify="center">
+              <div className="ua-upload-content">
+                <Cropper
+                  className="ua-cropper"
+                  src={tempCover}
+                  ref="cropper"
+                  viewMode={2}
+                  background={false}
+                  movable={false}
+                  zoomable={false}
+                  guides={false}
+                  toggleDragModeOnDblclick={false}
+                  autoCropArea={1}
+                  aspectRatio={16 / 9}
+                  minCropBoxWidth={100}
+                  preview=".ua-cover-preview"
+                />
+                <Divider />
+                <div className="ua-cover-preview" />
+                <div style={{ marginBottom: 16 }}>效果预览</div>
+                <Upload
+                  accept={imageTypes.join()}
+                  showUploadList={false}
+                  beforeUpload={this.uploadCover}
+                >
+                  <Button>重新选择一张图片</Button>
+                </Upload>
+              </div>
+            </Row>
+          </Modal>
+          <Prompt
+            when={articleCover || hasData}
+            message="填写的内容还未提交，确定离开本页吗？"
+          />
         </Row>
       );
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Form, Input, Checkbox, Button } from 'antd';
+import { Row, Form, Input, Button } from 'antd';
 
 import './Login.css';
 
@@ -8,11 +8,12 @@ const { Item: FormItem } = Form;
 
 export default Form.create()(
   class Login extends Component {
-    back = () => {
+    login = () => {
       const {
-        history: { goBack }
+        history: { push }
       } = this.props;
-      goBack();
+      localStorage.setItem('userId', 'admin');
+      push(sessionStorage.getItem('backPath'));
     };
 
     render() {
@@ -21,9 +22,6 @@ export default Form.create()(
       } = this.props;
       return (
         <div className="user-content user-form-content">
-          <Row className="login-back" onClick={this.back}>
-            返回上一级
-          </Row>
           <div className="user-form">
             <Form style={{ width: 300 }}>
               <FormItem>
@@ -43,11 +41,16 @@ export default Form.create()(
                 })(<Input type="password" placeholder="密码" />)}
               </FormItem>
               <FormItem>
-                {getFieldDecorator('remember', {
+                {/* {getFieldDecorator('remember', {
                   valuePropName: 'checked',
                   initialValue: true
-                })(<Checkbox>记住我</Checkbox>)}
-                <Button type="primary" size="large" style={{ width: '100%' }}>
+                })(<Checkbox>记住我</Checkbox>)} */}
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={this.login}
+                  style={{ width: '100%' }}
+                >
                   登录
                 </Button>
                 <Row type="flex" justify="space-between">

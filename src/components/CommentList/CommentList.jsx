@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
-import { Row, Button, message, Empty, Pagination, Avatar, Divider } from 'antd';
-import BraftEditor from 'braft-editor';
+import { Link } from 'react-router-dom';
+import {
+  Row,
+  Input,
+  Button,
+  message,
+  Empty,
+  Pagination,
+  Avatar,
+  Divider
+} from 'antd';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from 'moment';
@@ -8,15 +17,17 @@ import moment from 'moment';
 import './CommentList.css';
 import CommentListData from './CommentListData';
 
-const controls = ['bold', 'italic', 'blockquote', 'emoji'];
+const { TextArea } = Input;
 
 export default class CommentList extends Component {
   static propTypes = {
     contentId: PropTypes.string.isRequired
   };
-  
+
   state = {
-    editorState: BraftEditor.createEditorState(),
+    commentContent: '',
+    commentLength: 0,
+    replyComment: null,
     commentList: [],
     // 保存被引用者的id用于请求
     cited: '',
@@ -29,10 +40,15 @@ export default class CommentList extends Component {
     });
   }
 
-  changeEditor = editorState => {
-    this.setState({
-      editorState
-    });
+  changeComment = e => {
+    const {
+      target: { value }
+    } = e;
+    if (value.length > 240) {
+      message.error('超过最大可输入字符');
+    } else {
+      this.setState({ commentContent: value, commentLength: value.length });
+    }
   };
 
   submitComment = () => {
@@ -42,7 +58,7 @@ export default class CommentList extends Component {
     } else {
       message.success('评论成功 d=====(￣▽￣*)b');
       this.setState({
-        editorState: BraftEditor.createEditorState(),
+        commentContent: '',
         commentList: [
           {
             userId: 'testUserId12',
@@ -74,16 +90,19 @@ export default class CommentList extends Component {
     });
   };
 
-  replyComment = index => () => {
+  reply = index => () => {
     const { commentList, currentPage } = this.state;
     const selectComment = commentList[(currentPage - 1) * 10 + index];
-    this.refs.commentEditor.requestFocus();
+    this.refs.commentTextArea.textAreaRef.focus();
     this.setState({
-      editorState: BraftEditor.createEditorState(
-        `<blockquote><p>引用@${selectComment.username}:</p><p>${
-          selectComment.commentContent
-        }</p></blockquote><p></p>`
-      )
+      commentContent: '',
+      replyComment: selectComment
+    });
+  };
+
+  cancelReply = () => {
+    this.setState({
+      replyComment: null
     });
   };
 
@@ -94,33 +113,54 @@ export default class CommentList extends Component {
   };
 
   render() {
-    const { editorState, commentList, currentPage } = this.state;
+    const {
+      commentContent,
+      commentLength,
+      replyComment,
+      commentList,
+      currentPage
+    } = this.state;
     const hasData = !_.isEmpty(commentList);
     const dataLength = commentList.length;
     const needPagination = dataLength > 10;
     return (
       <div>
-        <Row className="comment-editor-content">
-          <BraftEditor
+        {!_.isEmpty(replyComment) ? (
+          <Row type="flex">
+            <div style={{ flex: 1 }}>
+              回复@{replyComment.username}：{replyComment.commentContent}
+            </div>
+            <div className="comment-cancel-reply" onClick={this.cancelReply}>
+              取消回复
+            </div>
+          </Row>
+        ) : null}
+
+        <Row style={{ marginBottom: 24 }}>
+          <TextArea
             className="comment-editor"
-            ref="commentEditor"
-            value={editorState}
-            controls={controls}
-            placeholder="编辑评论内容"
-            onChange={this.changeEditor}
+            ref="commentTextArea"
+            value={commentContent}
+            rows={3}
+            placeholder="编辑内容(最多240个字符)"
+            onChange={this.changeComment}
           />
           <Row type="flex" justify="end">
-            <Button
-              type="primary"
-              size="large"
-              onClick={this.submitComment}
-              style={{ padding: '0 40px' }}
-            >
-              评论
-            </Button>
+            {commentLength}/240
           </Row>
         </Row>
-        <Row style={{ marginBottom: 16 }}>
+        <Row type="flex" justify="end">
+          <Button
+            type="primary"
+            size="large"
+            onClick={this.submitComment}
+            style={{ padding: '0 40px' }}
+          >
+            提交评论
+          </Button>
+        </Row>
+        <Divider />
+        <Row style={{ marginBottom: 24 }}>
           {hasData ? (
             commentList
               .filter(
@@ -134,23 +174,32 @@ export default class CommentList extends Component {
                   key={'comment' + index}
                   type="flex"
                 >
-                  <Avatar
-                    src={value.avatar}
-                    size={48}
-                    icon="user"
-                    style={{ marginRight: 24 }}
-                  />
-                  <div className="comment-item-right">
-                    <Row className="comment-item-info">{`${value.username} | ${
-                      value.time
-                    }`}</Row>
-                    <Row>
-                      <div
-                        className="braft-output-content"
-                        dangerouslySetInnerHTML={{
-                          __html: value.commentContent
-                        }}
+                  <div>
+                    <Link to={`/index/personal/${value.id}`}>
+                      <Avatar
+                        src={value.avatar}
+                        size={48}
+                        icon="user"
+                        style={{ marginRight: 24 }}
                       />
+                    </Link>
+                  </div>
+                  <div className="comment-item-right">
+                    <Row
+                      type="flex"
+                      justify="space-between"
+                      style={{ marginBottom: 8 }}
+                    >
+                      <Link
+                        className="avatar-username"
+                        to={`/index/personal/${value.id}`}
+                      >
+                        {value.username}
+                      </Link>
+                      <span style={{ color: '#c7c7c7' }}>{value.time}</span>
+                    </Row>
+                    <Row style={{ marginBottom: 8 }}>
+                      {value.commentContent}
                     </Row>
                     <Row
                       className="comment-item-action"
@@ -165,7 +214,7 @@ export default class CommentList extends Component {
                         {value.liked ? '已赞' : '点赞'}({value.like})
                       </span>
                       <Divider type="vertical" />
-                      <span onClick={this.replyComment(index)}>回复</span>
+                      <span onClick={this.reply(index)}>回复</span>
                     </Row>
                   </div>
                 </Row>

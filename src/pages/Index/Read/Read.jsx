@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Breadcrumb, Avatar, Button, Divider } from 'antd';
+import { Row, Breadcrumb, Avatar } from 'antd';
 
 import './Read.css';
 import { ContentTypeDictionary } from '../../../config.js';
@@ -14,18 +14,18 @@ export default class Read extends Component {
     articleInfo: ArticleInfo
   };
 
-  changeArticleLike = () => {
-    const { articleInfo } = this.state;
-    if (articleInfo.liked) {
-      articleInfo.like -= 1;
-    } else {
-      articleInfo.like += 1;
-    }
-    articleInfo.liked = !articleInfo.liked;
-    this.setState({
-      articleInfo
-    });
-  };
+  // changeArticleLike = () => {
+  //   const { articleInfo } = this.state;
+  //   if (articleInfo.liked) {
+  //     articleInfo.like -= 1;
+  //   } else {
+  //     articleInfo.like += 1;
+  //   }
+  //   articleInfo.liked = !articleInfo.liked;
+  //   this.setState({
+  //     articleInfo
+  //   });
+  // };
 
   render() {
     const {
@@ -35,6 +35,7 @@ export default class Read extends Component {
     } = this.props;
     const {
       articleInfo: {
+        id,
         avatar,
         username,
         time,
@@ -42,16 +43,14 @@ export default class Read extends Component {
         articleTitle,
         articleCover,
         articleContent,
-        like,
-        liked,
         comments
       }
     } = this.state;
     return (
       <div>
         <div className="section">
-          <div className="section-content read-article-content">
-            <Breadcrumb className="read-breadcrumb">
+          <div className="section-content read-content">
+            <Breadcrumb className="content-breadcrumb">
               <BreadcrumbItem>
                 <Link to="/index/article">测评文章</Link>
               </BreadcrumbItem>
@@ -60,13 +59,14 @@ export default class Read extends Component {
               </BreadcrumbItem>
               <BreadcrumbItem>文章</BreadcrumbItem>
             </Breadcrumb>
-            <Row className="read-title">{articleTitle}</Row>
-            <Row className="read-info" type="flex" align="middle">
+            <Row className="content-title">{articleTitle}</Row>
+            <Row className="content-info" type="flex" align="middle">
               <span>
-                <Avatar src={avatar} icon="user" style={{ marginRight: 8 }} />
-                <span>{username}</span>
+                <Link className="avatar-username" to={`/index/personal/${id}`}>
+                  <Avatar src={avatar} icon="user" style={{ marginRight: 8 }} />
+                  <span>{username}</span>
+                </Link>
               </span>
-              <span>点赞({like})</span>
               <span>评论({comments})</span>
               <span>{time}</span>
             </Row>
@@ -85,7 +85,7 @@ export default class Read extends Component {
                 }}
               />
             </Row>
-            <Row type="flex" justify="center" style={{ marginBottom: 32 }}>
+            {/* <Row type="flex" justify="center" style={{ marginBottom: 32 }}>
               <Button
                 type="primary"
                 size="large"
@@ -96,7 +96,7 @@ export default class Read extends Component {
                 <Divider type="vertical" />
                 {like}
               </Button>
-            </Row>
+            </Row> */}
           </div>
         </div>
         <div className="section play-comment-content">

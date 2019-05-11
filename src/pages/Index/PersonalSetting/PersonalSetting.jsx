@@ -23,7 +23,7 @@ import _ from 'lodash';
 
 import './PersonalSetting.css';
 import options from './cascader-address-options';
-import testAvatar from '../../../../assets/test-avatar.jpg';
+import testAvatar from '../../../assets/test-avatar.jpg';
 
 const { Content, Sider } = Layout;
 const { Item: MenuItem } = Menu;
@@ -312,11 +312,12 @@ export default Form.create()(
 
     render() {
       const { pageState } = this.state;
+      const userId = localStorage.getItem('userId');
       return (
         <div className="section">
           <div className="section-content">
             <Row style={{ marginBottom: 24 }}>
-              <Link to="/index/personal">
+              <Link to={`/index/personal/${userId}`}>
                 <Icon type="left" />
                 返回个人中心
               </Link>

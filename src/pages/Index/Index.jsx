@@ -6,7 +6,9 @@ import './Index.css';
 import NavBar from '../../components/NavBar/NavBar';
 import Home from './Home/Home';
 import Search from './Search/Search';
-import PersonalRoute from './Personal/PersonalRoute';
+import Message from './Message/Message';
+import Personal from './Personal/Personal';
+import PersonalSetting from './PersonalSetting/PersonalSetting';
 import Upload from './Upload/Upload';
 import Auction from './Auction/Auction';
 import Official from './Official/OfficialContainer';
@@ -21,24 +23,28 @@ export default class Index extends Component {
   render() {
     const {
       location: { pathname },
-      match: { url },
-      history: { push }
+      match: { url }
     } = this.props;
     return (
       <Layout>
         <Header className="header">
-          <NavBar selectedKey={pathname.split('/')[2]} push={push} />
+          <NavBar pathname={pathname} />
         </Header>
         <Content className="content">
           <Switch>
             <Route path={`${url}/home`} component={Home} />
             <Route path={`${url}/search`} component={Search} />
-            <Route path={`${url}/personal`} component={PersonalRoute} />
+            <Route path={`${url}/message`} component={Message} />
+            <Route path={`${url}/personal/:id`} component={Personal} />
+            <Route
+              path={`${url}/personal-setting`}
+              component={PersonalSetting}
+            />
             <Route path={`${url}/upload`} component={Upload} />
             <Route path={`${url}/auction`} component={Auction} />
             <Route path={`${url}/official`} component={Official} />
             <Route path={`${url}/talent`} component={Talent} />
-            <Route path={`${url}/play/:videoId&&:videoType`} component={Play} />
+            <Route path={`${url}/play/:videoId`} component={Play} />
             <Route path={`${url}/article`} component={Article} />
             <Route path={`${url}/read/:articleId`} component={Read} />
             <Redirect from={`${url}/`} to={`${url}/home`} />

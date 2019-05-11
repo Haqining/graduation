@@ -9,17 +9,15 @@ const { Item: MenuItem } = Menu;
 
 export default class NavBar extends Component {
   logout = () => {
-    console.log('logout');
-  };
-
-  routeToSearch = () => {
-    const { push } = this.props;
-    push('/index/search');
+    localStorage.setItem('userId', '');
   };
 
   render() {
-    const { selectedKey } = this.props;
-    const isLogin = localStorage.getItem('userId') !== '';
+    const { pathname } = this.props;
+    const selectedKey = pathname.split('/')[2];
+    const userId = localStorage.getItem('userId');
+    const isLogin = userId !== '';
+    const isAdmin = userId === 'admin';
     return (
       <Row className="nav-bar" type="flex" justify="space-between">
         <div>
@@ -40,11 +38,12 @@ export default class NavBar extends Component {
           </Menu>
         </div>
         <Row className="nav-right" type="flex">
-          <span onClick={this.routeToSearch}>
-            <Icon type="search" style={{ marginRight: 8 }} />
-            搜索
+          <span>
+            <Link to="/index/search">
+              <Icon type="search" style={{ marginRight: 8 }} />
+              搜索
+            </Link>
           </span>
-
           <Popover
             placement="bottomRight"
             arrowPointAtCenter
@@ -56,7 +55,10 @@ export default class NavBar extends Component {
           <span>
             {isLogin ? (
               <Row type="flex" align="middle">
-                <Link to="#" style={{ color: 'rgba(255, 255, 255, 0.65)' }}>
+                <Link
+                  to="/index/message"
+                  style={{ color: 'rgba(255, 255, 255, 0.65)' }}
+                >
                   通知
                 </Link>
                 <Divider type="vertical" />
@@ -68,16 +70,25 @@ export default class NavBar extends Component {
                   overlay={
                     <Menu>
                       <MenuItem>
-                        <Link to={`/index/personal/${'id'}`}>testUserName</Link>
+                        <Link to={`/index/personal/${userId}`}>
+                          testUserName
+                        </Link>
                       </MenuItem>
+                      {isAdmin ? (
+                        <MenuItem>
+                          <Link to="/admin">管理员入口</Link>
+                        </MenuItem>
+                      ) : null}
                       <MenuItem>
-                        <div onClick={this.logout}>退出</div>
+                        <Link to="#" onClick={this.logout}>
+                          退出
+                        </Link>
                       </MenuItem>
                     </Menu>
                   }
                   placement="bottomRight"
                 >
-                  <Link to={`/index/personal/${'id'}`}>
+                  <Link to={`/index/personal/${userId}`}>
                     <Avatar icon="user" style={{ cursor: 'pointer' }} />
                   </Link>
                 </Dropdown>
@@ -88,7 +99,13 @@ export default class NavBar extends Component {
                   注册
                 </Link>
                 <Divider type="vertical" />
-                <Link className="nav-action" to="/login">
+                <Link
+                  className="nav-action"
+                  to="/login"
+                  onClick={() => {
+                    sessionStorage.setItem('backPath', pathname);
+                  }}
+                >
                   登录
                 </Link>
               </span>

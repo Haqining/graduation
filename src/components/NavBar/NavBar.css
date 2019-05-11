@@ -17,6 +17,10 @@
   cursor: pointer;
 }
 
+.nav-right > span > a {
+  color: rgba(255, 255, 255, 0.65);
+}
+
 .nav-right > span:last-child {
   margin-right: 0;
 }

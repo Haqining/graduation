@@ -15,11 +15,12 @@ export default class Upload extends Component {
       location: { pathname },
       match: { url }
     } = this.props;
+    const userId = localStorage.getItem('userId');
     return (
       <div className="section">
         <div className="section-content">
           <Row style={{ marginBottom: 24 }}>
-            <Link to="/index/personal">
+            <Link to={`/index/personal/${userId}`}>
               <Icon type="left" />
               返回个人中心
             </Link>

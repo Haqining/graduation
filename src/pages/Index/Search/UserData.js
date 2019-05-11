@@ -2,7 +2,7 @@ import testAvatar from '../../../assets/test-avatar.jpg';
 
 export default [
   {
-    userId: 'testId',
+    id: 'testId',
     avatar: testAvatar,
     username: 'testUsername',
     introduction: 'testintroduction',
@@ -11,7 +11,7 @@ export default [
     accumulatedPraise: 100
   },
   {
-    userId: 'testId',
+    id: 'testId',
     avatar: testAvatar,
     username: 'testUsername',
     introduction: 'testintroduction',

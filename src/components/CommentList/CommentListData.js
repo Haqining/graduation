@@ -2,7 +2,7 @@ import testAvatar from '../../assets/test-avatar.jpg';
 
 export default [
   {
-    userId: 'testUserId1',
+    id: 'testUserId1',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -12,7 +12,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId2',
+    id: 'testUserId2',
     avatar: '',
     username: 'testName',
     time: '2019-04-27 18:09',
@@ -22,7 +22,7 @@ export default [
     liked: true
   },
   {
-    userId: 'testUserId3',
+    id: 'testUserId3',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -32,7 +32,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId4',
+    id: 'testUserId4',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -42,7 +42,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId5',
+    id: 'testUserId5',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -52,7 +52,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId6',
+    id: 'testUserId6',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -62,7 +62,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId7',
+    id: 'testUserId7',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -72,7 +72,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId8',
+    id: 'testUserId8',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -82,7 +82,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId9',
+    id: 'testUserId9',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -92,7 +92,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId10',
+    id: 'testUserId10',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -102,7 +102,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId11',
+    id: 'testUserId11',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',
@@ -112,7 +112,7 @@ export default [
     liked: false
   },
   {
-    userId: 'testUserId12',
+    id: 'testUserId12',
     avatar: testAvatar,
     username: 'testName',
     time: '2019-04-27 09:09',

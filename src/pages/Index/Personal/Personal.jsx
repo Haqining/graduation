@@ -78,7 +78,7 @@ export default class Personal extends Component {
   render() {
     const {
       match: {
-        params: { userId }
+        params: { id }
       }
     } = this.props;
     const {
@@ -92,8 +92,7 @@ export default class Personal extends Component {
       paCurrentPage,
       pendingArticle
     } = this.state;
-    const isSelf = userId === 'id';
-    const isAdmin = userId === 'admin';
+    const isSelf = id === 'admin';
     const videoNumber = videoList.length;
     const videoNeedPagination = videoNumber > 12;
     const articleNumber = articleList.length;
@@ -123,7 +122,7 @@ export default class Personal extends Component {
                 </Row>
               </div>
               {isSelf ? (
-                <Button href="/index/personal/setting">编辑资料</Button>
+                <Button href="/index/personal-setting">编辑资料</Button>
               ) : null}
             </Row>
             {isSelf ? (
@@ -143,15 +142,6 @@ export default class Personal extends Component {
                   >
                     投稿文章
                   </Button>
-                  {isAdmin ? (
-                    <Button
-                      type="primary"
-                      href="/index/auction"
-                      style={{ padding: '0 40px' }}
-                    >
-                      二手拍卖
-                    </Button>
-                  ) : null}
                 </ButtonGroup>
               </Row>
             ) : null}

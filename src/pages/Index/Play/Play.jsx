@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Breadcrumb, Icon, BackTop } from 'antd';
+import { Row, Breadcrumb, Icon, BackTop, Avatar } from 'antd';
 import ReactPlayer from 'react-player';
 
 import CommentList from '../../../components/CommentList/CommentList';
@@ -43,11 +43,16 @@ export default class Play extends Component {
   render() {
     const {
       match: {
-        params: { videoId, videoType }
+        params: { videoId }
       }
     } = this.props;
     const {
       videoInfo: {
+        id,
+        avatar,
+        username,
+        time,
+        comments,
         videoTitle,
         contentType,
         videoUrl,
@@ -61,14 +66,24 @@ export default class Play extends Component {
       <div>
         <div className="section play-content">
           <div className="section-content">
-            <Breadcrumb className="play-breadcrumb">
-              <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem>
+            <Breadcrumb className="content-breadcrumb">
+              {/* <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem> */}
               <BreadcrumbItem>
                 {ContentTypeDictionary[contentType]}
               </BreadcrumbItem>
               <BreadcrumbItem>{videoTitle}</BreadcrumbItem>
             </Breadcrumb>
-            <Row className="play-title">{videoTitle}</Row>
+            <Row className="content-title">{videoTitle}</Row>
+            <Row className="content-info" type="flex" align="middle">
+              <span>
+                <Link className="avatar-username" to={`/index/personal/${id}`}>
+                  <Avatar src={avatar} icon="user" style={{ marginRight: 8 }} />
+                  <span>{username}</span>
+                </Link>
+              </span>
+              <span>评论({comments})</span>
+              <span>{time}</span>
+            </Row>
             <Row
               style={{
                 marginBottom: 16

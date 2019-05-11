@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Divider, Button, BackTop } from 'antd';
+import { Row, Divider, Button, BackTop } from 'antd';
 
 import VideoList from '../../../components/VideoList/VideoList';
 import ArticleList from '../../../components/ArticleList/ArticleList';
@@ -21,7 +21,7 @@ export default class Home extends Component {
 
   render() {
     const {
-      banners: { left, tl, tr, bl, br },
+      banners: { big, small },
       officialVideos,
       talentVideos,
       articleList
@@ -29,40 +29,61 @@ export default class Home extends Component {
     return (
       <div>
         <div className="section home-banner">
-          <Row className="section-content" type="flex">
-            <div className="home-banner-left" title={left.videoTitle}>
-              <Link to={`/index/play/${left.videoId}&&${left.videoType}`}>
-                <img src={left.videoCover} alt="" />
-                <span className="shadow-inside" />
-              </Link>
-            </div>
-            <div className="home-banner-right">
-              <Col className="home-banner-tl" span={12} title={tl.videoTitle}>
-                <Link to={`/index/play/${tl.videoId}&&${tl.videoType}`}>
-                  <img src={tl.videoCover} alt="" />
+          <div className="section-content">
+            <Row type="flex">
+              <div
+                className="home-banner-left"
+                span={12}
+                title={big.videoTitle}
+              >
+                <Link
+                  className="home-banner-image"
+                  to={`/index/play/${big.videoId}`}
+                  style={{ backgroundImage: `url('${big.videoCover}')` }}
+                >
                   <span className="shadow-inside" />
                 </Link>
-              </Col>
-              <Col className="home-banner-tr" span={12} title={tr.videoTitle}>
-                <Link to={`/index/play/${tr.videoId}&&${tr.videoType}`}>
-                  <img src={tr.videoCover} alt="" />
-                  <span className="shadow-inside" />
-                </Link>
-              </Col>
-              <Col className="home-banner-bl" span={12} title={bl.videoTitle}>
-                <Link to={`/index/play/${bl.videoId}&&${bl.videoType}`}>
-                  <img src={bl.videoCover} alt="" />
-                  <span className="shadow-inside" />
-                </Link>
-              </Col>
-              <Col className="home-banner-br" span={12} title={br.videoTitle}>
-                <Link to={`/index/play/${br.videoId}&&${br.videoType}`}>
-                  <img src={br.videoCover} alt="" />
-                  <span className="shadow-inside" />
-                </Link>
-              </Col>
-            </div>
-          </Row>
+              </div>
+              <div className="home-banner-right">
+                <div className="home-banner-tl" title={small.videoTitle}>
+                  <Link
+                    className="home-banner-image"
+                    to={`/index/play/${small.videoId}`}
+                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                  >
+                    <span className="shadow-inside" />
+                  </Link>
+                </div>
+                <div className="home-banner-tr" title={small.videoTitle}>
+                  <Link
+                    className="home-banner-image"
+                    to={`/index/play/${small.videoId}`}
+                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                  >
+                    <span className="shadow-inside" />
+                  </Link>
+                </div>
+                <div className="home-banner-bl" title={small.videoTitle}>
+                  <Link
+                    className="home-banner-image"
+                    to={`/index/play/${small.videoId}`}
+                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                  >
+                    <span className="shadow-inside" />
+                  </Link>
+                </div>
+                <div className="home-banner-br" title={small.videoTitle}>
+                  <Link
+                    className="home-banner-image"
+                    to={`/index/play/${small.videoId}`}
+                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                  >
+                    <span className="shadow-inside" />
+                  </Link>
+                </div>
+              </div>
+            </Row>
+          </div>
         </div>
         <div className="section">
           <div className="section-content">

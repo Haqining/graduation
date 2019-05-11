@@ -1,15 +1,14 @@
 .article-list-item {
   display: block;
-  padding: 24px;
+  padding: 16px;
   border-bottom: 1px solid #e8e8e8;
+}
+
+.article-list-item > a {
   color: rgba(0, 0, 0, 0.65);
 }
 
-.article-list-item:hover {
-  color: rgba(0, 0, 0, 0.65);
-}
-
-.article-list-item:hover .article-item-title {
+.article-list-item > a:hover .article-item-title {
   color: #1890ff;
 }
 
@@ -26,6 +25,10 @@
 .article-item-introduction {
   flex: 1;
   margin-right: 24px;
+}
+
+.article-item-info {
+  margin-top: 8px;
 }
 
 .article-item-info > span {
