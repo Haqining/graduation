@@ -15,6 +15,7 @@ export default class NavBar extends Component {
   render() {
     const { pathname } = this.props;
     const selectedKey = pathname.split('/')[2];
+    // TODO:替换成普通id
     const userId = localStorage.getItem('userId');
     const isLogin = userId !== '';
     const isAdmin = userId === 'admin';
@@ -57,6 +58,7 @@ export default class NavBar extends Component {
               <Row type="flex" align="middle">
                 <Link
                   to="/index/message"
+                  target="_blank"
                   style={{ color: 'rgba(255, 255, 255, 0.65)' }}
                 >
                   通知
@@ -70,13 +72,15 @@ export default class NavBar extends Component {
                   overlay={
                     <Menu>
                       <MenuItem>
-                        <Link to={`/index/personal/${userId}`}>
+                        <Link to={`/index/personal/${userId}`} target="_blank">
                           testUserName
                         </Link>
                       </MenuItem>
                       {isAdmin ? (
                         <MenuItem>
-                          <Link to="/admin">管理员入口</Link>
+                          <Link to="/admin" target="_blank">
+                            管理员入口
+                          </Link>
                         </MenuItem>
                       ) : null}
                       <MenuItem>
@@ -88,7 +92,7 @@ export default class NavBar extends Component {
                   }
                   placement="bottomRight"
                 >
-                  <Link to={`/index/personal/${userId}`}>
+                  <Link to={`/index/personal/${userId}`} target="_blank">
                     <Avatar icon="user" style={{ cursor: 'pointer' }} />
                   </Link>
                 </Dropdown>

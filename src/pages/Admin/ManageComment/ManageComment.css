@@ -1,0 +1,11 @@
+.mc-list-item {
+  padding: 16px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.mc-menu {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 1.5rem;
+}

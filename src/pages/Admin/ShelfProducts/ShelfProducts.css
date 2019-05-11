@@ -1,0 +1,66 @@
+
+.shelf-product-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.shelf-product-image > img {
+  border-radius: 4px;
+}
+
+.shelf-image-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 120px;
+  font-size: 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.shelf-product-image:hover > .shelf-image-mask {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.shelf-upload-content,
+.shelf-details-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+}
+
+.shelf-cropper {
+  width: 200px;
+  height: 200px;
+}
+
+.shelf-image-preview {
+  width: 400px;
+  height: 400px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.shelf-cover-uploader > .ant-upload {
+  width: 300px;
+  height: 300px;
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.shelf-image-uploader > .ant-upload {
+  width: 120px;
+  height: 120px;
+  margin: 0;
+  margin-bottom: 16px;
+}

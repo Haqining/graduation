@@ -44,6 +44,7 @@ export default class ArticleList extends Component {
               <span>
                 <Link
                   className="avatar-username"
+                  target="_blank"
                   to={`/index/personal/${value.id}`}
                 >
                   <Avatar

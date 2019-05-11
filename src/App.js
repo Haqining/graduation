@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 
 import Login from './pages/User/Login/Login';
 import Register from './pages/User/Register/Register';
@@ -11,6 +11,10 @@ import 'braft-editor/dist/index.css';
 import 'braft-editor/dist/output.css';
 import 'cropperjs/dist/cropper.css';
 import './App.css';
+
+message.config({
+  maxCount: 3
+});
 
 export default class App extends Component {
   getConfirmation = (message, callback) => {

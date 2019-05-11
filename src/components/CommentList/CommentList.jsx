@@ -192,6 +192,7 @@ export default class CommentList extends Component {
                     >
                       <Link
                         className="avatar-username"
+                        target='_blank'
                         to={`/index/personal/${value.id}`}
                       >
                         {value.username}

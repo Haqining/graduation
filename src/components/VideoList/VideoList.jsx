@@ -12,7 +12,7 @@ export default class VideoList extends Component {
       <ul className="video-list">
         {videoList.map((value, index) => (
           <li className="video-list-item" key={`video${index}`}>
-            <Link to={`/index/play/${value.videoId}`}>
+            <Link to={`/index/play/${value.videoId}`} target="_blank">
               <div
                 className="video-item-image"
                 style={{ backgroundImage: `url('${value.videoCover}')` }}

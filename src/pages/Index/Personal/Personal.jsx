@@ -92,7 +92,7 @@ export default class Personal extends Component {
       paCurrentPage,
       pendingArticle
     } = this.state;
-    const isSelf = id === 'admin';
+    const isSelf = id === localStorage.getItem('userId');
     const videoNumber = videoList.length;
     const videoNeedPagination = videoNumber > 12;
     const articleNumber = articleList.length;

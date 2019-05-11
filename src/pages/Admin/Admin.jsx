@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Switch, Route, Redirect } from 'react-router-dom';
-import { Row, Layout, Menu, Icon } from 'antd';
+import { Row, Layout, Menu, Icon, BackTop } from 'antd';
 
 import './Admin.css';
 import ReviewVideo from './ReviewVideo/ReviewVideo';
@@ -83,6 +83,9 @@ export default class Admin extends Component {
               </Switch>
             </Content>
           </Layout>
+          <BackTop visibilityHeight={0}>
+            <div className="ant-back-top-inner">UP</div>
+          </BackTop>
         </div>
       </div>
     );

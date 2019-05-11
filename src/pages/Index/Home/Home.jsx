@@ -39,6 +39,7 @@ export default class Home extends Component {
                 <Link
                   className="home-banner-image"
                   to={`/index/play/${big.videoId}`}
+                  target="_blank"
                   style={{ backgroundImage: `url('${big.videoCover}')` }}
                 >
                   <span className="shadow-inside" />
@@ -49,6 +50,7 @@ export default class Home extends Component {
                   <Link
                     className="home-banner-image"
                     to={`/index/play/${small.videoId}`}
+                    target="_blank"
                     style={{ backgroundImage: `url('${small.videoCover}')` }}
                   >
                     <span className="shadow-inside" />
@@ -58,6 +60,7 @@ export default class Home extends Component {
                   <Link
                     className="home-banner-image"
                     to={`/index/play/${small.videoId}`}
+                    target="_blank"
                     style={{ backgroundImage: `url('${small.videoCover}')` }}
                   >
                     <span className="shadow-inside" />
@@ -67,6 +70,7 @@ export default class Home extends Component {
                   <Link
                     className="home-banner-image"
                     to={`/index/play/${small.videoId}`}
+                    target="_blank"
                     style={{ backgroundImage: `url('${small.videoCover}')` }}
                   >
                     <span className="shadow-inside" />
@@ -76,6 +80,7 @@ export default class Home extends Component {
                   <Link
                     className="home-banner-image"
                     to={`/index/play/${small.videoId}`}
+                    target="_blank"
                     style={{ backgroundImage: `url('${small.videoCover}')` }}
                   >
                     <span className="shadow-inside" />

@@ -78,6 +78,7 @@ export default class Message extends Component {
                     <Link
                       className="avatar-username"
                       to={`/index/personal/${value.id}`}
+                      target="_blank"
                       style={{ marginRight: 32 }}
                     >
                       {value.username}
@@ -85,13 +86,16 @@ export default class Message extends Component {
                     <span style={{ color: '#c7c7c7' }}>{value.time}</span>
                   </Row>
                   <Row style={{ marginBottom: 8 }}>
-                    评论了你的测评
+                    评论了你的
                     {value.videoId ? (
-                      <Link to={`/index/play/${value.videoId}`}>
+                      <Link to={`/index/play/${value.videoId}`} target="_blank">
                         {value.videoTitle}
                       </Link>
                     ) : (
-                      <Link to={`/index/read/${value.articleId}`}>
+                      <Link
+                        to={`/index/read/${value.articleId}`}
+                        target="_blank"
+                      >
                         {value.articleTitle}
                       </Link>
                     )}
@@ -130,6 +134,7 @@ export default class Message extends Component {
                     <Link
                       className="avatar-username"
                       to={`/index/personal/${value.id}`}
+                      target="_blank"
                       style={{ marginRight: 32 }}
                     >
                       {value.username}
@@ -139,11 +144,14 @@ export default class Message extends Component {
                   <Row>
                     赞了你在
                     {value.videoId ? (
-                      <Link to={`/index/play/${value.videoId}`}>
+                      <Link to={`/index/play/${value.videoId}`} target="_blank">
                         {value.videoTitle}
                       </Link>
                     ) : (
-                      <Link to={`/index/read/${value.articleId}`}>
+                      <Link
+                        to={`/index/read/${value.articleId}`}
+                        target="_blank"
+                      >
                         {value.articleTitle}
                       </Link>
                     )}
@@ -171,6 +179,7 @@ export default class Message extends Component {
                     <Link
                       className="avatar-username"
                       to={`/index/personal/${value.id}`}
+                      target="_blank"
                       style={{ marginRight: 32 }}
                     >
                       {value.username}
@@ -180,11 +189,14 @@ export default class Message extends Component {
                   <Row style={{ marginBottom: 8 }}>
                     回复了你在
                     {value.videoId ? (
-                      <Link to={`/index/play/${value.videoId}`}>
+                      <Link to={`/index/play/${value.videoId}`} target="_blank">
                         {value.videoTitle}
                       </Link>
                     ) : (
-                      <Link to={`/index/read/${value.articleId}`}>
+                      <Link
+                        to={`/index/read/${value.articleId}`}
+                        target="_blank"
+                      >
                         {value.articleTitle}
                       </Link>
                     )}

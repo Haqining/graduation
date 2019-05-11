@@ -76,7 +76,11 @@ export default class Play extends Component {
             <Row className="content-title">{videoTitle}</Row>
             <Row className="content-info" type="flex" align="middle">
               <span>
-                <Link className="avatar-username" to={`/index/personal/${id}`}>
+                <Link
+                  className="avatar-username"
+                  to={`/index/personal/${id}`}
+                  target="_blank"
+                >
                   <Avatar src={avatar} icon="user" style={{ marginRight: 8 }} />
                   <span>{username}</span>
                 </Link>

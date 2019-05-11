@@ -40,8 +40,8 @@ export default Form.create()(
       userInfo: {
         avatar: testAvatar,
         username: 'testName',
-        introduction: '个人介绍',
-        sex: '1',
+        introduction: '',
+        sex: '男',
         hometown: '11,1101,110101'
       },
       // changeAvatar changeInfo changePassword
@@ -117,6 +117,20 @@ export default Form.create()(
       });
     };
 
+    changeIntroduction = e => {
+      const {
+        form: { getFieldValue }
+      } = this.props;
+      const {
+        target: { value }
+      } = e;
+      if (value.length > 120) {
+        message.error('超过最大可输入字符');
+        return getFieldValue('introduction');
+      }
+      return value;
+    };
+
     comparePassword = (rule, value, callback) => {
       const {
         form: { getFieldValue }
@@ -129,7 +143,7 @@ export default Form.create()(
 
     choosePage = pageState => {
       const {
-        form: { getFieldDecorator }
+        form: { getFieldDecorator, getFieldValue }
       } = this.props;
       const {
         userInfo: { avatar, username, introduction, sex, hometown },
@@ -225,15 +239,19 @@ export default Form.create()(
                 initialValue: sex
               })(
                 <RadioGroup>
-                  <Radio value="1">男</Radio>
-                  <Radio value="2">女</Radio>
+                  <Radio value="男">男</Radio>
+                  <Radio value="女">女</Radio>
                 </RadioGroup>
               )}
             </FormItem>
             <FormItem label="简介">
               {getFieldDecorator('introduction', {
-                initialValue: introduction
+                initialValue: introduction,
+                getValueFromEvent: this.changeIntroduction
               })(<TextArea autosize />)}
+              <Row type="flex" justify="end" style={{ lineHeight: 1.5 }}>
+                {getFieldValue('introduction').length}/120
+              </Row>
             </FormItem>
             <FormItem label="家乡">
               {getFieldDecorator('hometown', {

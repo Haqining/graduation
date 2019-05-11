@@ -14,6 +14,7 @@ export default class UserList extends Component {
           <Link
             className="user-list-item"
             to={`/index/personal/${value.id}`}
+            target="_blank"
             key={value.username + index}
           >
             <Row type="flex" align="middle">
