@@ -4,7 +4,7 @@ import { Row, Empty, Avatar } from 'antd';
 import _ from 'lodash';
 
 import './ArticleList.css';
-import { ContentTypeDictionary } from '../../config.js';
+import ContentType from '../../ContentType';
 
 export default class ArticleList extends Component {
   render() {
@@ -13,7 +13,7 @@ export default class ArticleList extends Component {
       <div>
         {articleList.map((value, index) => (
           <div className="article-list-item" key={value.contentType + index}>
-            <Link to={`/index/read/${value.articleId}`}>
+            <Link to={`/index/read/${value.articleId}`} target="_blank">
               <Row
                 type="flex"
                 justify="space-between"
@@ -44,8 +44,8 @@ export default class ArticleList extends Component {
               <span>
                 <Link
                   className="avatar-username"
-                  target="_blank"
                   to={`/index/personal/${value.id}`}
+                  target="_blank"
                 >
                   <Avatar
                     src={value.avatar}
@@ -55,7 +55,7 @@ export default class ArticleList extends Component {
                   <span>{value.username}</span>
                 </Link>
               </span>
-              <span>{ContentTypeDictionary[value.contentType]}</span>
+              <span>{ContentType[value.contentType]}</span>
               <span>评论({value.comments})</span>
               {/* TODO:加一个可操作列表 */}
             </Row>

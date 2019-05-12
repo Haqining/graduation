@@ -10,9 +10,6 @@ export default [
       '简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介',
     hometown: '11,1101,110101',
     birthday: '2018-01-01',
-    videoSubmission: 10,
-    articleSubmission: 0,
-    accumulatedPraise: 100,
     status: 'normal'
   },
   {
@@ -24,9 +21,6 @@ export default [
     introduction: '简介',
     hometown: '11,1101,110101',
     birthday: '2018-01-01',
-    videoSubmission: 10,
-    articleSubmission: 0,
-    accumulatedPraise: 100,
     status: 'disable'
   }
 ];

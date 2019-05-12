@@ -3,3 +3,12 @@
   border: 1px solid #e8e8e8;
   background: #ffffff;
 }
+
+.admin-long-text {
+  max-width: 100px;
+  margin: 0 auto;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

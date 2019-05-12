@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Prompt } from 'react-router-dom';
 import {
   Row,
   Form,
@@ -113,7 +114,7 @@ export default Form.create()(
 
     render() {
       const {
-        form: { getFieldDecorator }
+        form: { getFieldDecorator, getFieldsValue }
       } = this.props;
       const {
         isCover,
@@ -122,6 +123,14 @@ export default Form.create()(
         productCover,
         productImages
       } = this.state;
+      let hasData = false;
+      if (!_.isEmpty(getFieldsValue())) {
+        _.forEach(getFieldsValue(), value => {
+          if (value) {
+            hasData = true;
+          }
+        });
+      }
       const canUpload = productImages.length < 9;
       return (
         <Row type="flex" justify="center">
@@ -351,6 +360,10 @@ export default Form.create()(
               </div>
             </Row>
           </Modal>
+          <Prompt
+            when={!!productCover || !_.isEmpty(productImages) || hasData}
+            message="填写的内容还未提交，确定离开本页吗？"
+          />
         </Row>
       );
     }

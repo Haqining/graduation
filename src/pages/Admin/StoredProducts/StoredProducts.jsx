@@ -45,7 +45,7 @@ export default class StoredProducts extends Component {
       title: productName,
       centered: true,
       icon: false,
-      width: 500,
+      width: 600,
       content: (
         <Row type="flex" justify="center">
           <div className="stored-details-content">

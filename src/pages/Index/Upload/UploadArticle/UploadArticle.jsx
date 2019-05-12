@@ -162,11 +162,11 @@ export default Form.create()(
                 rules: [
                   { required: true, message: '标题是必需的' },
                   {
-                    max: 40,
-                    message: '最多40个字符'
+                    max: 30,
+                    message: '最多30个字符'
                   }
                 ]
-              })(<Input placeholder="建议30个字符以内" />)}
+              })(<Input placeholder="最多30个字符" />)}
             </FormItem>
             <FormItem label="分类">
               {getFieldDecorator('contentType', {

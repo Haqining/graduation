@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Breadcrumb, Avatar } from 'antd';
 
 import './Read.css';
-import { ContentTypeDictionary } from '../../../config.js';
+import ContentType from '../../../ContentType.js';
 import ArticleInfo from './ArticleInfo';
 import CommentList from '../../../components/CommentList/CommentList';
 
@@ -54,9 +54,7 @@ export default class Read extends Component {
               <BreadcrumbItem>
                 <Link to="/index/article">测评文章</Link>
               </BreadcrumbItem>
-              <BreadcrumbItem>
-                {ContentTypeDictionary[contentType]}
-              </BreadcrumbItem>
+              <BreadcrumbItem>{ContentType[contentType]}</BreadcrumbItem>
               <BreadcrumbItem>文章</BreadcrumbItem>
             </Breadcrumb>
             <Row className="content-title">{articleTitle}</Row>
@@ -74,14 +72,14 @@ export default class Read extends Component {
               <span>评论({comments})</span>
               <span>{time}</span>
             </Row>
-            <Row style={{ marginBottom: 32 }}>
+            <Row style={{ marginBottom: 24 }}>
               <img
                 src={articleCover}
                 alt="articleCover"
                 style={{ width: '100%' }}
               />
             </Row>
-            <Row style={{ marginBottom: 32 }}>
+            <Row>
               <div
                 className="braft-output-content"
                 dangerouslySetInnerHTML={{

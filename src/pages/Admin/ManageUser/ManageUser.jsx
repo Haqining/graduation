@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Avatar, Tooltip, Tag, Button } from 'antd';
+import { Table, Avatar, Tooltip, Tag, Button, Popconfirm } from 'antd';
 import _ from 'lodash';
 
 import './ManageUser.css';
@@ -68,7 +68,7 @@ export default class ManageUser extends Component {
             render={(text, record) => (
               <Link
                 className="avatar-username"
-                target='_blank'
+                target="_blank"
                 to={`/index/personal/${record.id}`}
               >
                 {text}
@@ -82,7 +82,7 @@ export default class ManageUser extends Component {
             align="center"
             render={text => (
               <Tooltip title={text} placement="bottom">
-                <div className="mu-introduction">{text}</div>
+                <div className="admin-long-text">{text}</div>
               </Tooltip>
             )}
           />
@@ -93,12 +93,6 @@ export default class ManageUser extends Component {
             render={text => this.formatHometown(text)}
           />
           <Column title="生日" dataIndex="birthday" align="center" />
-          <Column title="投稿视频" dataIndex="videoSubmission" align="center" />
-          <Column
-            title="投稿文章"
-            dataIndex="articleSubmission"
-            align="center"
-          />
           <Column
             title="用户状态"
             dataIndex="status"
@@ -107,7 +101,14 @@ export default class ManageUser extends Component {
           />
           <Column
             render={record => (
-              <Button onClick={this.changeStatus(record)}>修改状态</Button>
+              <Popconfirm
+                title="将改变该用户的状态"
+                placement="topLeft"
+                arrowPointAtCenter
+                onConfirm={this.changeStatus(record)}
+              >
+                <Button>修改状态</Button>
+              </Popconfirm>
             )}
           />
         </Table>

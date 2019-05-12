@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Menu, Empty, Icon, Dropdown } from 'antd';
+import { Row, Menu, Empty, Icon, Dropdown, Modal } from 'antd';
 import _ from 'lodash';
 
 import './ManageComment.css';
@@ -31,8 +31,18 @@ export default class ManageComment extends Component {
 
   deleteComment = commentIndex => () => {
     const { commentList } = this.state;
-    this.setState({
-      commentList: commentList.filter((value, index) => index !== commentIndex)
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      onOk: () => {
+        that.setState({
+          commentList: commentList.filter(
+            (value, index) => index !== commentIndex
+          )
+        });
+      }
     });
   };
 

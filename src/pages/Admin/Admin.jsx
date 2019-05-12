@@ -9,7 +9,7 @@ import ManageUser from './ManageUser/ManageUser';
 import ManageComment from './ManageComment/ManageComment';
 import ShelfProducts from './ShelfProducts/ShelfProducts';
 import StoredProducts from './StoredProducts/StoredProducts';
-import ManageBanner from './ManageBanner/ManageBanner';
+// import ManageBanner from './ManageBanner/ManageBanner';
 
 const { Content, Sider } = Layout;
 const { Item: MenuItem } = Menu;
@@ -53,9 +53,9 @@ export default class Admin extends Component {
                 <MenuItem key="stored-products">
                   <Link to="/admin/stored-products">已上架产品</Link>
                 </MenuItem>
-                <MenuItem key="manage-banner">
+                {/* <MenuItem key="manage-banner">
                   <Link to="/admin/manage-banner">首页展示内容</Link>
-                </MenuItem>
+                </MenuItem> */}
               </Menu>
             </Sider>
             <Content style={{ padding: '0 24px' }}>
@@ -78,7 +78,7 @@ export default class Admin extends Component {
                   path={`${url}/stored-products`}
                   component={StoredProducts}
                 />
-                <Route path={`${url}/manage-banner`} component={ManageBanner} />
+                {/* <Route path={`${url}/manage-banner`} component={ManageBanner} /> */}
                 <Redirect from={`${url}/`} to={`${url}/review-video`} />
               </Switch>
             </Content>

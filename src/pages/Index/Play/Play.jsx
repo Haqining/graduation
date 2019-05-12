@@ -6,7 +6,7 @@ import ReactPlayer from 'react-player';
 import CommentList from '../../../components/CommentList/CommentList';
 
 import './Play.css';
-import { ContentTypeDictionary } from '../../../config.js';
+import ContentType from '../../../ContentType.js';
 import VideoInfo from './VideoInfo';
 
 const { Item: BreadcrumbItem } = Breadcrumb;
@@ -68,9 +68,7 @@ export default class Play extends Component {
           <div className="section-content">
             <Breadcrumb className="content-breadcrumb">
               {/* <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem> */}
-              <BreadcrumbItem>
-                {ContentTypeDictionary[contentType]}
-              </BreadcrumbItem>
+              <BreadcrumbItem>{ContentType[contentType]}</BreadcrumbItem>
               <BreadcrumbItem>{videoTitle}</BreadcrumbItem>
             </Breadcrumb>
             <Row className="content-title">{videoTitle}</Row>

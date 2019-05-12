@@ -38,18 +38,12 @@ export default Form.create()(
     uploadVideo = file => {
       const { videoList } = this.state;
       const { name } = file;
-      let uploaded = false;
-      if (!_.includes(videoTypes, name.slice(-4))) {
-        message.error('选择了错误的文件类型，请重新选择');
+      if (!_.isEmpty(videoList)) {
+        message.error('只能上传一个视频');
         return false;
       }
-      videoList.forEach(value => {
-        if (name === value.name) {
-          uploaded = true;
-        }
-      });
-      if (uploaded) {
-        message.error(name + '文件已经上传过一次了');
+      if (!_.includes(videoTypes, name.slice(-4))) {
+        message.error('选择了错误的文件类型，请重新选择');
         return false;
       }
       this.setState({
@@ -59,9 +53,8 @@ export default Form.create()(
     };
 
     removeVideo = () => {
-      const { videoList } = this.state;
       this.setState({
-        videoList: videoList.filter(value => value.status !== 'removed')
+        videoList: []
       });
     };
 
@@ -141,8 +134,14 @@ export default Form.create()(
             </FormItem>
             <FormItem label="标题">
               {getFieldDecorator('videoTitle', {
-                rules: [{ required: true, message: '标题是必须的' }]
-              })(<Input placeholder="建议30个字符以内" />)}
+                rules: [
+                  { required: true, message: '标题是必须的' },
+                  {
+                    max: 30,
+                    message: '最多30个字符'
+                  }
+                ]
+              })(<Input placeholder="最多30个字符" />)}
             </FormItem>
             <FormItem label="封面图片" required>
               <Row type="flex" justify="center">
@@ -242,7 +241,7 @@ export default Form.create()(
             </Row>
           </Modal>
           <Prompt
-            when={!_.isEmpty(videoList)||videoCover||hasData}
+            when={!_.isEmpty(videoList) || videoCover || hasData}
             message="填写的内容还未提交，确定离开本页吗？"
           />
         </Row>

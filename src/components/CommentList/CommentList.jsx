@@ -52,20 +52,23 @@ export default class CommentList extends Component {
   };
 
   submitComment = () => {
-    const { editorState, commentList } = this.state;
-    if (editorState.isEmpty()) {
+    const { commentContent, replyComment, commentList } = this.state;
+    if (!commentContent) {
       message.error('请输入评论的内容 (～￣(OO)￣)ブ');
     } else {
       message.success('评论成功 d=====(￣▽￣*)b');
       this.setState({
         commentContent: '',
+        replyComment: null,
         commentList: [
           {
             userId: 'testUserId12',
             avatar: '',
             username: 'testName',
             time: moment().format('YYYY-MM-DD HH:mm'),
-            commentContent: editorState.toHTML(),
+            commentContent: !_.isEmpty(replyComment)
+              ? `回复@${replyComment.username}：${commentContent}`
+              : commentContent,
             like: 0,
             liked: false
           },
@@ -126,7 +129,7 @@ export default class CommentList extends Component {
     return (
       <div>
         {!_.isEmpty(replyComment) ? (
-          <Row type="flex">
+          <Row type="flex" style={{ marginBottom: 8 }}>
             <div style={{ flex: 1 }}>
               回复@{replyComment.username}：{replyComment.commentContent}
             </div>
@@ -175,7 +178,7 @@ export default class CommentList extends Component {
                   type="flex"
                 >
                   <div>
-                    <Link to={`/index/personal/${value.id}`}>
+                    <Link to={`/index/personal/${value.id}`} target="_blank">
                       <Avatar
                         src={value.avatar}
                         size={48}
@@ -192,8 +195,8 @@ export default class CommentList extends Component {
                     >
                       <Link
                         className="avatar-username"
-                        target='_blank'
                         to={`/index/personal/${value.id}`}
+                        target="_blank"
                       >
                         {value.username}
                       </Link>
