@@ -103,8 +103,6 @@ export default class ManageUser extends Component {
             render={record => (
               <Popconfirm
                 title="将改变该用户的状态"
-                placement="topLeft"
-                arrowPointAtCenter
                 onConfirm={this.changeStatus(record)}
               >
                 <Button>修改状态</Button>

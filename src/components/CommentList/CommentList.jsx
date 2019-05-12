@@ -15,7 +15,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 import './CommentList.css';
-import CommentListData from './CommentListData';
+import CommentData from './CommentData';
 
 const { TextArea } = Input;
 
@@ -36,7 +36,7 @@ export default class CommentList extends Component {
 
   componentWillMount() {
     this.setState({
-      commentList: CommentListData
+      commentList: CommentData
     });
   }
 
@@ -128,7 +128,7 @@ export default class CommentList extends Component {
     const needPagination = dataLength > 10;
     return (
       <div>
-        {!_.isEmpty(replyComment) ? (
+        {!_.isEmpty(replyComment) && (
           <Row type="flex" style={{ marginBottom: 8 }}>
             <div style={{ flex: 1 }}>
               回复@{replyComment.username}：{replyComment.commentContent}
@@ -137,7 +137,7 @@ export default class CommentList extends Component {
               取消回复
             </div>
           </Row>
-        ) : null}
+        )}
 
         <Row style={{ marginBottom: 24 }}>
           <TextArea
@@ -174,7 +174,7 @@ export default class CommentList extends Component {
               .map((value, index) => (
                 <Row
                   className="comment-item"
-                  key={'comment' + index}
+                  key={`comment${index}`}
                   type="flex"
                 >
                   <div>
@@ -230,7 +230,7 @@ export default class CommentList extends Component {
             />
           )}
         </Row>
-        {needPagination ? (
+        {needPagination && (
           <Row type="flex" justify="center">
             <Pagination
               pageSize={10}
@@ -238,7 +238,7 @@ export default class CommentList extends Component {
               onChange={this.changePage}
             />
           </Row>
-        ) : null}
+        )}
       </div>
     );
   }

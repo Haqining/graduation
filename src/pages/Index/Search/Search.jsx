@@ -81,12 +81,12 @@ export default class Search extends Component {
                 />
               </Col>
             </Row>
-            {searchResult ? (
+            {searchResult && (
               <div>
                 <Divider />
                 <Row>{this.chooseList(searchResult)}</Row>
               </div>
-            ) : null}
+            )}
           </div>
         </div>
         <BackTop visibilityHeight={0}>

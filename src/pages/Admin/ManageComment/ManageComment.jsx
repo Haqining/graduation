@@ -36,6 +36,7 @@ export default class ManageComment extends Component {
       title: '删除是不可逆的操作，是否确定',
       icon: false,
       centered: true,
+      okType: 'danger',
       onOk: () => {
         that.setState({
           commentList: commentList.filter(

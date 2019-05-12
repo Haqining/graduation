@@ -30,7 +30,7 @@ export default class Talent extends Component {
             <Row>
               <VideoList videoList={videoList} />
             </Row>
-            {hasData ? (
+            {hasData && (
               <Row type="flex" justify="center">
                 {hasMore ? (
                   <Button
@@ -45,7 +45,7 @@ export default class Talent extends Component {
                   <span>没有更多了ε=ε=ε=(~￣▽￣)~</span>
                 )}
               </Row>
-            ) : null}
+            )}
           </div>
         </div>
         <BackTop visibilityHeight={0}>

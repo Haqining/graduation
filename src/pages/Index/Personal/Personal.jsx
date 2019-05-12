@@ -121,11 +121,11 @@ export default class Personal extends Component {
                   <span>加入时间：{joinTime}</span>
                 </Row>
               </div>
-              {isSelf ? (
+              {isSelf && (
                 <Button href="/index/personal-setting">编辑资料</Button>
-              ) : null}
+              )}
             </Row>
-            {isSelf ? (
+            {isSelf && (
               <Row type="flex" justify="center" style={{ marginBottom: 32 }}>
                 <ButtonGroup size="large">
                   <Button
@@ -144,7 +144,7 @@ export default class Personal extends Component {
                   </Button>
                 </ButtonGroup>
               </Row>
-            ) : null}
+            )}
             <Row>
               <Tabs onChange={this.changeTabPane}>
                 <TabPane key="video" tab={'投稿的视频（' + videoNumber + '）'}>
@@ -157,7 +157,7 @@ export default class Personal extends Component {
                       )}
                     />
                   </Row>
-                  {videoNeedPagination ? (
+                  {videoNeedPagination && (
                     <Row type="flex" justify="center">
                       <Pagination
                         current={videoCurrentPage}
@@ -166,7 +166,7 @@ export default class Personal extends Component {
                         onChange={this.changeVideoPage}
                       />
                     </Row>
-                  ) : null}
+                  )}
                 </TabPane>
                 <TabPane
                   key="article"
@@ -179,7 +179,7 @@ export default class Personal extends Component {
                         index <= articleCurrentPage * 9 - 1
                     )}
                   />
-                  {articleNeedPagination ? (
+                  {articleNeedPagination && (
                     <Row type="flex" justify="center">
                       <Pagination
                         current={articleCurrentPage}
@@ -188,9 +188,9 @@ export default class Personal extends Component {
                         onChange={this.changeArticlePage}
                       />
                     </Row>
-                  ) : null}
+                  )}
                 </TabPane>
-                {isSelf ? (
+                {isSelf && (
                   <TabPane
                     key="pendingVideo"
                     tab={'待审核视频（' + pvNumber + '）'}
@@ -204,7 +204,7 @@ export default class Personal extends Component {
                         )}
                       />
                     </Row>
-                    {pvNeedPagination ? (
+                    {pvNeedPagination && (
                       <Row type="flex" justify="center">
                         <Pagination
                           current={pvCurrentPage}
@@ -213,10 +213,10 @@ export default class Personal extends Component {
                           onChange={this.changePVPage}
                         />
                       </Row>
-                    ) : null}
+                    )}
                   </TabPane>
-                ) : null}
-                {isSelf ? (
+                )}
+                {isSelf && (
                   <TabPane
                     key="pendingArticle"
                     tab={'待审核文章（' + paNumber + '）'}
@@ -228,7 +228,7 @@ export default class Personal extends Component {
                           index <= paCurrentPage * 9 - 1
                       )}
                     />
-                    {paNeedPagination ? (
+                    {paNeedPagination && (
                       <Row type="flex" justify="center">
                         <Pagination
                           current={paCurrentPage}
@@ -237,9 +237,9 @@ export default class Personal extends Component {
                           onChange={this.changePAPage}
                         />
                       </Row>
-                    ) : null}
+                    )}
                   </TabPane>
-                ) : null}
+                )}
               </Tabs>
             </Row>
           </div>

@@ -7,13 +7,13 @@ import CommentList from '../../../components/CommentList/CommentList';
 
 import './Play.css';
 import ContentType from '../../../ContentType.js';
-import VideoInfo from './VideoInfo';
+import VideoData from './VideoData';
 
 const { Item: BreadcrumbItem } = Breadcrumb;
 
 export default class Play extends Component {
   state = {
-    videoInfo: VideoInfo,
+    videoInfo: VideoData,
     isPlay: false,
     isFirstClick: true
   };
@@ -100,7 +100,7 @@ export default class Play extends Component {
                 onPlay={this.playVideo}
                 onPause={this.pauseVideo}
               />
-              {!isPlay && isFirstClick ? (
+              {!isPlay && isFirstClick && (
                 <div>
                   <div
                     className="play-video-wrapper"
@@ -108,8 +108,8 @@ export default class Play extends Component {
                     style={{ backgroundImage: `url(${videoCover})` }}
                   />
                 </div>
-              ) : null}
-              {isPlay ? null : (
+              )}
+              {!isPlay && (
                 <div className="play-video-icon" onClick={this.playVideo}>
                   <Icon type="caret-right" />
                 </div>

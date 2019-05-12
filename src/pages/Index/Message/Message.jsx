@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Layout, Menu, Empty, Icon, Dropdown, BackTop } from 'antd';
+import { Row, Layout, Menu, Empty, Icon, Dropdown, BackTop, Modal } from 'antd';
 import _ from 'lodash';
 
 import './Message.css';
@@ -59,8 +59,35 @@ export default class Message extends Component {
 
   deleteComment = commentIndex => () => {
     const { commentList } = this.state;
-    this.setState({
-      commentList: commentList.filter((value, index) => index !== commentIndex)
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      okType: 'danger',
+      onOk: () => {
+        that.setState({
+          commentList: commentList.filter(
+            (value, index) => index !== commentIndex
+          )
+        });
+      }
+    });
+  };
+
+  deleteReply = replyIndex => () => {
+    const { replyList } = this.state;
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      okType: 'danger',
+      onOk: () => {
+        that.setState({
+          replyList: replyList.filter((value, index) => index !== replyIndex)
+        });
+      }
     });
   };
 
@@ -203,6 +230,17 @@ export default class Message extends Component {
                     中的评论
                   </Row>
                   <Row>{value.replyContent}</Row>
+                  <Dropdown
+                    overlay={
+                      <Menu onClick={this.deleteReply(index)}>
+                        <MenuItem>删除</MenuItem>
+                      </Menu>
+                    }
+                    trigger={['click']}
+                    placement="bottomRight"
+                  >
+                    <Icon className="message-menu" type="more" />
+                  </Dropdown>
                 </Row>
               ))}
             </div>

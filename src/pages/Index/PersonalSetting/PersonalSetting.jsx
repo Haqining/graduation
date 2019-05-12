@@ -38,7 +38,9 @@ export default Form.create()(
   class PersonalSetting extends Component {
     state = {
       userInfo: {
+        id: 'testId',
         avatar: testAvatar,
+        email: 'xxx@xxx',
         username: 'testName',
         introduction: '',
         sex: '男',
@@ -143,10 +145,10 @@ export default Form.create()(
 
     choosePage = pageState => {
       const {
-        form: { getFieldDecorator, getFieldValue }
+        form: { getFieldDecorator }
       } = this.props;
       const {
-        userInfo: { avatar, username, introduction, sex, hometown },
+        userInfo: { id, avatar, username, email, introduction, sex, hometown },
         modalVisible,
         tempImage
       } = this.state;
@@ -228,12 +230,17 @@ export default Form.create()(
             wrapperCol={{ span: 18 }}
             style={{ width: 400 }}
           >
+            <FormItem label="ID">{id}</FormItem>
             <FormItem label="用户名">
               {getFieldDecorator('username', {
-                rules: [{ required: true, message: '用户名是必需的' }],
+                rules: [
+                  { required: true, message: '用户名是必需的' },
+                  { max: 20, message: '最多20个字符' }
+                ],
                 initialValue: username
               })(<Input />)}
             </FormItem>
+            <FormItem label="邮箱">{email}</FormItem>
             <FormItem label="性别">
               {getFieldDecorator('sex', {
                 initialValue: sex
@@ -246,20 +253,26 @@ export default Form.create()(
             </FormItem>
             <FormItem label="简介">
               {getFieldDecorator('introduction', {
-                initialValue: introduction,
-                getValueFromEvent: this.changeIntroduction
-              })(<TextArea autosize />)}
-              <Row type="flex" justify="end" style={{ lineHeight: 1.5 }}>
+                rules: [
+                  { required: true, message: '简介是必需的' },
+                  { max: 2, message: '最多120个字符' }
+                ],
+                initialValue: introduction
+              })(<TextArea autosize placeholder="最多120个字符" />)}
+              {/* <Row type="flex" justify="end" style={{ lineHeight: 1.5 }}>
                 {getFieldValue('introduction').length}/120
-              </Row>
+              </Row> */}
             </FormItem>
             <FormItem label="家乡">
               {getFieldDecorator('hometown', {
+                rules: [{ required: true, message: '家乡是必需的' }],
                 initialValue: hometown.split(',')
               })(<Cascader options={options} placeholder="点击选择" />)}
             </FormItem>
             <FormItem label="生日">
-              {getFieldDecorator('birthday')(
+              {getFieldDecorator('birthday', {
+                rules: [{ required: true, message: '生日是必需的' }]
+              })(
                 <DatePicker
                   disabledDate={currentDate =>
                     currentDate > moment().endOf('day')

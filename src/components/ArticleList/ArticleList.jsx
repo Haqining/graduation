@@ -7,12 +7,17 @@ import './ArticleList.css';
 import ContentType from '../../ContentType';
 
 export default class ArticleList extends Component {
+  static defaultProps = {
+    articleList: [],
+    hasMenu: false
+  };
+
   render() {
     const { articleList } = this.props;
     return !_.isEmpty(articleList) ? (
       <div>
         {articleList.map((value, index) => (
-          <div className="article-list-item" key={value.contentType + index}>
+          <div className="article-list-item" key={`article${index}`}>
             <Link to={`/index/read/${value.articleId}`} target="_blank">
               <Row
                 type="flex"

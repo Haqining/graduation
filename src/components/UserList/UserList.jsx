@@ -13,7 +13,7 @@ export default class UserList extends Component {
         {userList.map((value, index) => (
           <Link
             className="user-list-item"
-            key={value.username + index}
+            key={`user${index}`}
             to={`/index/personal/${value.id}`}
             target="_blank"
           >

@@ -4,28 +4,28 @@ import { Row, Breadcrumb, Avatar } from 'antd';
 
 import './Read.css';
 import ContentType from '../../../ContentType.js';
-import ArticleInfo from './ArticleInfo';
+import ArticleData from './ArticleData';
 import CommentList from '../../../components/CommentList/CommentList';
 
 const { Item: BreadcrumbItem } = Breadcrumb;
 
 export default class Read extends Component {
   state = {
-    articleInfo: ArticleInfo
+    articleInfo: ArticleData
   };
 
-  // changeArticleLike = () => {
-  //   const { articleInfo } = this.state;
-  //   if (articleInfo.liked) {
-  //     articleInfo.like -= 1;
-  //   } else {
-  //     articleInfo.like += 1;
-  //   }
-  //   articleInfo.liked = !articleInfo.liked;
-  //   this.setState({
-  //     articleInfo
-  //   });
-  // };
+  changeArticleLike = () => {
+    const { articleInfo } = this.state;
+    if (articleInfo.liked) {
+      articleInfo.like -= 1;
+    } else {
+      articleInfo.like += 1;
+    }
+    articleInfo.liked = !articleInfo.liked;
+    this.setState({
+      articleInfo
+    });
+  };
 
   render() {
     const {

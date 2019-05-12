@@ -24,7 +24,6 @@ export default class ReviewVideo extends Component {
   };
 
   changeStatus = (record, result) => () => {
-    console.log(record, result);
     const { videoList } = this.state;
     const selectIndex = _.findIndex(
       videoList,
@@ -36,24 +35,25 @@ export default class ReviewVideo extends Component {
 
   chooseAction = record => {
     const { status } = record;
+    const normalAction = (
+      <span>
+        <Button
+          onClick={this.openDetailsModal(record)}
+          style={{ marginRight: 8 }}
+        >
+          查看详情
+        </Button>
+        <Popconfirm title="将删除" onConfirm={this.deleteVideo(record)}>
+          <Button type="danger">删除</Button>
+        </Popconfirm>
+      </span>
+    );
     const switchMap = new Map([
-      [
-        'pass',
-        <Button onClick={this.openDetailsModal(record)}>查看详情</Button>
-      ],
-      [
-        'notPass',
-        <Button onClick={this.openDetailsModal(record)}>查看详情</Button>
-      ],
+      ['pass', normalAction],
+      ['notPass', normalAction],
       [
         'pending',
         <div>
-          <Button
-            onClick={this.openDetailsModal(record)}
-            style={{ marginRight: 8 }}
-          >
-            查看详情
-          </Button>
           <Popconfirm
             title="将通过该视频的审核"
             onConfirm={this.changeStatus(record, 'pass')}
@@ -66,8 +66,11 @@ export default class ReviewVideo extends Component {
             title="将不通过该视频的审核"
             onConfirm={this.changeStatus(record, 'notPass')}
           >
-            <Button type="danger">不通过</Button>
+            <Button type="danger" style={{ marginRight: 8 }}>
+              不通过
+            </Button>
           </Popconfirm>
+          {normalAction}
         </div>
       ]
     ]);
@@ -113,6 +116,13 @@ export default class ReviewVideo extends Component {
           <Row>简介：{videoIntroduction}</Row>
         </div>
       )
+    });
+  };
+
+  deleteVideo = record => () => {
+    const { videoList } = this.state;
+    this.setState({
+      videoList: videoList.filter(value => value.key !== record.key)
     });
   };
 

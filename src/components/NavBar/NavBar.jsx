@@ -48,7 +48,10 @@ export default class NavBar extends Component {
           <Popover
             placement="bottomRight"
             arrowPointAtCenter
-            content={<img src={wxCode} alt="小程序码" />}
+            content={
+              <img src={wxCode} alt="小程序码" style={{ width: '100%' }} />
+            }
+            overlayStyle={{ width: 200 }}
           >
             <Icon type="wechat" style={{ marginRight: 8 }} />
             小程序
@@ -76,13 +79,13 @@ export default class NavBar extends Component {
                           testUserName
                         </Link>
                       </MenuItem>
-                      {isAdmin ? (
+                      {isAdmin && (
                         <MenuItem>
                           <Link to="/admin" target="_blank">
                             管理员入口
                           </Link>
                         </MenuItem>
-                      ) : null}
+                      )}
                       <MenuItem>
                         <Link to="#" onClick={this.logout}>
                           退出

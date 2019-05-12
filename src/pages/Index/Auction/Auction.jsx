@@ -383,7 +383,7 @@ export default Form.create()(
                       </span>
                     </div>
                   ))}
-                  {canUpload ? (
+                  {canUpload && (
                     <Upload
                       className="auction-image-uploader"
                       accept={imageTypes.join()}
@@ -393,7 +393,7 @@ export default Form.create()(
                     >
                       <Icon type="plus" />
                     </Upload>
-                  ) : null}
+                  )}
                 </Row>
                 <div style={{ textAlign: 'center' }}>
                   请选择图片上传：支持JPG、PNG格式，需小于2M，最多9张
