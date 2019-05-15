@@ -192,7 +192,7 @@ export default Form.create()(
         priceIncrease,
         bidderNumber,
         auctionTimes,
-        shelfTime,
+        shelfDate,
         deadline,
         status
       } = record;
@@ -293,7 +293,7 @@ export default Form.create()(
                 <Row>
                   <Col span={12}>
                     <span className="auction-details-label">上架时间</span>
-                    {shelfTime}
+                    {shelfDate}
                   </Col>
                   <Col span={12}>
                     <span className="auction-details-label">截止时间</span>
@@ -585,7 +585,7 @@ export default Form.create()(
                 align="center"
               />
               <Column title="成交价格" dataIndex="dealPrice" align="center" />
-              <Column title="上架时间" dataIndex="shelfTime" align="center" />
+              <Column title="上架时间" dataIndex="shelfDate" align="center" />
               <Column title="截止日期" dataIndex="deadline" align="center" />
               <Column
                 title="状态"

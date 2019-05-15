@@ -37,7 +37,7 @@ export default class StoredProducts extends Component {
       priceIncrease,
       bidderNumber,
       auctionTimes,
-      shelfTime,
+      shelfDate,
       deadline,
       status
     } = record;
@@ -138,7 +138,7 @@ export default class StoredProducts extends Component {
               <Row>
                 <Col span={12}>
                   <span className="stored-details-label">上架时间</span>
-                  {shelfTime}
+                  {shelfDate}
                 </Col>
                 <Col span={12}>
                   <span className="stored-details-label">截止时间</span>
@@ -172,7 +172,7 @@ export default class StoredProducts extends Component {
           <Column title="起拍价格" dataIndex="startingPrice" align="center" />
           <Column title="当前价格" dataIndex="currentPrice" align="center" />
           <Column title="成交价格" dataIndex="dealPrice" align="center" />
-          <Column title="上架时间" dataIndex="shelfTime" align="center" />
+          <Column title="上架时间" dataIndex="shelfDate" align="center" />
           <Column title="截止日期" dataIndex="deadline" align="center" />
           <Column
             title="状态"

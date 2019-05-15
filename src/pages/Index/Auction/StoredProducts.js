@@ -18,7 +18,7 @@ export default [
     dealPrice: 200.1,
     bidderNumber: 1,
     auctionTimes: 3,
-    shelfTime: '2018-01-01',
+    shelfDate: '2018-01-01',
     deadline: '2018-01-05',
     status: 'auctioned'
   },
@@ -37,7 +37,7 @@ export default [
     dealPrice: '-',
     bidderNumber: 1,
     auctionTimes: 3,
-    shelfTime: '2018-01-01',
+    shelfDate: '2018-01-01',
     deadline: '2018-01-05',
     status: 'auctioning'
   }
