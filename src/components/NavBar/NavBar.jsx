@@ -17,7 +17,7 @@ export default class NavBar extends Component {
     const selectedKey = pathname.split('/')[2];
     // TODO:替换成普通id
     const userId = localStorage.getItem('userId');
-    const isLogin = userId !== '';
+    const isLogin = !!userId;
     const isAdmin = userId === 'admin';
     return (
       <Row className="nav-bar" type="flex" justify="space-between">
@@ -28,11 +28,11 @@ export default class NavBar extends Component {
               <Link to="/index/home">首页</Link>
             </MenuItem>
             <MenuItem key="official" className="nav-menu-item">
-              <Link to="/index/official">官方频道</Link>
+              <Link to="/index/official">测评视频</Link>
             </MenuItem>
-            <MenuItem key="talent" className="nav-menu-item">
+            {/* <MenuItem key="talent" className="nav-menu-item">
               <Link to="/index/talent">达人频道</Link>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem key="article" className="nav-menu-item">
               <Link to="/index/article">测评文章</Link>
             </MenuItem>

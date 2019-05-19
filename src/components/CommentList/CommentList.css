@@ -1,3 +1,8 @@
+.comment-reply {
+  flex: 1;
+  width: 0;
+}
+
 .comment-cancel-reply {
   margin-left: 16px;
   color: #f5222d;
@@ -16,6 +21,7 @@
 
 .comment-item-right {
   flex: 1;
+  width: 0;
   font-size: 1rem;
 }
 

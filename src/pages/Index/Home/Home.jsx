@@ -8,14 +8,14 @@ import ArticleList from '../../../components/ArticleList/ArticleList';
 import './Home.css';
 import bannersData from './bannersData';
 import OfficialData from '../OfficialData';
-import TalentData from '../TalentData';
+// import TalentData from '../TalentData';
 import ArticleData from '../ArticleData';
 
 export default class Home extends Component {
   state = {
     banners: bannersData,
     officialVideos: OfficialData,
-    talentVideos: TalentData,
+    // talentVideos: TalentData,
     articleList: ArticleData
   };
 
@@ -23,7 +23,7 @@ export default class Home extends Component {
     const {
       banners: { big, small },
       officialVideos,
-      talentVideos,
+      // talentVideos,
       articleList
     } = this.state;
     return (
@@ -96,7 +96,7 @@ export default class Home extends Component {
               className="home-channel-title"
               style={{ margin: '0 0 40px 0' }}
             >
-              官方频道
+              测评视频
             </Divider>
             <Row>
               <VideoList videoList={officialVideos} />
@@ -113,7 +113,7 @@ export default class Home extends Component {
             </Row>
           </div>
         </div>
-        <div className="section">
+        {/* <div className="section">
           <div className="section-content">
             <Divider
               className="home-channel-title"
@@ -135,7 +135,7 @@ export default class Home extends Component {
               </Button>
             </Row>
           </div>
-        </div>
+        </div> */}
         <div className="section">
           <div className="section-content">
             <Divider

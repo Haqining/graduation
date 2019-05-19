@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, BackTop, Avatar, Button, Tabs, Pagination } from 'antd';
+import { Row, BackTop, Avatar, Button, Tabs, Pagination, Modal } from 'antd';
 
 import './Personal.css';
 import testAvatar from '../../../assets/test-avatar.jpg';
@@ -22,23 +22,13 @@ export default class Personal extends Component {
       joinTime: '2019-03-03'
     },
     videoCurrentPage: 1,
-    videoList: [...VideoData, ...VideoData, ...VideoData],
+    videoList: [...VideoData],
     articleCurrentPage: 1,
-    articleList: [
-      ...ArticleData,
-      ...ArticleData,
-      ...ArticleData,
-      ...ArticleData
-    ],
+    articleList: [...ArticleData],
     pvCurrentPage: 1,
-    pendingVideo: [...VideoData, ...VideoData, ...VideoData],
+    pendingVideo: [...VideoData],
     paCurrentPage: 1,
-    pendingArticle: [
-      ...ArticleData,
-      ...ArticleData,
-      ...ArticleData,
-      ...ArticleData
-    ]
+    pendingArticle: [...ArticleData]
   };
 
   changeTabPane = activeKey => {
@@ -48,6 +38,74 @@ export default class Personal extends Component {
       articleCurrentPage: 1,
       pvCurrentPage: 1,
       paCurrentPage: 1
+    });
+  };
+
+  deleteVideoHandler = videoId => {
+    const { videoList } = this.state;
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      okType: 'danger',
+      onOk: () => {
+        that.setState({
+          videoList: videoList.filter(value => value.videoId !== videoId)
+        });
+      }
+    });
+  };
+
+  deletePVHandler = videoId => {
+    const { pendingVideo } = this.state;
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      okType: 'danger',
+      onOk: () => {
+        that.setState({
+          pendingVideo: pendingVideo.filter(value => value.videoId !== videoId)
+        });
+      }
+    });
+  };
+
+  deleteArticleHandler = articleId => {
+    const { articleList } = this.state;
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      okType: 'danger',
+      onOk: () => {
+        that.setState({
+          articleList: articleList.filter(
+            value => value.articleId !== articleId
+          )
+        });
+      }
+    });
+  };
+
+  deletePAHandler = articleId => {
+    const { pendingArticle } = this.state;
+    const that = this;
+    Modal.confirm({
+      title: '删除是不可逆的操作，是否确定',
+      icon: false,
+      centered: true,
+      okType: 'danger',
+      onOk: () => {
+        that.setState({
+          pendingArticle: pendingArticle.filter(
+            value => value.articleId !== articleId
+          )
+        });
+      }
     });
   };
 
@@ -155,6 +213,8 @@ export default class Personal extends Component {
                           (videoCurrentPage - 1) * 12 <= index &&
                           index <= videoCurrentPage * 12 - 1
                       )}
+                      hasAction={isSelf}
+                      deleteVideo={this.deleteVideoHandler}
                     />
                   </Row>
                   {videoNeedPagination && (
@@ -178,6 +238,8 @@ export default class Personal extends Component {
                         (articleCurrentPage - 1) * 9 <= index &&
                         index <= articleCurrentPage * 9 - 1
                     )}
+                    hasAction={isSelf}
+                    deleteArticle={this.deleteArticleHandler}
                   />
                   {articleNeedPagination && (
                     <Row type="flex" justify="center">
@@ -202,6 +264,8 @@ export default class Personal extends Component {
                             (pvCurrentPage - 1) * 12 <= index &&
                             index <= pvCurrentPage * 12 - 1
                         )}
+                        hasAction={isSelf}
+                        deleteVideo={this.deletePVHandler}
                       />
                     </Row>
                     {pvNeedPagination && (
@@ -227,6 +291,8 @@ export default class Personal extends Component {
                           (paCurrentPage - 1) * 9 <= index &&
                           index <= paCurrentPage * 9 - 1
                       )}
+                      hasAction={isSelf}
+                      deleteArticle={this.deletePAHandler}
                     />
                     {paNeedPagination && (
                       <Row type="flex" justify="center">

@@ -12,7 +12,7 @@ import PersonalSetting from './PersonalSetting/PersonalSetting';
 import Upload from './Upload/Upload';
 import Auction from './Auction/Auction';
 import Official from './Official/Official';
-import Talent from './Talent/Talent';
+// import Talent from './Talent/Talent';
 import Play from './Play/Play';
 import Article from './Article/Article';
 import Read from './Read/Read';
@@ -43,7 +43,7 @@ export default class Index extends Component {
             <Route path={`${url}/upload`} component={Upload} />
             <Route path={`${url}/auction`} component={Auction} />
             <Route path={`${url}/official`} component={Official} />
-            <Route path={`${url}/talent`} component={Talent} />
+            {/* <Route path={`${url}/talent`} component={Talent} /> */}
             <Route path={`${url}/play/:videoId`} component={Play} />
             <Route path={`${url}/article`} component={Article} />
             <Route path={`${url}/read/:articleId`} component={Read} />

@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Empty, Avatar } from 'antd';
+import { Row, Empty, Avatar, Icon, Dropdown, Menu } from 'antd';
 import _ from 'lodash';
 
 import './ArticleList.css';
 import ContentType from '../../ContentType';
 
+const { Item: MenuItem } = Menu;
+
 export default class ArticleList extends Component {
   static defaultProps = {
     articleList: [],
-    hasMenu: false
+    hasAction: false,
+    deleteArticle: () => {}
+  };
+
+  deleteArticleHandler = videoId => () => {
+    const { deleteArticle } = this.props;
+    deleteArticle(videoId);
   };
 
   render() {
-    const { articleList } = this.props;
+    const { articleList, hasAction } = this.props;
     return !_.isEmpty(articleList) ? (
       <div>
         {articleList.map((value, index) => (
@@ -62,8 +70,22 @@ export default class ArticleList extends Component {
               </span>
               <span>{ContentType[value.contentType]}</span>
               <span>评论({value.comments})</span>
-              {/* TODO:加一个可操作列表 */}
             </Row>
+            {/* TODO:加一个可操作列表 */}
+            {hasAction && (
+              <Dropdown
+                className="article-item-action"
+                overlay={
+                  <Menu onClick={this.deleteArticleHandler(value.articleId)}>
+                    <MenuItem>删除</MenuItem>
+                  </Menu>
+                }
+                placement="bottomRight"
+                trigger={['click']}
+              >
+                <Icon type="more" />
+              </Dropdown>
+            )}
           </div>
         ))}
       </div>

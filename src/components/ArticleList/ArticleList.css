@@ -1,7 +1,20 @@
 .article-list-item {
   display: block;
+  position: relative;
   padding: 16px;
   border-bottom: 1px solid #e8e8e8;
+}
+
+.article-item-action {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1;
+  font-size: 1.5rem;
+}
+
+.article-item-action:hover {
+  color: #0084ff;
 }
 
 .article-list-item > a {

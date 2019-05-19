@@ -67,7 +67,9 @@ export default class CommentList extends Component {
             username: 'testName',
             time: moment().format('YYYY-MM-DD HH:mm'),
             commentContent: !_.isEmpty(replyComment)
-              ? `回复@${replyComment.username}：${commentContent}`
+              ? `<blockquote>回复@${replyComment.username}：${
+                  replyComment.commentContent
+                }</blockquote>${commentContent}`
               : commentContent,
             like: 0,
             liked: false
@@ -95,7 +97,10 @@ export default class CommentList extends Component {
 
   reply = index => () => {
     const { commentList, currentPage } = this.state;
-    const selectComment = commentList[(currentPage - 1) * 10 + index];
+    const selectComment = { ...commentList[(currentPage - 1) * 10 + index] };
+    selectComment.commentContent =
+      selectComment.commentContent.split('</blockquote>')[1] ||
+      selectComment.commentContent;
     this.refs.commentTextArea.textAreaRef.focus();
     this.setState({
       commentContent: '',
@@ -115,6 +120,10 @@ export default class CommentList extends Component {
     });
   };
 
+  notLoggedInTips = () => {
+    message.info('需要登录');
+  };
+
   render() {
     const {
       commentContent,
@@ -123,6 +132,7 @@ export default class CommentList extends Component {
       commentList,
       currentPage
     } = this.state;
+    const isLogin = !!localStorage.getItem('userId');
     const hasData = !_.isEmpty(commentList);
     const dataLength = commentList.length;
     const needPagination = dataLength > 10;
@@ -130,7 +140,7 @@ export default class CommentList extends Component {
       <div>
         {!_.isEmpty(replyComment) && (
           <Row type="flex" style={{ marginBottom: 8 }}>
-            <div style={{ flex: 1 }}>
+            <div className="comment-reply">
               回复@{replyComment.username}：{replyComment.commentContent}
             </div>
             <div className="comment-cancel-reply" onClick={this.cancelReply}>
@@ -138,30 +148,38 @@ export default class CommentList extends Component {
             </div>
           </Row>
         )}
-
-        <Row style={{ marginBottom: 24 }}>
-          <TextArea
-            className="comment-editor"
-            ref="commentTextArea"
-            value={commentContent}
-            rows={3}
-            placeholder="编辑内容(最多240个字符)"
-            onChange={this.changeComment}
-          />
-          <Row type="flex" justify="end">
-            {commentLength}/240
+        {isLogin ? (
+          <div>
+            <Row style={{ marginBottom: 24 }}>
+              <TextArea
+                className="comment-editor"
+                ref="commentTextArea"
+                value={commentContent}
+                rows={3}
+                placeholder="编辑内容(最多240个字符)"
+                onChange={this.changeComment}
+              />
+              <Row type="flex" justify="end">
+                {commentLength}/240
+              </Row>
+            </Row>
+            <Row type="flex" justify="end">
+              <Button
+                type="primary"
+                size="large"
+                onClick={this.submitComment}
+                style={{ padding: '0 40px' }}
+              >
+                提交评论
+              </Button>
+            </Row>
+          </div>
+        ) : (
+          <Row type="flex" justify="center">
+            <span>登录后可以进行评论和点赞回复别人的评论。</span>
+            <Link to="/login">去登录</Link>
           </Row>
-        </Row>
-        <Row type="flex" justify="end">
-          <Button
-            type="primary"
-            size="large"
-            onClick={this.submitComment}
-            style={{ padding: '0 40px' }}
-          >
-            提交评论
-          </Button>
-        </Row>
+        )}
         <Divider />
         <Row style={{ marginBottom: 24 }}>
           {hasData ? (
@@ -203,7 +221,12 @@ export default class CommentList extends Component {
                       <span style={{ color: '#c7c7c7' }}>{value.time}</span>
                     </Row>
                     <Row style={{ marginBottom: 8 }}>
-                      {value.commentContent}
+                      <div
+                        className="braft-output-content"
+                        dangerouslySetInnerHTML={{
+                          __html: value.commentContent
+                        }}
+                      />
                     </Row>
                     <Row
                       className="comment-item-action"
@@ -212,13 +235,23 @@ export default class CommentList extends Component {
                       align="middle"
                     >
                       <span
-                        onClick={this.changeCommentLike(index)}
+                        onClick={
+                          isLogin
+                            ? this.changeCommentLike(index)
+                            : this.notLoggedInTips
+                        }
                         style={{ color: value.liked ? '#ed1c24' : '' }}
                       >
                         {value.liked ? '已赞' : '点赞'}({value.like})
                       </span>
                       <Divider type="vertical" />
-                      <span onClick={this.reply(index)}>回复</span>
+                      <span
+                        onClick={
+                          isLogin ? this.reply(index) : this.notLoggedInTips
+                        }
+                      >
+                        回复
+                      </span>
                     </Row>
                   </div>
                 </Row>

@@ -22,7 +22,7 @@ export default class Play extends Component {
     const isOfficial = videoType === 'official';
     return (
       <Link to={isOfficial ? '/index/official' : '/index/talent'}>
-        {isOfficial ? '官方频道' : '达人频道'}
+        {isOfficial ? '官方视频' : '达人频道'}
       </Link>
     );
   };
@@ -68,6 +68,9 @@ export default class Play extends Component {
           <div className="section-content">
             <Breadcrumb className="content-breadcrumb">
               {/* <BreadcrumbItem>{this.chooseVideoType(videoType)}</BreadcrumbItem> */}
+              <BreadcrumbItem>
+                <Link to="/index/official">测评视频</Link>
+              </BreadcrumbItem>
               <BreadcrumbItem>{ContentType[contentType]}</BreadcrumbItem>
               <BreadcrumbItem>{videoTitle}</BreadcrumbItem>
             </Breadcrumb>
