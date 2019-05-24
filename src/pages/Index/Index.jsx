@@ -1,34 +1,46 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 
 import './Index.css';
 import NavBar from '../../components/NavBar/NavBar';
-import Home from './Home/Home';
+import Home from './Home/HomeContainer';
 import Search from './Search/Search';
 import Message from './Message/Message';
-import Personal from './Personal/Personal';
-import PersonalSetting from './PersonalSetting/PersonalSetting';
+import Personal from './Personal/PersonalContainer';
+import PersonalSetting from './PersonalSetting/PersonalSettingContainer';
 import Upload from './Upload/Upload';
 import Auction from './Auction/Auction';
-import Official from './Official/Official';
+import Official from './Official/OfficialContainer';
 // import Talent from './Talent/Talent';
-import Play from './Play/Play';
-import Article from './Article/Article';
-import Read from './Read/Read';
+import Play from './Play/PlayContainer';
+import Article from './Article/ArticleContainer';
+import Read from './Read/ReadContainer';
 
 const { Header, Content, Footer } = Layout;
 
 export default class Index extends Component {
+  componentWillMount() {
+    const { getVideo, getArticle, getUserInfo } = this.props;
+    getVideo();
+    getArticle();
+    if (localStorage.getItem('userId')) {
+      getUserInfo().catch(err => {
+        message.error(err);
+      });
+    }
+  }
+
   render() {
     const {
       location: { pathname },
-      match: { url }
+      match: { url },
+      userInfo
     } = this.props;
     return (
       <Layout>
         <Header className="header">
-          <NavBar pathname={pathname} />
+          <NavBar pathname={pathname} userInfo={userInfo} />
         </Header>
         <Content className="content">
           <Switch>
@@ -50,7 +62,7 @@ export default class Index extends Component {
             <Redirect from={`${url}/`} to={`${url}/home`} />
           </Switch>
         </Content>
-        <Footer style={{ minWidth: 1024 }}>Footer</Footer>
+        <Footer style={{ minWidth: 1024, textAlign: 'center' }}>Footer</Footer>
       </Layout>
     );
   }

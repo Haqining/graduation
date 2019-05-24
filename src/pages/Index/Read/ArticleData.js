@@ -6,7 +6,7 @@ export default {
   avatar: testAvatar,
   username: 'testUsername',
   time: '2019-01-01 01:01',
-  contentType: '1',
+  contentType: 1,
   articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
   articleCover,
   articleContent:

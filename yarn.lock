@@ -2127,7 +2127,7 @@ braft-finder@^0.0.18:
   resolved "https://registry.yarnpkg.com/braft-finder/-/braft-finder-0.0.18.tgz#5f43659b61290081fb2920cc3ce1f62e31e9da57"
   integrity sha512-XtEyVywEfHDzRjAV5HOiqKFva6vEm0Rez+QHgq+EbqXpAqxuHQTci2s3LX2u7G3UicNYpDsVY/UV3nleF2VYyw==
 
-braft-utils@^3.0.8:
+braft-utils@^3.0.12, braft-utils@^3.0.8:
   version "3.0.12"
   resolved "https://registry.yarnpkg.com/braft-utils/-/braft-utils-3.0.12.tgz#2b755ce1d8397d96b627b6767f74d07f25729d85"
   integrity sha512-O2cKysURNC4HSEMKgNmQ2RluwcrxvYrztlEmyPN5SzktiNX3vaLFQoo0Ez3PlIhvjaGrIBSIT2Oyh2N6mn6TFg==

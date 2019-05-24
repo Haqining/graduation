@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Form, Input, Button, Checkbox } from 'antd';
+import { Row, Form, Input, Button, Checkbox, message } from 'antd';
 
 import './Register.css';
 
@@ -16,6 +16,36 @@ export default Form.create()(
         callback('确认的密码与设置的密码不一致');
       }
       callback();
+    };
+
+    registerHandler = () => {
+      const {
+        form: { validateFields },
+        history: { push },
+        register
+      } = this.props;
+      validateFields((errors, values) => {
+        if (!errors) {
+          const { username, confirmPassword } = values;
+          const formData = new FormData();
+          formData.append('username', username);
+          formData.append('password', confirmPassword);
+          register(formData)
+            .then(res => {
+              const {
+                data: {
+                  data: { id }
+                }
+              } = res;
+              localStorage.setItem('userId', id);
+              message.info('注册成功，请登录');
+              push('/login');
+            })
+            .catch(err => {
+              message.error('err:' + err);
+            });
+        }
+      });
     };
 
     render() {
@@ -37,14 +67,14 @@ export default Form.create()(
                   ]
                 })(<Input placeholder="用户名" />)}
               </FormItem>
-              <FormItem>
+              {/* <FormItem>
                 {getFieldDecorator('email', {
                   rules: [
                     { required: true, message: '邮箱是必需的' },
                     { type: 'email', message: '邮箱格式不正确' }
                   ]
                 })(<Input placeholder="邮箱" />)}
-              </FormItem>
+              </FormItem> */}
               <FormItem>
                 {getFieldDecorator('password', {
                   rules: [
@@ -70,7 +100,12 @@ export default Form.create()(
                 })(<Input type="password" placeholder="确认密码" />)}
               </FormItem>
               <FormItem>
-                <Button type="primary" size="large" style={{ width: '100%' }}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={this.registerHandler}
+                  style={{ width: '100%' }}
+                >
                   注册
                 </Button>
                 {getFieldDecorator('remember', {

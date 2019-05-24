@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Button, BackTop } from 'antd';
+import _ from 'lodash';
 
 import './Article.css';
 import ArticleList from '../../../components/ArticleList/ArticleList';
@@ -7,20 +8,35 @@ import ArticleData from '../ArticleData';
 
 export default class Article extends Component {
   state = {
-    articleList: ArticleData,
+    listLength: 0,
+    currentLength: 3,
     hasMore: true
   };
 
-  showMore = () => {
-    const { articleList } = this.state;
+  componentWillMount() {
+    const { articleList } = this.props;
+    const { currentLength } = this.state;
+    const listLength = articleList.length;
+    const hasMore = listLength > currentLength;
     this.setState({
-      articleList: [...articleList, ...ArticleData],
-      hasMore: articleList.length < 30
+      listLength,
+      currentLength: listLength > currentLength ? currentLength : listLength,
+      hasMore
+    });
+  }
+  showMore = () => {
+    const { listLength, currentLength } = this.state;
+    const nextLength = currentLength + 6;
+    this.setState({
+      currentLength: nextLength,
+      hasMore: nextLength < listLength
     });
   };
 
   render() {
-    const { articleList, hasMore } = this.state;
+    const { articleList } = this.props;
+    const { hasMore } = this.state;
+    const hasData = !_.isEmpty(articleList);
     return (
       <div>
         <div className="section">
@@ -28,20 +44,22 @@ export default class Article extends Component {
             <Row>
               <ArticleList articleList={articleList} />
             </Row>
-            <Row type="flex" justify="center">
-              {hasMore ? (
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={this.showMore}
-                  style={{ padding: '0 40px' }}
-                >
-                  显示更多
-                </Button>
-              ) : (
-                <span>没有更多了ε=ε=ε=(~￣▽￣)~</span>
-              )}
-            </Row>
+            {hasData && (
+              <Row type="flex" justify="center">
+                {hasMore ? (
+                  <Button
+                    type="primary"
+                    size="large"
+                    onClick={this.showMore}
+                    style={{ padding: '0 40px' }}
+                  >
+                    显示更多
+                  </Button>
+                ) : (
+                  <span>没有更多了ε=ε=ε=(~￣▽￣)~</span>
+                )}
+              </Row>
+            )}
           </div>
         </div>
         <BackTop visibilityHeight={0}>

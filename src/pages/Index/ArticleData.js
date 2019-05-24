@@ -8,7 +8,7 @@ export default [
     username: 'testUsername',
     time: '2019-01-01 01:01',
     articleId: 'testId1',
-    contentType: '1',
+    contentType: 1,
     articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
     articleCover,
     articleIntroduction:
@@ -21,7 +21,7 @@ export default [
     username: 'testUsername',
     time: '2019-01-01 01:01',
     articleId: 'testId2',
-    contentType: '1',
+    contentType: 1,
     articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
     articleCover,
     articleIntroduction:
@@ -34,7 +34,7 @@ export default [
     username: 'testUsername',
     time: '2019-01-01 01:01',
     articleId: 'testId3',
-    contentType: '1',
+    contentType: 1,
     articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
     articleCover,
     articleIntroduction:

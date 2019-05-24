@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Empty, Avatar, Icon, Dropdown, Menu } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 
 import './ArticleList.css';
 import ContentType from '../../ContentType';
@@ -33,7 +34,9 @@ export default class ArticleList extends Component {
                 style={{ marginBottom: 8 }}
               >
                 <span className="article-item-title">{value.articleTitle}</span>
-                <span style={{ color: '#c7c7c7' }}>{value.time}</span>
+                <span style={{ color: '#c7c7c7' }}>
+                  {moment(value.time).format('YYYY-MM-DD HH:mm')}
+                </span>
               </Row>
               <Row type="flex">
                 <span className="article-item-introduction">
@@ -54,7 +57,7 @@ export default class ArticleList extends Component {
               align="middle"
               style={{ userSelect: 'none' }}
             >
-              <span>
+              {/* <span>
                 <Link
                   className="avatar-username"
                   to={`/index/personal/${value.id}`}
@@ -67,9 +70,9 @@ export default class ArticleList extends Component {
                   />
                   <span>{value.username}</span>
                 </Link>
-              </span>
+              </span> */}
               <span>{ContentType[value.contentType]}</span>
-              <span>评论({value.comments})</span>
+              {/* <span>评论({value.comments})</span> */}
             </Row>
             {/* TODO:加一个可操作列表 */}
             {hasAction && (

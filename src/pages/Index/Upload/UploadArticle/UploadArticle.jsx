@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import Cropper from 'react-cropper';
 import BraftEditor from 'braft-editor';
+import { ContentUtils } from 'braft-utils';
 import _ from 'lodash';
 
 import './UploadArticle.css';
@@ -73,11 +74,18 @@ export default Form.create()(
     };
 
     updateCover = () => {
+      const { uploadImage } = this.props;
       // 裁切后直接上传服务器用
-      // this.refs.cropper.getCroppedCanvas().toBlob(blob => {
-      // });
+      this.refs.cropper.getCroppedCanvas().toBlob(blob => {
+        const formData = new FormData();
+        formData.append('file', blob);
+        uploadImage(formData).then(res => {
+          message.success('封面上传成功');
+          const { data } = res;
+          this.setState({ articleCover: `http://${data}` });
+        });
+      });
       this.setState({
-        articleCover: this.refs.cropper.getCroppedCanvas().toDataURL(),
         tempCover: '',
         modalVisible: false
       });
@@ -97,6 +105,88 @@ export default Form.create()(
       });
     };
 
+    saveArticleHandler = () => {
+      const {
+        form: { validateFields, resetFields },
+        saveArticle
+      } = this.props;
+      const { articleCover, editorState } = this.state;
+      validateFields((errors, values) => {
+        if (!articleCover) {
+          message.error('需要上传一张封面图片');
+        } else if (editorState.isEmpty()) {
+          message.error('要写好正文内容');
+        } else if (!errors) {
+          const { articleTitle, contentType, articleIntroduction } = values;
+          const formData = new FormData();
+          formData.append('userId', localStorage.getItem('userId'));
+          formData.append('headPictureUrl', articleCover.slice(7));
+          formData.append('title', articleTitle);
+          formData.append('typeId', +contentType);
+          formData.append('introduction', articleIntroduction);
+          formData.append('content', editorState.toHTML());
+          saveArticle(formData)
+            .then(() => {
+              message.success('上传成功，请等待审核');
+              resetFields();
+              this.setState({
+                articleCover: '',
+                editorState: BraftEditor.createEditorState()
+              });
+            })
+            .catch(err => {
+              message.error(err);
+            });
+        }
+      });
+    };
+
+    insertImage = file => {
+      const { uploadImage } = this.props;
+      const { editorState } = this.state;
+      const { size, type } = file;
+      if (size > 5 * 1024 * 1024) {
+        message.error('选择的图片过大，请重新选择');
+        return false;
+      }
+      if (!_.includes(imageTypes, type)) {
+        message.error('选择了错误的文件类型，请重新选择');
+        return false;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        console.log(reader.result);
+        const formData = new FormData();
+        formData.append('file', this.baseToBlob(reader.result));
+        uploadImage(formData).then(res => {
+          message.success('插入成功');
+          const { data } = res;
+          this.setState({
+            editorState: ContentUtils.insertMedias(editorState, [
+              {
+                type: 'IMAGE',
+                url: `http://${data}`
+              }
+            ])
+          });
+        });
+      };
+      return false;
+    };
+
+    baseToBlob = base => {
+      let arr = base.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    };
+
     render() {
       const {
         form: { getFieldDecorator, getFieldsValue }
@@ -107,8 +197,11 @@ export default Form.create()(
           key: 'ua-editor-uploader',
           type: 'component',
           component: (
-            <Upload accept={imageTypes.join()} showUploadList={false}>
-              {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
+            <Upload
+              accept={imageTypes.join()}
+              showUploadList={false}
+              beforeUpload={this.insertImage}
+            >
               <button
                 className="control-item button upload-button"
                 data-title="插入图片"
@@ -173,7 +266,11 @@ export default Form.create()(
                 rules: [{ required: true, message: '分类是必需的' }]
               })(
                 <Select placeholder="点击选择">
-                  <Option value="1">手机</Option>
+                  <Option value="1">耳机</Option>
+                  <Option value="2">键盘</Option>
+                  <Option value="3">鼠标</Option>
+                  <Option value="4">显示器</Option>
+                  <Option value="5">音箱</Option>
                 </Select>
               )}
             </FormItem>
@@ -205,6 +302,7 @@ export default Form.create()(
                 <Button
                   type="primary"
                   size="large"
+                  onClick={this.saveArticleHandler}
                   style={{ padding: '0 40px' }}
                 >
                   立即投稿
@@ -254,7 +352,7 @@ export default Form.create()(
             </Row>
           </Modal>
           <Prompt
-            when={articleCover || hasData}
+            when={!!articleCover || hasData}
             message="填写的内容还未提交，确定离开本页吗？"
           />
         </Row>

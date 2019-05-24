@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Avatar, Tooltip, Tag, Button, Popconfirm } from 'antd';
+import { Table, Avatar, Tooltip, Tag, Button, Popconfirm, message } from 'antd';
 import _ from 'lodash';
 
 import './ManageUser.css';
@@ -11,7 +11,32 @@ const { Column } = Table;
 
 export default class ManageUser extends Component {
   state = {
-    userList: UserData
+    userList: []
+  };
+
+  componentWillMount() {
+    this.getUserHandler();
+  }
+
+  getUserHandler = () => {
+    const { getUser } = this.props;
+    getUser()
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          userList: data.map(value => ({
+            key: value.id,
+            userId: value.id,
+            username: value.username,
+            status: value.state
+          }))
+        });
+      })
+      .catch(err => {
+        message.error(err);
+      });
   };
 
   formatHometown = hometown => {
@@ -24,24 +49,49 @@ export default class ManageUser extends Component {
 
   chooseStatus = status => {
     const switchMap = new Map([
-      ['normal', <Tag>正常</Tag>],
-      ['disable', <Tag color="red">禁用</Tag>]
+      // [1, <Tag>正常</Tag>],
+      [2, <Tag color="red">禁用</Tag>]
     ]);
     return switchMap.get(status);
   };
 
   changeStatus = record => () => {
     const { userList } = this.state;
-    const { key } = record;
-    const selectIndex = _.findIndex(userList, value => value.key === key);
-    if (userList[selectIndex].status === 'normal') {
-      userList[selectIndex].status = 'disable';
+    const { userId, username } = record;
+    const selected = _.find(userList, value => value.userId === userId);
+    if (selected.status === 0) {
+      this.lockAccountHandler(username);
     } else {
-      userList[selectIndex].status = 'normal';
+      this.unlockAccountHandler(username);
     }
-    this.setState({
-      userList
-    });
+  };
+
+  lockAccountHandler = username => {
+    const { lockAccount } = this.props;
+    const formData = new FormData();
+    formData.append('username', username);
+    lockAccount(formData)
+      .then(res => {
+        message.success('修改成功');
+        this.getUserHandler();
+      })
+      .catch(err => {
+        message.error(err);
+      });
+  };
+
+  unlockAccountHandler = username => {
+    const { unlockAccount } = this.props;
+    const formData = new FormData();
+    formData.append('username', username);
+    unlockAccount(formData)
+      .then(res => {
+        message.success('修改成功');
+        this.getUserHandler();
+      })
+      .catch(err => {
+        message.error(err);
+      });
   };
 
   render() {
@@ -55,12 +105,13 @@ export default class ManageUser extends Component {
             pageSize: 10
           }}
         >
-          <Column
+          <Column title="ID" dataIndex="userId" align="center" />
+          {/* <Column
             title="头像"
             dataIndex="avatar"
             align="center"
             render={text => <Avatar src={text} icon="user" />}
-          />
+          /> */}
           <Column
             title="用户名"
             dataIndex="username"
@@ -75,7 +126,7 @@ export default class ManageUser extends Component {
               </Link>
             )}
           />
-          <Column title="性别" dataIndex="sex" align="center" />
+          {/* <Column title="性别" dataIndex="sex" align="center" />
           <Column
             title="简介"
             dataIndex="introduction"
@@ -92,7 +143,7 @@ export default class ManageUser extends Component {
             align="center"
             render={text => this.formatHometown(text)}
           />
-          <Column title="生日" dataIndex="birthday" align="center" />
+          <Column title="生日" dataIndex="birthday" align="center" /> */}
           <Column
             title="用户状态"
             dataIndex="status"

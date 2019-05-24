@@ -8,14 +8,14 @@ import {
   Empty,
   Pagination,
   Avatar,
-  Divider
+  Divider,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from 'moment';
 
 import './CommentList.css';
-import CommentData from './CommentData';
 
 const { TextArea } = Input;
 
@@ -31,13 +31,37 @@ export default class CommentList extends Component {
     commentList: [],
     // 保存被引用者的id用于请求
     cited: '',
-    currentPage: 1
+    currentPage: 1,
+    loading: true
   };
 
   componentWillMount() {
-    this.setState({
-      commentList: CommentData
-    });
+    this.getCommentByIdHandler();
+  }
+
+  getCommentByIdHandler() {
+    const { contentId, getCommentById } = this.props;
+    getCommentById({ articleId: contentId })
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          commentList: data.map(value => ({
+            id: value.userId,
+            time: moment(value.createTime).format('YYYY-MM-DD HH:mm'),
+            commentContent: value.content,
+            like: 10,
+            liked: false
+          }))
+        });
+      })
+      .catch(err => {
+        message.error(err);
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
   }
 
   changeComment = e => {
@@ -52,31 +76,38 @@ export default class CommentList extends Component {
   };
 
   submitComment = () => {
-    const { commentContent, replyComment, commentList } = this.state;
+    const { saveComment, contentId } = this.props;
+    const { commentContent, replyComment } = this.state;
     if (!commentContent) {
       message.error('请输入评论的内容 (～￣(OO)￣)ブ');
     } else {
-      message.success('评论成功 d=====(￣▽￣*)b');
-      this.setState({
-        commentContent: '',
-        replyComment: null,
-        commentList: [
-          {
-            userId: 'testUserId12',
-            avatar: '',
-            username: 'testName',
-            time: moment().format('YYYY-MM-DD HH:mm'),
-            commentContent: !_.isEmpty(replyComment)
-              ? `<blockquote>回复@${replyComment.username}：${
-                  replyComment.commentContent
-                }</blockquote>${commentContent}`
-              : commentContent,
-            like: 0,
-            liked: false
-          },
-          ...commentList
-        ]
-      });
+      const formData = new FormData();
+      formData.append('articleId', +contentId);
+      formData.append(
+        'referId',
+        !_.isEmpty(replyComment) ? replyComment.id : 0
+      );
+      formData.append('userId', localStorage.getItem('userId'));
+      formData.append(
+        'content',
+        !_.isEmpty(replyComment)
+          ? `<blockquote>回复：${
+              replyComment.commentContent
+            }</blockquote>${commentContent}`
+          : commentContent
+      );
+      saveComment(formData)
+        .then(res => {
+          message.success('评论成功 d=====(￣▽￣*)b');
+          this.getCommentByIdHandler();
+          this.setState({
+            commentContent: '',
+            replyComment: null
+          });
+        })
+        .catch(err => {
+          message.error(err);
+        });
     }
   };
 
@@ -126,6 +157,7 @@ export default class CommentList extends Component {
 
   render() {
     const {
+      loading,
       commentContent,
       commentLength,
       replyComment,
@@ -137,11 +169,11 @@ export default class CommentList extends Component {
     const dataLength = commentList.length;
     const needPagination = dataLength > 10;
     return (
-      <div>
+      <Spin spinning={loading}>
         {!_.isEmpty(replyComment) && (
           <Row type="flex" style={{ marginBottom: 8 }}>
             <div className="comment-reply">
-              回复@{replyComment.username}：{replyComment.commentContent}
+              回复：{replyComment.commentContent}
             </div>
             <div className="comment-cancel-reply" onClick={this.cancelReply}>
               取消回复
@@ -195,7 +227,7 @@ export default class CommentList extends Component {
                   key={`comment${index}`}
                   type="flex"
                 >
-                  <div>
+                  {/* <div>
                     <Link to={`/index/personal/${value.id}`} target="_blank">
                       <Avatar
                         src={value.avatar}
@@ -204,9 +236,9 @@ export default class CommentList extends Component {
                         style={{ marginRight: 24 }}
                       />
                     </Link>
-                  </div>
+                  </div> */}
                   <div className="comment-item-right">
-                    <Row
+                    {/* <Row
                       type="flex"
                       justify="space-between"
                       style={{ marginBottom: 8 }}
@@ -219,7 +251,7 @@ export default class CommentList extends Component {
                         {value.username}
                       </Link>
                       <span style={{ color: '#c7c7c7' }}>{value.time}</span>
-                    </Row>
+                    </Row> */}
                     <Row style={{ marginBottom: 8 }}>
                       <div
                         className="braft-output-content"
@@ -272,7 +304,7 @@ export default class CommentList extends Component {
             />
           </Row>
         )}
-      </div>
+      </Spin>
     );
   }
 }

@@ -23,7 +23,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { confirm } = Modal;
 
-const videoTypes = ['.mp4', '.flv'];
+const videoTypes = ['video/mp4'];
 const imageTypes = ['image/jpeg', 'image/png'];
 
 export default Form.create()(
@@ -35,21 +35,35 @@ export default Form.create()(
       modalVisible: false
     };
 
-    uploadVideo = file => {
+    beforeVideoUpload = file => {
       const { videoList } = this.state;
-      const { name } = file;
+      const { type } = file;
       if (!_.isEmpty(videoList)) {
         message.error('只能上传一个视频');
         return false;
       }
-      if (!_.includes(videoTypes, name.slice(-4))) {
+      if (!_.includes(videoTypes, type)) {
         message.error('选择了错误的文件类型，请重新选择');
         return false;
       }
-      this.setState({
-        videoList: [...videoList, file]
-      });
-      return false;
+      return true;
+    };
+
+    uploadVideo = info => {
+      const {
+        file: { status, response }
+      } = info;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        message.success('上传成功');
+        this.setState({
+          videoList: [response]
+        });
+      } else if (status === 'error') {
+        message.error('上传失败');
+      }
     };
 
     removeVideo = () => {
@@ -77,11 +91,18 @@ export default Form.create()(
     };
 
     updateCover = () => {
+      const { uploadImage } = this.props;
       // 裁切后直接上传服务器用
-      // this.refs.cropper.getCroppedCanvas().toBlob(blob => {
-      // });
+      this.refs.cropper.getCroppedCanvas().toBlob(blob => {
+        const formData = new FormData();
+        formData.append('file', blob);
+        uploadImage(formData).then(res => {
+          message.success('封面上传成功');
+          const { data } = res;
+          this.setState({ videoCover: `http://${data}` });
+        });
+      });
       this.setState({
-        videoCover: this.refs.cropper.getCroppedCanvas().toDataURL(),
         tempCover: '',
         modalVisible: false
       });
@@ -97,6 +118,42 @@ export default Form.create()(
             tempCover: '',
             modalVisible: false
           });
+        }
+      });
+    };
+
+    saveVideoHandler = () => {
+      const {
+        form: { validateFields, resetFields },
+        saveVideo
+      } = this.props;
+      const { videoList, videoCover } = this.state;
+      validateFields((errors, values) => {
+        if (_.isEmpty(videoList)) {
+          message.error('需要上传视频');
+        } else if (!videoCover) {
+          message.error('需要上传一张封面图片');
+        } else if (!errors) {
+          const { videoTitle, contentType, videoIntroduction } = values;
+          const formData = new FormData();
+          formData.append('userId', localStorage.getItem('userId'));
+          formData.append('headPictureUrl', videoCover.slice(7));
+          formData.append('videoUrl', videoList[0]);
+          formData.append('title', videoTitle);
+          formData.append('typeId', +contentType);
+          formData.append('introduction', videoIntroduction);
+          saveVideo(formData)
+            .then(() => {
+              message.success('上传成功，请等待审核');
+              resetFields();
+              this.setState({
+                videoLsit: [],
+                videoCover: ''
+              });
+            })
+            .catch(err => {
+              message.error(err);
+            });
         }
       });
     };
@@ -119,17 +176,18 @@ export default Form.create()(
           <Form style={{ width: 800 }}>
             <FormItem label="上传视频" required>
               <Dragger
-                accept={videoTypes.join()}
-                fileList={videoList}
-                beforeUpload={this.uploadVideo}
-                onRemove={this.removeVideo}
+                accept="video/mp4"
+                action="http://ngrok.hergua.cn:5000/uploadVideo"
+                beforeUpload={this.beforeVideoUpload}
+                onChange={this.uploadVideo}
+                // onRemove={this.removeVideo}
                 style={{ padding: '24px 0' }}
               >
                 <p className="ant-upload-drag-icon">
                   <Icon type="inbox" />
                 </p>
                 <p className="ant-upload-text">点击或将文件拖拽到这里上传</p>
-                <p className="ant-upload-hint">支持MP4、FLV格式</p>
+                <p className="ant-upload-hint">支持MP4格式</p>
               </Dragger>
             </FormItem>
             <FormItem label="标题">
@@ -172,7 +230,11 @@ export default Form.create()(
                 rules: [{ required: true, message: '需要选择一个类型' }]
               })(
                 <Select placeholder="点击选择">
-                  <Option value="1">手机</Option>
+                  <Option value="1">耳机</Option>
+                  <Option value="2">键盘</Option>
+                  <Option value="3">鼠标</Option>
+                  <Option value="4">显示器</Option>
+                  <Option value="5">音箱</Option>
                 </Select>
               )}
             </FormItem>
@@ -192,6 +254,7 @@ export default Form.create()(
                 <Button
                   type="primary"
                   size="large"
+                  onClick={this.saveVideoHandler}
                   style={{ padding: '0 40px' }}
                 >
                   立即投稿
@@ -241,7 +304,7 @@ export default Form.create()(
             </Row>
           </Modal>
           <Prompt
-            when={!_.isEmpty(videoList) || videoCover || hasData}
+            when={!_.isEmpty(videoList) || !!videoCover || hasData}
             message="填写的内容还未提交，确定离开本页吗？"
           />
         </Row>

@@ -22,8 +22,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import './PersonalSetting.css';
-import options from './cascader-address-options';
-import testAvatar from '../../../assets/test-avatar.jpg';
+import options from '../cascader-address-options';
 
 const { Content, Sider } = Layout;
 const { Item: MenuItem } = Menu;
@@ -37,15 +36,6 @@ const fileTypes = ['image/jpeg', 'image/png'];
 export default Form.create()(
   class PersonalSetting extends Component {
     state = {
-      userInfo: {
-        id: 'testId',
-        avatar: testAvatar,
-        email: 'xxx@xxx',
-        username: 'testName',
-        introduction: '',
-        sex: '男',
-        hometown: '11,1101,110101'
-      },
       // changeAvatar changeInfo changePassword
       pageState: 'changeAvatar',
       modalVisible: false,
@@ -88,7 +78,7 @@ export default Form.create()(
 
     uploadAvatar = file => {
       const { size, type } = file;
-      if (size > 2 * 1024 * 1024) {
+      if (size > 1 * 1024 * 1024) {
         message.error('选择的图片过大，请重新选择');
         return false;
       }
@@ -105,18 +95,71 @@ export default Form.create()(
     };
 
     updateAvatar = () => {
-      const { userInfo } = this.state;
+      const {
+        uploadImage,
+        userInfo: { username, email, introduction, sex, hometown, birthday }
+      } = this.props;
       // 裁切后直接上传服务器用
-      // this.refs.cropper.getCroppedCanvas().toBlob(blob => {
-      // });
+      this.refs.cropper.getCroppedCanvas().toBlob(blob => {
+        const formData = new FormData();
+        formData.append('file', blob);
+        uploadImage(formData).then(res => {
+          message.success('图片上传成功，即将更新');
+          const { data } = res;
+          const updateData = new FormData();
+          updateData.append('userId', localStorage.getItem('userId'));
+          updateData.append('nickName', username);
+          updateData.append('gender', sex);
+          updateData.append('sign', introduction);
+          updateData.append('birthday', birthday);
+          updateData.append('email', email);
+          updateData.append('location', hometown);
+          updateData.append('headPicture', data);
+          this.updateUsetInfoHandler(updateData);
+        });
+      });
       this.setState({
-        userInfo: {
-          ...userInfo,
-          avatar: this.refs.cropper.getCroppedCanvas().toDataURL()
-        },
         tempImage: '',
         modalVisible: false
       });
+    };
+
+    updateUsetInfo = () => {
+      const {
+        form: { validateFields },
+        userInfo: { id, avatar, email }
+      } = this.props;
+      validateFields(
+        ['username', 'introduction', 'hometown', 'birthday'],
+        (errors, values) => {
+          if (!errors) {
+            const { username, sex, introduction, birthday, hometown } = values;
+            const updateData = new FormData();
+            updateData.append('userId', localStorage.getItem('userId'));
+            updateData.append('nickName', username);
+            updateData.append('gender', sex);
+            updateData.append('sign', introduction);
+            updateData.append('birthday', birthday.format('YYYY-MM-DD'));
+            updateData.append('email', email);
+            updateData.append('location', hometown.join());
+            updateData.append('headPicture', avatar.slice(7));
+            updateData.append('id', id);
+            this.updateUsetInfoHandler(updateData);
+          }
+        }
+      );
+    };
+
+    updateUsetInfoHandler = formData => {
+      const { saveOrUpdateUserInfo, getUserInfo } = this.props;
+      saveOrUpdateUserInfo(formData)
+        .then(() => {
+          message.success('更新成功');
+          getUserInfo();
+        })
+        .catch(err => {
+          message.error('更新失败');
+        });
     };
 
     changeIntroduction = e => {
@@ -145,13 +188,18 @@ export default Form.create()(
 
     choosePage = pageState => {
       const {
-        form: { getFieldDecorator }
+        form: { getFieldDecorator },
+        userInfo: {
+          avatar,
+          username,
+          email,
+          introduction,
+          sex,
+          hometown,
+          birthday
+        }
       } = this.props;
-      const {
-        userInfo: { id, avatar, username, email, introduction, sex, hometown },
-        modalVisible,
-        tempImage
-      } = this.state;
+      const { modalVisible, tempImage } = this.state;
       const switchMap = new Map([
         [
           'changeAvatar',
@@ -216,7 +264,7 @@ export default Form.create()(
                     >
                       <Icon type="plus" />
                     </Upload>
-                    <div>请选择图片上传：支持JPG、PNG格式，需小于5M</div>
+                    <div>请选择图片上传：支持JPG、PNG格式，需小于1M</div>
                   </div>
                 )}
               </Row>
@@ -230,7 +278,7 @@ export default Form.create()(
             wrapperCol={{ span: 18 }}
             style={{ width: 400 }}
           >
-            <FormItem label="ID">{id}</FormItem>
+            <FormItem label="ID">{localStorage.getItem('userId')}</FormItem>
             <FormItem label="用户名">
               {getFieldDecorator('username', {
                 rules: [
@@ -255,7 +303,7 @@ export default Form.create()(
               {getFieldDecorator('introduction', {
                 rules: [
                   { required: true, message: '简介是必需的' },
-                  { max: 2, message: '最多120个字符' }
+                  { max: 120, message: '最多120个字符' }
                 ],
                 initialValue: introduction
               })(<TextArea autosize placeholder="最多120个字符" />)}
@@ -271,7 +319,8 @@ export default Form.create()(
             </FormItem>
             <FormItem label="生日">
               {getFieldDecorator('birthday', {
-                rules: [{ required: true, message: '生日是必需的' }]
+                rules: [{ required: true, message: '生日是必需的' }],
+                initialValue: moment(birthday, 'YYYY-MM-DD')
               })(
                 <DatePicker
                   disabledDate={currentDate =>
@@ -283,7 +332,12 @@ export default Form.create()(
               )}
             </FormItem>
             <FormItem wrapperCol={{ offset: 6 }}>
-              <Button type="primary" size="large" style={{ width: '100%' }}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={this.updateUsetInfo}
+                style={{ width: '100%' }}
+              >
                 修改
               </Button>
             </FormItem>

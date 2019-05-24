@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
-import { Table, Tooltip, Tag, Modal, Button, Popconfirm, Row } from 'antd';
+import {
+  Table,
+  Tooltip,
+  Tag,
+  Modal,
+  Button,
+  Popconfirm,
+  Row,
+  message
+} from 'antd';
 import ReactPlayer from 'react-player';
 import _ from 'lodash';
+import moment from 'moment';
 
 import './ReviewVideo.css';
 import ReviewVideoData from './ReviewVideoData';
@@ -11,14 +21,45 @@ const { Column } = Table;
 
 export default class ReviewVideo extends Component {
   state = {
-    videoList: ReviewVideoData
+    videoList: []
+  };
+
+  componentWillMount() {
+    this.getPendingVideoHandler();
+  }
+
+  getPendingVideoHandler = () => {
+    const { getPendingVideo } = this.props;
+    getPendingVideo()
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          videoList: data.map(value => ({
+            key: value.id,
+            userId: value.userId,
+            videoId: value.id,
+            time: moment(value.createTime).format('YYYY-MM-DD HH:mm'),
+            videoTitle: value.title,
+            contentType: value.type.id,
+            videoUrl: `http://${value.videoUrl}`,
+            videoCover: value.headPictureUrl,
+            videoIntroduction: value.introduction,
+            status: value.status
+          }))
+        });
+      })
+      .catch(err => {
+        message.error(err);
+      });
   };
 
   chooseStatus = status => {
     const switchMap = new Map([
-      ['pass', <Tag color="green">通过</Tag>],
-      ['notPass', <Tag color="red">未通过</Tag>],
-      ['pending', <Tag>待审核</Tag>]
+      [0, <Tag color="green">通过</Tag>],
+      [1, <Tag color="red">未通过</Tag>],
+      [2, <Tag>待审核</Tag>]
     ]);
     return switchMap.get(status);
   };
@@ -49,10 +90,10 @@ export default class ReviewVideo extends Component {
       </span>
     );
     const switchMap = new Map([
-      ['pass', normalAction],
-      ['notPass', normalAction],
+      [0, normalAction],
+      [1, normalAction],
       [
-        'pending',
+        2,
         <div>
           <Popconfirm
             title="将通过该视频的审核"
@@ -79,7 +120,7 @@ export default class ReviewVideo extends Component {
 
   openDetailsModal = record => () => {
     const {
-      username,
+      userId,
       time,
       videoTitle,
       contentType,
@@ -96,10 +137,10 @@ export default class ReviewVideo extends Component {
       content: (
         <div>
           <Row className="content-info" type="flex" align="middle">
-            <span>{username}</span>
+            <span>{userId}</span>
             <span>{ContentType[contentType]}</span>
             <span>{time}</span>
-            <span>{this.chooseStatus(status)}</span>
+            {/* <span>{this.chooseStatus(status)}</span> */}
           </Row>
           <Row>视频封面:</Row>
           <Row type="flex" justify="center" style={{ marginBottom: 24 }}>
@@ -120,10 +161,17 @@ export default class ReviewVideo extends Component {
   };
 
   deleteVideo = record => () => {
-    const { videoList } = this.state;
-    this.setState({
-      videoList: videoList.filter(value => value.key !== record.key)
-    });
+    const { deleteVideo } = this.props;
+    const formData = new FormData();
+    formData.append('id', record.videoId);
+    deleteVideo(formData)
+      .then(() => {
+        message.success('删除成功');
+        this.getPendingVideoHandler();
+      })
+      .catch(err => {
+        message.error(err);
+      });
   };
 
   render() {
@@ -137,7 +185,7 @@ export default class ReviewVideo extends Component {
             pageSize: 10
           }}
         >
-          <Column title="用户" dataIndex="username" align="center" />
+          <Column title="用户ID" dataIndex="userId" align="center" />
           <Column title="上传时间" dataIndex="time" align="center" />
           <Column
             title="标题"
@@ -165,12 +213,12 @@ export default class ReviewVideo extends Component {
               </Tooltip>
             )}
           />
-          <Column
+          {/* <Column
             title="当前状态"
             dataIndex="status"
             align="center"
             render={text => this.chooseStatus(text)}
-          />
+          /> */}
           <Column render={record => this.chooseAction(record)} />
         </Table>
       </div>

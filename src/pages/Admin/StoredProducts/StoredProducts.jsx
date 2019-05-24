@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Button, Icon, Modal, Table, Tag, Col } from 'antd';
+import { Row, Button, Icon, Modal, Table, Tag, Col, message } from 'antd';
 
 import './StoredProducts.css';
 import StoredData from './StoredData';
@@ -9,16 +9,45 @@ const { Column } = Table;
 export default class StoredProducts extends Component {
   state = {
     modalVisible: false,
-    storedProducts: [...StoredData],
+    storedProducts: [],
     previewVisible: false,
     previewImage: ''
   };
 
+  componentWillMount() {
+    const { getProductsByUserId } = this.props;
+    const formData = new FormData();
+    formData.append('userId', localStorage.getItem('userId'));
+    getProductsByUserId(formData)
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          storedProducts: data.map(value => ({
+            key: value.id,
+            id: value.id,
+            userId: value.userId,
+            productCover: `http://${value.goodsHeadPictureUrl}`,
+            productImages: value.urls.map(item => `http://${item.url}`),
+            productName: value.goodsName,
+            productIntroduction: value.introduce,
+            productType: value.type,
+            productQuantity: value.goodsMount,
+            status: value.status
+          }))
+        });
+      })
+      .catch(err => {
+        message.error(err);
+      });
+  }
+
   chooseStatus = status => {
     const switchMap = new Map([
-      ['auctioned', <Tag color="green">已拍出</Tag>],
-      ['auctioning', <Tag color="red">竞拍中</Tag>],
-      ['failure', <Tag>拍卖失败</Tag>]
+      ['3', <Tag color="green">已拍出</Tag>],
+      ['2', <Tag color="red">竞拍中</Tag>],
+      ['4', <Tag>拍卖失败</Tag>]
     ]);
     return switchMap.get(status);
   };
@@ -105,7 +134,7 @@ export default class StoredProducts extends Component {
                   {productQuantity}
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col span={12}>
                   <span className="stored-details-label">起拍价格</span>
                   {startingPrice}
@@ -114,8 +143,8 @@ export default class StoredProducts extends Component {
                   <span className="stored-details-label">加价幅度</span>
                   {priceIncrease}
                 </Col>
-              </Row>
-              <Row>
+              </Row> */}
+              {/* <Row>
                 <Col span={12}>
                   <span className="stored-details-label">当前价格</span>
                   {currentPrice}
@@ -124,8 +153,8 @@ export default class StoredProducts extends Component {
                   <span className="stored-details-label">成交价格</span>
                   {dealPrice}
                 </Col>
-              </Row>
-              <Row>
+              </Row> */}
+              {/* <Row>
                 <Col span={12}>
                   <span className="stored-details-label">出价人数</span>
                   {bidderNumber}
@@ -134,8 +163,8 @@ export default class StoredProducts extends Component {
                   <span className="stored-details-label">出价次数</span>
                   {auctionTimes}
                 </Col>
-              </Row>
-              <Row>
+              </Row> */}
+              {/* <Row>
                 <Col span={12}>
                   <span className="stored-details-label">上架时间</span>
                   {shelfDate}
@@ -144,7 +173,7 @@ export default class StoredProducts extends Component {
                   <span className="stored-details-label">截止时间</span>
                   {deadline}
                 </Col>
-              </Row>
+              </Row> */}
               <Row>
                 <span className="stored-details-label">状态</span>
                 {this.chooseStatus(status)}
@@ -169,11 +198,11 @@ export default class StoredProducts extends Component {
         >
           <Column title="产品名称" dataIndex="productName" align="center" />
           <Column title="产品数量" dataIndex="productQuantity" align="center" />
-          <Column title="起拍价格" dataIndex="startingPrice" align="center" />
-          <Column title="当前价格" dataIndex="currentPrice" align="center" />
-          <Column title="成交价格" dataIndex="dealPrice" align="center" />
-          <Column title="上架时间" dataIndex="shelfDate" align="center" />
-          <Column title="截止日期" dataIndex="deadline" align="center" />
+          {/* <Column title="起拍价格" dataIndex="startingPrice" align="center" /> */}
+          {/* <Column title="当前价格" dataIndex="currentPrice" align="center" /> */}
+          {/* <Column title="成交价格" dataIndex="dealPrice" align="center" /> */}
+          {/* <Column title="上架时间" dataIndex="shelfDate" align="center" /> */}
+          {/* <Column title="截止日期" dataIndex="deadline" align="center" /> */}
           <Column
             title="状态"
             dataIndex="status"

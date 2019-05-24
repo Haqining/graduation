@@ -3,12 +3,12 @@ import { Link, Switch, Route, Redirect } from 'react-router-dom';
 import { Row, Layout, Menu, Icon, BackTop } from 'antd';
 
 import './Admin.css';
-import ReviewVideo from './ReviewVideo/ReviewVideo';
-import ReviewArticle from './ReviewArticle/ReviewArticle';
-import ManageUser from './ManageUser/ManageUser';
-import ManageComment from './ManageComment/ManageComment';
-import ShelfProducts from './ShelfProducts/ShelfProducts';
-import StoredProducts from './StoredProducts/StoredProducts';
+import ReviewVideo from './ReviewVideo/ReviewVideoContainer';
+import ReviewArticle from './ReviewArticle/ReviewArticleContainer.';
+import ManageUser from './ManageUser/ManageUserContainer';
+import ManageComment from './ManageComment/ManageCommentContainer';
+import ShelfProducts from './ShelfProducts/ShelfProductsContainer';
+import StoredProducts from './StoredProducts/StoredProductsContainer';
 // import ManageBanner from './ManageBanner/ManageBanner';
 
 const { Content, Sider } = Layout;

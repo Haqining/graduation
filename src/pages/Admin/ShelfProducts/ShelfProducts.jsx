@@ -74,24 +74,44 @@ export default Form.create()(
     };
 
     uploadImage = () => {
-      // 裁切后直接上传服务器用
-      // this.refs.cropper.getCroppedCanvas().toBlob(blob => {
-      // });
+      const { uploadImage } = this.props;
       const { isCover, productImages } = this.state;
-      const image = this.refs.cropper.getCroppedCanvas().toDataURL();
-      this.setState({
-        modalVisible: false,
-        tempImage: '',
-        ...(isCover
-          ? {
-              productCover: image
-            }
-          : {
-              modalVisible: false,
-              tempImage: '',
-              productImages: [...productImages, image]
-            })
+      // 裁切后直接上传服务器用
+      this.refs.cropper.getCroppedCanvas().toBlob(blob => {
+        const formData = new FormData();
+        formData.append('file', blob);
+        uploadImage(formData).then(res => {
+          message.success('上传成功');
+          const { data } = res;
+          this.setState({
+            modalVisible: false,
+            tempImage: '',
+            ...(isCover
+              ? {
+                  productCover: `http://${data}`
+                }
+              : {
+                  modalVisible: false,
+                  tempImage: '',
+                  productImages: [...productImages, `http://${data}`]
+                })
+          });
+        });
       });
+      // const image = this.refs.cropper.getCroppedCanvas().toDataURL();
+      // this.setState({
+      //   modalVisible: false,
+      //   tempImage: '',
+      //   ...(isCover
+      //     ? {
+      //         productCover: image
+      //       }
+      //     : {
+      //         modalVisible: false,
+      //         tempImage: '',
+      //         productImages: [...productImages, image]
+      //       })
+      // });
     };
 
     // TODO:正常的应该是传url
@@ -108,6 +128,57 @@ export default Form.create()(
               (value, index) => index !== selectedIndex
             )
           });
+        }
+      });
+    };
+
+    shelfProductsHandler = () => {
+      const {
+        form: { validateFields, resetFields },
+        shelfProducts
+      } = this.props;
+      const { productCover, productImages } = this.state;
+      validateFields((errors, values) => {
+        if (!productCover) {
+          message.error('请上传一张产品封面');
+        } else if (_.isEmpty(productImages)) {
+          message.error('请上传产品图片');
+        } else if (!errors) {
+          const {
+            productName,
+            productIntroduction,
+            productType,
+            productQuantity,
+            startingPrice,
+            priceIncrease,
+            deadline
+          } = values;
+          const formData = new FormData();
+          formData.append('userId', localStorage.getItem('userId'));
+          formData.append('introduce', productIntroduction);
+          formData.append('goodsName', productName);
+          formData.append('goodsHeadPictureUrl', productCover.slice(7));
+          formData.append('type', productType);
+          formData.append('goodsMount', productQuantity);
+          formData.append(
+            'descUrls',
+            productImages.map(value => value.slice(7)).join()
+          );
+          formData.append('startPrice', startingPrice);
+          formData.append('priceIncrease', priceIncrease);
+          formData.append('deadTime', deadline.format('YYYY-MM-DD HH:mm:ss'));
+          shelfProducts(formData)
+            .then(() => {
+              message.success('上传成功');
+              resetFields();
+              this.setState({
+                productCover: '',
+                productImages: []
+              });
+            })
+            .catch(err => {
+              message.error(err);
+            });
         }
       });
     };
@@ -312,6 +383,7 @@ export default Form.create()(
                 <Button
                   type="primary"
                   size="large"
+                  onClick={this.shelfProductsHandler}
                   style={{ padding: '0 40px' }}
                 >
                   立即上架

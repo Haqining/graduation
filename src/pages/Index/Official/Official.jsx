@@ -8,27 +8,46 @@ import VideoList from '../../../components/VideoList/VideoList';
 
 export default class Official extends Component {
   state = {
-    videoList: OfficialData,
+    listLength: 0,
+    currentLength: 6,
     hasMore: true
   };
 
-  showMore = () => {
-    const { videoList } = this.state;
+  componentWillMount() {
+    const { videoList } = this.props;
+    const { currentLength } = this.state;
+    const hasMore = videoList.length > currentLength;
     this.setState({
-      videoList: [...videoList, ...OfficialData],
-      hasMore: videoList.length < 30
+      listLength: videoList.length,
+      currentLength:
+        videoList.length > currentLength ? currentLength : videoList.length,
+      hasMore
+    });
+  }
+
+  showMore = () => {
+    const { listLength, currentLength } = this.state;
+    const nextLength = currentLength + 6;
+    this.setState({
+      currentLength: nextLength,
+      hasMore: nextLength < listLength
     });
   };
 
   render() {
-    const { videoList, hasMore } = this.state;
+    const { videoList } = this.props;
+    const { currentLength, hasMore } = this.state;
     const hasData = !_.isEmpty(videoList);
     return (
       <div>
         <div className="section">
           <div className="section-content">
             <Row>
-              <VideoList videoList={videoList} />
+              <VideoList
+                videoList={videoList.filter(
+                  (value, index) => index < currentLength
+                )}
+              />
             </Row>
             {hasData && (
               <Row type="flex" justify="center">

@@ -1,3 +1,3 @@
 export default {
-  serverHost: 'http://localhost:8080/'
+  serverHost: 'http://ngrok.hergua.cn:8080/'
 };

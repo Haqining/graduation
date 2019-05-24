@@ -3,8 +3,8 @@ import { Link, Switch, Route } from 'react-router-dom';
 import { Row, Layout, Menu, Icon } from 'antd';
 
 import './Upload.css';
-import UploadArticle from './UploadArticle/UploadArticle';
-import UploadVideo from './UploadVideo/UploadVideo';
+import UploadArticle from './UploadArticle/UploadArticleContainer';
+import UploadVideo from './UploadVideo/UploadVideoContainer';
 
 const { Content, Sider } = Layout;
 const { Item: MenuItem } = Menu;

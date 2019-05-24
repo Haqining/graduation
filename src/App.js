@@ -7,9 +7,9 @@ import 'braft-editor/dist/index.css';
 import 'braft-editor/dist/output.css';
 import 'cropperjs/dist/cropper.css';
 import './App.css';
-import Login from './pages/User/Login/Login';
-import Register from './pages/User/Register/Register';
-import Index from './pages/Index/Index';
+import Login from './pages/User/Login/LoginContainer';
+import Register from './pages/User/Register/RegisterContainer';
+import Index from './pages/Index/IndexContainer';
 import Admin from './pages/Admin/Admin';
 
 import appConfig from './config.js';
@@ -19,18 +19,11 @@ message.config({
 });
 
 Axios.defaults.baseURL = appConfig.serverHost;
+
 Axios.interceptors.request.use(
   config => {
-    const tempConfig = config;
-    const userId = sessionStorage.getItem('userId');
-    if (userId) {
-      tempConfig.data = {
-        ...config.data,
-        userId
-      };
-    }
-    console.log('requestConfig:', tempConfig);
-    return tempConfig;
+    console.log('requestConfig:', config);
+    return config;
   },
   err => {
     console.error('requestErr:', err);
@@ -40,10 +33,11 @@ Axios.interceptors.request.use(
 Axios.interceptors.response.use(
   res => {
     console.log('response:', res);
-    const { statusCode, message } = res;
-    if (statusCode !== '200') {
-      console.log('statusCodeError:', message);
-      return Promise.reject('Error');
+    const {
+      data: { statusCode, message }
+    } = res;
+    if (statusCode && statusCode !== 200) {
+      return Promise.reject(message);
     }
     return res;
   },

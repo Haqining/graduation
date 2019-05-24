@@ -21,7 +21,7 @@
   color: rgba(0, 0, 0, 0.65);
 }
 
-.video-item-action:hover{
+.video-item-action:hover {
   color: #0084ff;
 }
 
@@ -51,8 +51,8 @@
   left: 0;
   right: 0;
   padding: 8px 20px;
-  color: rgba(0, 0, 0, 0.65);
-  background: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(0, 0, 0, 0.65);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

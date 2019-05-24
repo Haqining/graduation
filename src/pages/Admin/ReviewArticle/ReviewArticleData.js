@@ -7,7 +7,7 @@ export default [
     time: '2018-01-01 01:01',
     articleCover,
     articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
-    contentType: '1',
+    contentType: 1,
     articleIntroduction:
       '三星 Galaxy Fold 正在宣布返厂进行重新调试。我会耐心的等待三星 Galaxy Fold 的回归。同时，这期视频将是一个暂时性的三星 Galaxy Fold 评测。那么问题来了，现在我应该换哪款智能手机呢?',
     articleContent:
@@ -21,7 +21,7 @@ export default [
     time: '2018-01-01 01:01',
     articleCover,
     articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
-    contentType: '1',
+    contentType: 1,
     articleIntroduction:
       '三星 Galaxy Fold 正在宣布返厂进行重新调试。我会耐心的等待三星 Galaxy Fold 的回归。同时，这期视频将是一个暂时性的三星 Galaxy Fold 评测。那么问题来了，现在我应该换哪款智能手机呢?',
     articleContent:
@@ -35,7 +35,7 @@ export default [
     time: '2018-01-01 01:01',
     articleCover,
     articleTitle: '正式宣布！三星 Galaxy Fold 返厂延后上市',
-    contentType: '1',
+    contentType: 1,
     articleIntroduction:
       '三星 Galaxy Fold 正在宣布返厂进行重新调试。我会耐心的等待三星 Galaxy Fold 的回归。同时，这期视频将是一个暂时性的三星 Galaxy Fold 评测。那么问题来了，现在我应该换哪款智能手机呢?',
     articleContent:

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Row, Icon, Popover, Divider, Avatar, Dropdown } from 'antd';
+import _ from 'lodash';
 
 import './NavBar.css';
 import wxCode from '../../assets/小程序码.jpg';
@@ -13,12 +14,16 @@ export default class NavBar extends Component {
   };
 
   render() {
-    const { pathname } = this.props;
+    const {
+      pathname,
+      userInfo: { avatar, username }
+    } = this.props;
     const selectedKey = pathname.split('/')[2];
     // TODO:替换成普通id
     const userId = localStorage.getItem('userId');
     const isLogin = !!userId;
-    const isAdmin = userId === 'admin';
+    console.log()
+    const isAdmin = userId === "1";
     return (
       <Row className="nav-bar" type="flex" justify="space-between">
         <div>
@@ -76,7 +81,7 @@ export default class NavBar extends Component {
                     <Menu>
                       <MenuItem>
                         <Link to={`/index/personal/${userId}`} target="_blank">
-                          testUserName
+                          {username}
                         </Link>
                       </MenuItem>
                       {isAdmin && (
@@ -96,7 +101,11 @@ export default class NavBar extends Component {
                   placement="bottomRight"
                 >
                   <Link to={`/index/personal/${userId}`} target="_blank">
-                    <Avatar icon="user" style={{ cursor: 'pointer' }} />
+                    <Avatar
+                      src={avatar}
+                      icon="user"
+                      style={{ cursor: 'pointer' }}
+                    />
                   </Link>
                 </Dropdown>
               </Row>

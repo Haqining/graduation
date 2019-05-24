@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Divider, Button, BackTop } from 'antd';
+import _ from 'lodash';
 
 import VideoList from '../../../components/VideoList/VideoList';
 import ArticleList from '../../../components/ArticleList/ArticleList';
@@ -20,76 +21,98 @@ export default class Home extends Component {
   };
 
   render() {
-    const {
-      banners: { big, small },
-      officialVideos,
-      // talentVideos,
-      articleList
-    } = this.state;
+    const { videoList, articleList } = this.props;
+    const hasTop = videoList.length > 5;
+    const hasVideo = !_.isEmpty(videoList);
+    const hasArticle = !_.isEmpty(videoList);
     return (
       <div>
-        <div className="section home-banner">
-          <div className="section-content">
-            <Row type="flex">
-              <div
-                className="home-banner-left"
-                span={12}
-                title={big.videoTitle}
-              >
-                <Link
-                  className="home-banner-image"
-                  to={`/index/play/${big.videoId}`}
-                  target="_blank"
-                  style={{ backgroundImage: `url('${big.videoCover}')` }}
+        {hasTop && (
+          <div className="section home-banner">
+            <div className="section-content">
+              <Row type="flex">
+                <div
+                  className="home-banner-left"
+                  span={12}
+                  title={videoList[0].videoTitle}
                 >
-                  <span className="shadow-inside" />
-                </Link>
-              </div>
-              <div className="home-banner-right">
-                <div className="home-banner-tl" title={small.videoTitle}>
                   <Link
                     className="home-banner-image"
-                    to={`/index/play/${small.videoId}`}
+                    to={`/index/play/${videoList[0].videoId}`}
                     target="_blank"
-                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                    style={{
+                      backgroundImage: `url('${videoList[0].videoCover}')`
+                    }}
                   >
                     <span className="shadow-inside" />
                   </Link>
                 </div>
-                <div className="home-banner-tr" title={small.videoTitle}>
-                  <Link
-                    className="home-banner-image"
-                    to={`/index/play/${small.videoId}`}
-                    target="_blank"
-                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                <div className="home-banner-right">
+                  <div
+                    className="home-banner-tl"
+                    title={videoList[1].videoTitle}
                   >
-                    <span className="shadow-inside" />
-                  </Link>
-                </div>
-                <div className="home-banner-bl" title={small.videoTitle}>
-                  <Link
-                    className="home-banner-image"
-                    to={`/index/play/${small.videoId}`}
-                    target="_blank"
-                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                    <Link
+                      className="home-banner-image"
+                      to={`/index/play/${videoList[1].videoId}`}
+                      target="_blank"
+                      style={{
+                        backgroundImage: `url('${videoList[1].videoCover}')`
+                      }}
+                    >
+                      <span className="shadow-inside" />
+                    </Link>
+                  </div>
+                  <div
+                    className="home-banner-tr"
+                    title={videoList[2].videoTitle}
                   >
-                    <span className="shadow-inside" />
-                  </Link>
-                </div>
-                <div className="home-banner-br" title={small.videoTitle}>
-                  <Link
-                    className="home-banner-image"
-                    to={`/index/play/${small.videoId}`}
-                    target="_blank"
-                    style={{ backgroundImage: `url('${small.videoCover}')` }}
+                    <Link
+                      className="home-banner-image"
+                      to={`/index/play/${videoList[2].videoId}`}
+                      target="_blank"
+                      style={{
+                        backgroundImage: `url('${videoList[2].videoCover}')`
+                      }}
+                    >
+                      <span className="shadow-inside" />
+                    </Link>
+                  </div>
+                  <div
+                    className="home-banner-bl"
+                    title={videoList[3].videoTitle}
                   >
-                    <span className="shadow-inside" />
-                  </Link>
+                    <Link
+                      className="home-banner-image"
+                      to={`/index/play/${videoList[3].videoId}`}
+                      target="_blank"
+                      style={{
+                        backgroundImage: `url('${videoList[3].videoCover}')`
+                      }}
+                    >
+                      <span className="shadow-inside" />
+                    </Link>
+                  </div>
+                  <div
+                    className="home-banner-br"
+                    title={videoList[4].videoTitle}
+                  >
+                    <Link
+                      className="home-banner-image"
+                      to={`/index/play/${videoList[4].videoId}`}
+                      target="_blank"
+                      style={{
+                        backgroundImage: `url('${videoList[4].videoCover}')`
+                      }}
+                    >
+                      <span className="shadow-inside" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </Row>
+              </Row>
+            </div>
           </div>
-        </div>
+        )}
         <div className="section">
           <div className="section-content">
             <Divider
@@ -99,18 +122,28 @@ export default class Home extends Component {
               测评视频
             </Divider>
             <Row>
-              <VideoList videoList={officialVideos} />
+              <VideoList
+                videoList={
+                  hasTop
+                    ? videoList.filter(
+                        (value, index) => index > 6 || index < 12
+                      )
+                    : videoList
+                }
+              />
             </Row>
-            <Row type="flex" justify="center">
-              <Button
-                href="/index/official"
-                type="primary"
-                size="large"
-                style={{ padding: '0 40px' }}
-              >
-                更多视频
-              </Button>
-            </Row>
+            {hasVideo && (
+              <Row type="flex" justify="center">
+                <Button
+                  href="/index/official"
+                  type="primary"
+                  size="large"
+                  style={{ padding: '0 40px' }}
+                >
+                  全部视频
+                </Button>
+              </Row>
+            )}
           </div>
         </div>
         {/* <div className="section">
@@ -147,16 +180,18 @@ export default class Home extends Component {
             <Row>
               <ArticleList articleList={articleList} />
             </Row>
-            <Row type="flex" justify="center">
-              <Button
-                href="/index/article"
-                type="primary"
-                size="large"
-                style={{ padding: '0 40px' }}
-              >
-                更多文章
-              </Button>
-            </Row>
+            {hasArticle && (
+              <Row type="flex" justify="center">
+                <Button
+                  href="/index/article"
+                  type="primary"
+                  size="large"
+                  style={{ padding: '0 40px' }}
+                >
+                  全部文章
+                </Button>
+              </Row>
+            )}
           </div>
         </div>
         <BackTop visibilityHeight={0}>

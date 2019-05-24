@@ -1,39 +1,176 @@
 import React, { Component } from 'react';
-import { Row, BackTop, Avatar, Button, Tabs, Pagination, Modal } from 'antd';
+import {
+  Row,
+  BackTop,
+  Avatar,
+  Button,
+  Tabs,
+  Pagination,
+  Modal,
+  message
+} from 'antd';
+import _ from 'lodash';
 
 import './Personal.css';
-import testAvatar from '../../../assets/test-avatar.jpg';
-import VideoData from '../OfficialData';
-import ArticleData from '../ArticleData';
 import VideoList from '../../../components/VideoList/VideoList';
 import ArticleList from '../../../components/ArticleList/ArticleList';
+import AddressData from '../cascader-address-options';
 
 const { Group: ButtonGroup } = Button;
 const { TabPane } = Tabs;
 
 export default class Personal extends Component {
   state = {
-    userInfo: {
-      avatar: testAvatar,
-      username: 'testName',
-      introduction: '个人介绍',
-      sex: '男',
-      hometown: '未设置',
-      joinTime: '2019-03-03'
-    },
+    loading: true,
     videoCurrentPage: 1,
-    videoList: [...VideoData],
+    videoList: [],
     articleCurrentPage: 1,
-    articleList: [...ArticleData],
+    articleList: [],
     pvCurrentPage: 1,
-    pendingVideo: [...VideoData],
+    pendingVideo: [],
     paCurrentPage: 1,
-    pendingArticle: [...ArticleData]
+    pendingArticle: []
+  };
+
+  componentWillMount() {
+    const {
+      match: {
+        params: { id }
+      }
+    } = this.props;
+    this.getVideoByUserIdHandler(id);
+    this.getArticleByUserIdHandler(id);
+  }
+
+  formatHometown = hometown => {
+    const pca = hometown.split(',');
+    const province = _.find(AddressData, value => value.value === pca[0]);
+    const city = _.find(province.children, value => value.value === pca[1]);
+    const area = _.find(city.children, value => value.value === pca[2]);
+    return `${province.label} ${city.label} ${area.label}`;
+  };
+
+  getVideoByUserIdHandler = id => {
+    const { getVideoByUserId } = this.props;
+    getVideoByUserId(id)
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          videoList: data.map((value, index) => ({
+            key: index,
+            userId: value.userId,
+            time: value.createTime,
+            videoId: value.id,
+            videoTitle: value.title,
+            contentType: value.type.id,
+            videoUrl: value.videoUrl,
+            videoCover: `http://${value.headPictureUrl}`,
+            videoIntroduction: value.introduction,
+            status: value.status
+          }))
+        });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  getArticleByUserIdHandler = id => {
+    const { getArticleByUserId } = this.props;
+    getArticleByUserId(id)
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          articleList: data.map((value, index) => ({
+            userId: value.userId,
+            time: value.createTime,
+            articleId: value.id,
+            articleCover: `http://${value.headPictureUrl}`,
+            articleTitle: value.title,
+            contentType: value.articleType.id,
+            articleIntroduction: value.introduction,
+            status: value.status
+          }))
+        });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  getPendingArticleByUserIdHandler = () => {
+    const { getPendingArticleByUserId } = this.props;
+    getPendingArticleByUserId()
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          articleList: data.map((value, index) => ({
+            key: index,
+            userId: value.userId,
+            time: value.createTime,
+            articleCover: `http://${value.headPictureUrl}`,
+            articleTitle: value.title,
+            contentType: value.articleType.id,
+            articleIntroduction: value.introduction,
+            articleContent: value.content,
+            status: value.status
+          }))
+        });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  getPendingVideoByUserIdHandler = () => {
+    const { getPendingVideoByUserId } = this.props;
+    getPendingVideoByUserId()
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          articleList: data.map((value, index) => ({
+            key: index,
+            userId: value.userId,
+            time: value.createTime,
+            videoId: value.id,
+            videoTitle: value.title,
+            contentType: value.type.id,
+            videoUrl: value.videoUrl,
+            videoCover: `http://${value.headPictureUrl}`,
+            videoIntroduction: value.introduction,
+            status: value.status
+          }))
+        });
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
   };
 
   changeTabPane = activeKey => {
+    const {
+      match: {
+        params: { id }
+      }
+    } = this.props;
     // TODO:在这里请求接口
+    const switchMap = new Map([
+      ['video', this.getVideoByUserIdHandler(id)],
+      ['article', this.getArticleByUserIdHandler(id)],
+      ['pendingVideo', this.getPendingVideoByUserIdHandler],
+      ['pendingArticle', this.getPendingArticleByUserIdHandler]
+    ]);
+    switchMap.get(activeKey);
     this.setState({
+      loading: true,
       videoCurrentPage: 1,
       articleCurrentPage: 1,
       pvCurrentPage: 1,
@@ -42,6 +179,7 @@ export default class Personal extends Component {
   };
 
   deleteVideoHandler = videoId => {
+    const { deleteVideo } = this.props;
     const { videoList } = this.state;
     const that = this;
     Modal.confirm({
@@ -50,9 +188,18 @@ export default class Personal extends Component {
       centered: true,
       okType: 'danger',
       onOk: () => {
-        that.setState({
-          videoList: videoList.filter(value => value.videoId !== videoId)
-        });
+        const formData = new FormData();
+        formData.append('id', videoId);
+        deleteVideo(formData)
+          .then(() => {
+            message.success('删除成功');
+            that.setState({
+              videoList: videoList.filter(value => value.videoId !== videoId)
+            });
+          })
+          .catch(err => {
+            message.error(err);
+          });
       }
     });
   };
@@ -74,6 +221,7 @@ export default class Personal extends Component {
   };
 
   deleteArticleHandler = articleId => {
+    const { deleteVideo } = this.props;
     const { articleList } = this.state;
     const that = this;
     Modal.confirm({
@@ -82,11 +230,20 @@ export default class Personal extends Component {
       centered: true,
       okType: 'danger',
       onOk: () => {
-        that.setState({
-          articleList: articleList.filter(
-            value => value.articleId !== articleId
-          )
-        });
+        const formData = new FormData();
+        formData.append('articleId', articleId);
+        deleteVideo(formData)
+          .then(() => {
+            message.success('删除成功');
+            that.setState({
+              articleList: articleList.filter(
+                value => value.articleId !== articleId
+              )
+            });
+          })
+          .catch(err => {
+            message.error(err);
+          });
       }
     });
   };
@@ -137,10 +294,10 @@ export default class Personal extends Component {
     const {
       match: {
         params: { id }
-      }
+      },
+      userInfo: { avatar, username, introduction, sex, hometown, birthday }
     } = this.props;
     const {
-      userInfo: { avatar, username, introduction, sex, hometown, joinTime },
       videoCurrentPage,
       videoList,
       articleCurrentPage,
@@ -175,8 +332,8 @@ export default class Personal extends Component {
                 <Row>{introduction}</Row>
                 <Row className="personal-other-info">
                   <span>性别：{sex}</span>
-                  <span>家乡：{hometown}</span>
-                  <span>加入时间：{joinTime}</span>
+                  <span>家乡：{this.formatHometown(hometown)}</span>
+                  <span>生日：{birthday}</span>
                 </Row>
               </div>
               {isSelf && (
@@ -252,7 +409,7 @@ export default class Personal extends Component {
                     </Row>
                   )}
                 </TabPane>
-                {isSelf && (
+                {/* {isSelf && (
                   <TabPane
                     key="pendingVideo"
                     tab={'待审核视频（' + pvNumber + '）'}
@@ -305,7 +462,7 @@ export default class Personal extends Component {
                       </Row>
                     )}
                   </TabPane>
-                )}
+                )} */}
               </Tabs>
             </Row>
           </div>

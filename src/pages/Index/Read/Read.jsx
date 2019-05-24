@@ -1,29 +1,60 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Breadcrumb, Avatar } from 'antd';
+import { Row, Breadcrumb, Avatar, message } from 'antd';
+import moment from 'moment';
 
 import './Read.css';
 import ContentType from '../../../ContentType.js';
 import ArticleData from './ArticleData';
-import CommentList from '../../../components/CommentList/CommentList';
+import CommentList from '../../../components/CommentList/CommentListContainer';
 
 const { Item: BreadcrumbItem } = Breadcrumb;
 
 export default class Read extends Component {
   state = {
-    articleInfo: ArticleData
+    articleData: {}
   };
 
+  componentWillMount() {
+    const {
+      match: {
+        params: { articleId }
+      },
+      getArticleById
+    } = this.props;
+    getArticleById({ id: articleId })
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        this.setState({
+          articleData: {
+            userId: data.userId,
+            articleId: data.id,
+            time: moment(data.createTime).format('YYYY-MM-DD HH:mm'),
+            articleCover: `http://${data.headPictureUrl}`,
+            articleTitle: data.title,
+            contentType: data.articleType.id,
+            articleIntroduction: data.introduction,
+            articleContent: data.content
+          }
+        });
+      })
+      .catch(err => {
+        message.error(err);
+      });
+  }
+
   changeArticleLike = () => {
-    const { articleInfo } = this.state;
-    if (articleInfo.liked) {
-      articleInfo.like -= 1;
+    const { articleData } = this.state;
+    if (articleData.liked) {
+      articleData.like -= 1;
     } else {
-      articleInfo.like += 1;
+      articleData.like += 1;
     }
-    articleInfo.liked = !articleInfo.liked;
+    articleData.liked = !articleData.liked;
     this.setState({
-      articleInfo
+      articleData
     });
   };
 
@@ -34,8 +65,8 @@ export default class Read extends Component {
       }
     } = this.props;
     const {
-      articleInfo: {
-        id,
+      articleData: {
+        userId,
         avatar,
         username,
         time,
@@ -62,14 +93,14 @@ export default class Read extends Component {
               <span>
                 <Link
                   className="avatar-username"
-                  to={`/index/personal/${id}`}
+                  to={`/index/personal/${userId}`}
                   target="_blank"
                 >
-                  <Avatar src={avatar} icon="user" style={{ marginRight: 8 }} />
-                  <span>{username}</span>
+                  {/* <Avatar src={avatar} icon="user" style={{ marginRight: 8 }} /> */}
+                  <span>{userId}</span>
                 </Link>
               </span>
-              <span>评论({comments})</span>
+              {/* <span>评论({comments})</span> */}
               <span>{time}</span>
             </Row>
             <Row style={{ marginBottom: 24 }}>

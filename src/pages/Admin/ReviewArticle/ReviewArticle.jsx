@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
-import { Table, Tooltip, Tag, Modal, Button, Popconfirm, Row } from 'antd';
+import {
+  Table,
+  Tooltip,
+  Tag,
+  Modal,
+  Button,
+  Popconfirm,
+  Row,
+  message,
+  Divider
+} from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 
 import './ReviewArticle.css';
 import ReviewArticleData from './ReviewArticleData';
@@ -10,14 +21,45 @@ const { Column } = Table;
 
 export default class ReviewArticle extends Component {
   state = {
-    articleList: ReviewArticleData
+    articleList: []
   };
 
+  componentWillMount() {
+    this.getPendingArticleHandler();
+  }
+
+  getPendingArticleHandler = () => {
+    const { getPendingArticle } = this.props;
+    getPendingArticle()
+      .then(res => {
+        const {
+          data: { data }
+        } = res;
+        console.log(data);
+        this.setState({
+          articleList: data.map(value => ({
+            key: value.id,
+            userId: value.userId,
+            articleId: value.id,
+            time: moment(value.createTime).format('YYYY-MM-DD HH:mm'),
+            articleCover: `http://${value.headPictureUrl}`,
+            articleTitle: value.title,
+            contentType: value.articleType.id,
+            articleIntroduction: value.introduction,
+            articleContent: value.content,
+            status: value.status
+          }))
+        });
+      })
+      .catch(err => {
+        message.error(err);
+      });
+  };
   chooseStatus = status => {
     const switchMap = new Map([
-      ['pass', <Tag color="green">通过</Tag>],
-      ['notPass', <Tag color="red">未通过</Tag>],
-      ['pending', <Tag>待审核</Tag>]
+      [0, <Tag color="green">通过</Tag>],
+      [1, <Tag color="red">未通过</Tag>],
+      [2, <Tag>待审核</Tag>]
     ]);
     return switchMap.get(status);
   };
@@ -49,10 +91,10 @@ export default class ReviewArticle extends Component {
       </span>
     );
     const switchMap = new Map([
-      ['pass', normalAction],
-      ['notPass', normalAction],
+      [0, normalAction],
+      [1, normalAction],
       [
-        'pending',
+        2,
         <div>
           <Popconfirm
             title="将通过该文章的审核"
@@ -79,7 +121,7 @@ export default class ReviewArticle extends Component {
 
   openDetailsModal = record => () => {
     const {
-      username,
+      userId,
       time,
       articleCover,
       articleTitle,
@@ -96,10 +138,10 @@ export default class ReviewArticle extends Component {
       content: (
         <div>
           <Row className="content-info" type="flex" align="middle">
-            <span>{username}</span>
+            <span>{userId}</span>
             <span>{ContentType[contentType]}</span>
             <span>{time}</span>
-            <span>{this.chooseStatus(status)}</span>
+            {/* <span>{this.chooseStatus(status)}</span> */}
           </Row>
           <Row style={{ marginBottom: 24 }}>简介：{articleIntroduction}</Row>
           <Row style={{ marginBottom: 24 }}>
@@ -109,6 +151,7 @@ export default class ReviewArticle extends Component {
               style={{ width: '100%' }}
             />
           </Row>
+          <Divider />
           <Row>
             <div
               className="braft-output-content"
@@ -123,10 +166,17 @@ export default class ReviewArticle extends Component {
   };
 
   deleteArticle = record => () => {
-    const { articleList } = this.state;
-    this.setState({
-      articleList: articleList.filter(value => value.key !== record.key)
-    });
+    const { deleteArticle } = this.props;
+    const formData = new FormData();
+    formData.append('articleId', record.articleId);
+    deleteArticle(formData)
+      .then(() => {
+        message.success('删除成功');
+        this.getPendingArticleHandler();
+      })
+      .catch(err => {
+        message.error(err);
+      });
   };
 
   render() {
@@ -140,7 +190,7 @@ export default class ReviewArticle extends Component {
             pageSize: 10
           }}
         >
-          <Column title="用户" dataIndex="username" align="center" />
+          <Column title="用户ID" dataIndex="userId" align="center" />
           <Column title="上传时间" dataIndex="time" align="center" />
           <Column
             title="标题"
@@ -168,12 +218,12 @@ export default class ReviewArticle extends Component {
               </Tooltip>
             )}
           />
-          <Column
+          {/* <Column
             title="当前状态"
             dataIndex="status"
             align="center"
             render={text => this.chooseStatus(text)}
-          />
+          /> */}
           <Column render={record => this.chooseAction(record)} />
         </Table>
       </div>
