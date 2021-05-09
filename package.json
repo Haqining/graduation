@@ -10,7 +10,7 @@
     "braft-utils": "^3.0.12",
     "china-division": "^2.1.1",
     "customize-cra": "^0.2.12",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
